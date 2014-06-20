@@ -21,3 +21,7 @@ default['mysql_tuning']['tuning.cnf']['mysqld']['read_buffer_size'] = '256K'
 default['mysql_tuning']['tuning.cnf']['mysqld']['read_rnd_buffer_size'] = '256K'
 default['mysql_tuning']['tuning.cnf']['mysqld']['net_buffer_length'] = '2K'
 default['mysql_tuning']['tuning.cnf']['mysqld']['thread_stack'] = '64K'
+
+default['mysql_tuning']['logging.cnf']['mysqld']['log_bin'] = 'mysql-bin.log'
+default['mysql_tuning']['logging.cnf']['mysqld']['slow_query_log'] = 'ON'
+default['mysql_tuning']['logging.cnf']['mysqld']['slow_query_log_file'] = 'slow-query.log'
