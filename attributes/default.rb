@@ -2,7 +2,12 @@ default['mysql_tuning']['service_name'] = node['mysql']['service_name']
 
 # Recommended for small machines (512 MB)
 # TODO improve this to be more generic
-default['mysql_tuning']['tuning.cnf']['mysqld']['key_buffer'] = '16K'
+
+if Gem::Version.new(node['mysql']['version']) < Gem::Version.new('5.5')
+  default['mysql_tuning']['tuning.cnf']['mysqld']['key_buffer'] = '16K'
+else
+  default['mysql_tuning']['tuning.cnf']['mysqld']['key_buffer_size'] = '16K'
+end
 default['mysql_tuning']['tuning.cnf']['mysqld']['max_allowed_packet'] = '1M'
 default['mysql_tuning']['tuning.cnf']['mysqld']['thread_stack'] = '64K'
 # TODO this should compare full versions, not only x.y
