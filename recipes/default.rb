@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-configs = node['mysql_tuning'].keys.select { |i| i[/\.cfg$/] }
+configs = node['mysql_tuning'].keys.select { |i| i[/\.cnf$/] }
 
 configs.each do |config|
   template "/etc/mysql/conf.d/#{config}" do
