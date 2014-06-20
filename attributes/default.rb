@@ -25,5 +25,6 @@ default['mysql_tuning']['tuning.cnf']['mysqld']['thread_stack'] = '64K'
 default['mysql_tuning']['tuning.cnf']['mysqld']['thread_cache_size'] = '4'
 
 default['mysql_tuning']['logging.cnf']['mysqld']['log_bin'] = 'mysql-bin.log'
+default['mysql_tuning']['logging.cnf']['mysqld']['expire_logs_days'] = 30
 default['mysql_tuning']['logging.cnf']['mysqld']['slow_query_log'] = 'ON'
 default['mysql_tuning']['logging.cnf']['mysqld']['slow_query_log_file'] = 'slow-query.log'
