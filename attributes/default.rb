@@ -38,7 +38,7 @@ default['mysql_tuning']['configuration_samples'][0] = {
 
 # 64M < RAM < 512M (medium)
 default['mysql_tuning']['configuration_samples'][64 * MB] = {
-  :mysql => {
+  :mysqld => {
     :key_buffer_size => '16M',
     :table_open_cache => 64,
     :sort_buffer_size => '512K',
