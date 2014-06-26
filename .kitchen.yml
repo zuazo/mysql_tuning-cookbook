@@ -1,0 +1,21 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name: ubuntu-12.04
+    run_list:
+      - recipe[apt]
+  - name: centos-6.4
+    run_list:
+      - recipe[yum]
+
+suites:
+  - name: default
+    run_list:
+      - recipe[mysql::server]
+      - recipe[mysql_tuning::default]
+    attributes:
