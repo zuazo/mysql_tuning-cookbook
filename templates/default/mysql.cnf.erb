@@ -2,10 +2,10 @@
 
 [<%= namespace.to_s %>]
 <%   options.sort.each do |key, value|
-       if value.nil?
+       if value === true
 -%>
 <%=      key.to_s %>
-<%     else -%>
+<%     elsif ! value.nil? -%>
 <%=      key.to_s %> = <%= value.to_s %>
 <%     end -%>
 <%   end -%>
