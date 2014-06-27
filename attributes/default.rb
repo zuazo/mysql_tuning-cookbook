@@ -2,6 +2,8 @@ default['mysql_tuning']['service_name'] = node['mysql']['service_name']
 
 self.class.send(:include, ::MysqlTuning::AttributeHelpers)
 
+default['mysql_tuning']['system_percentage'] = 100
+
 # RAM <= 64M (small)
 default['mysql_tuning']['configuration_samples'][0] = {
   :mysqld => {

@@ -20,11 +20,15 @@ module MysqlTuning
         end
     end
 
+    def memory_for_mysql
+      (physical_memory * node['mysql_tuning']['system_percentage'] / 100).round
+    end
+
     def cnf_from_samples(cnf_samples)
       cnf_samples = Hash[cnf_samples.sort] # sort inc by RAM size
 
-      cnf_samples.reduce({}) do |final_cnf, (required_ram, cnf)|
-        if physical_memory >= required_ram
+      cnf_samples.reduce({}) do |final_cnf, (required_memory, cnf)|
+        if memory_for_mysql >= required_memory
           Chef::Mixin::DeepMerge.hash_only_merge(final_cnf, cnf)
         else
           final_cnf
