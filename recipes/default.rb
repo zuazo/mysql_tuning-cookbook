@@ -17,6 +17,17 @@
 # limitations under the License.
 #
 
+self.class.send(:include, ::MysqlTuning::CookbookHelpers)
+
+# Avoid interpolating already defined configuration values
+non_interpolated_keys = node['mysql_tuning']['tuning.cnf'].reduce({}) do |r, (ns, cnf)|
+  r[ns] = cnf.keys
+end
+
+# Interpolate configuration values
+tuning_cnf = cnf_from_samples(node['mysql_tuning']['configuration_samples'], node['mysql_tuning']['interpolation'], non_interpolated_keys)
+node.default['mysql_tuning']['tuning.cnf'] = Chef::Mixin::DeepMerge.hash_only_merge(tuning_cnf, node['mysql_tuning']['tuning.cnf'])
+
 configs = node['mysql_tuning'].keys.select { |i| i[/\.cnf$/] }
 
 configs.each do |config|

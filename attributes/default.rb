@@ -1,11 +1,17 @@
-default['mysql_tuning']['service_name'] = node['mysql']['service_name']
+self.class.send(:include, ::MysqlTuning::CookbookHelpers)
 
-self.class.send(:include, ::MysqlTuning::AttributeHelpers)
+default['mysql_tuning']['service_name'] = node['mysql']['service_name']
 
 default['mysql_tuning']['system_percentage'] = 100
 
-# RAM <= 64M (small)
-default['mysql_tuning']['configuration_samples'][0] = {
+default['mysql_tuning']['interpolation'] = 'proximal'
+
+default['mysql_tuning']['non_interpolated_keys']['mysqld'] = %W{
+  innodb_log_file_size
+}
+
+# 45M <= RAM <= 64M (small)
+default['mysql_tuning']['configuration_samples'][45 * MB] = {
   :mysqld => {
     :key_buffer_size => '16K',
     :table_open_cache => 4,
@@ -138,7 +144,8 @@ default['mysql_tuning']['configuration_samples'][4 * GB] = {
   },
 }
 
-default['mysql_tuning']['tuning.cnf'] = cnf_from_samples(node['mysql_tuning']['configuration_samples'])
+# Calculated from samples
+default['mysql_tuning']['tuning.cnf'] = {}
 
 default['mysql_tuning']['logging.cnf'] = {
   :mysqld => {
