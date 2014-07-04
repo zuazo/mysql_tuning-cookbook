@@ -30,6 +30,7 @@ action :create do
     mysql_tuning_cnf config do
       service_name new_resource.service_name
       directory new_resource.directory
+      mysql_port new_resource.mysql_port
       action :create
     end
   end
@@ -42,6 +43,9 @@ action :delete do
     mysql_tuning_cnf config do
       service_name new_resource.service_name
       directory new_resource.directory
+      mysql_user new_resource.mysql_user # not used on delete
+      mysql_password new_resource.mysql_password
+      mysql_port new_resource.mysql_port
       action :delete
     end
   end

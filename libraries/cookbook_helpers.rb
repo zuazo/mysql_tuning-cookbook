@@ -5,6 +5,7 @@ class MysqlTuning
     KB = 1024
     MB = 1024 * KB
     GB = 1024 * MB
+    IO_SIZE = 4 * KB
 
     def mysql_tuning_interpolator_install
       if node['mysql_tuning']['interpolation'] === true or
@@ -15,6 +16,25 @@ class MysqlTuning
           end
           r.run_action(:install)
           require g
+        end
+      end
+    end
+
+    def mysql_round_variable(name, value)
+      if node['mysql_tuning']['variables_block_size'].has_key?(name)
+        base = node['mysql_tuning']['variables_block_size'][name]
+        value = (MysqlTuning::MysqlHelpers.mysql2num(value) / base).round * base
+      else
+        value
+      end
+    end
+
+    def mysql_round_cnf(cnf)
+      cnf.reduce({}) do |r, (ns, keys)|
+        r[ns] = {}
+        keys.reduce(r) do |r, (key, value)|
+          r[ns][key] = mysql_round_variable(key, value)
+          r
         end
       end
     end
@@ -100,13 +120,12 @@ class MysqlTuning
         minimum_memory = cnf_samples.keys.sort[0] # first example
         if memory_for_mysql >= minimum_memory
           result_i = cnf_interpolation(cnf_samples, type, non_interpolated_keys)
-          Chef::Mixin::DeepMerge.hash_only_merge(result, result_i)
+          result = Chef::Mixin::DeepMerge.hash_only_merge(result, result_i)
         else
           Chef::Log.warn("Memory for MySQL too low (#{MysqlTuning::MysqlHelpers.num2mysql(memory_for_mysql)}), non-proximal interpolation skipped")
         end
-      else
-        result
       end
+      mysql_round_cnf(result)
     end
 
     private
