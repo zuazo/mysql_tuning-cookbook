@@ -15,7 +15,7 @@ class MysqlTuning
     # convert all values to float
     def data_points(data_points)
       @data_points = data_points.reduce({}) do |r, (k, v)|
-        r[k] = v.to_f
+        r[k.to_f] = v.to_f
         r
       end
     end
