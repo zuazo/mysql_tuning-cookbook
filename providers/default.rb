@@ -26,21 +26,24 @@ action :create do
   tuning_cnf = cnf_from_samples(configuration_samples, interpolation, non_interpolated_keys)
   node.default['mysql_tuning']['tuning.cnf'] = Chef::Mixin::DeepMerge.hash_only_merge(tuning_cnf, node['mysql_tuning']['tuning.cnf'])
 
+  new_resource.updated_by_last_action(false)
   configs.each do |config|
-    mysql_tuning_cnf config do
+    r = mysql_tuning_cnf config do
       service_name new_resource.service_name
       directory new_resource.directory
       mysql_port new_resource.mysql_port
       action :create
     end
+    new_resource.updated_by_last_action(true) if r.updated_by_last_action?
   end
 
 end
 
 action :delete do
 
+  new_resource.updated_by_last_action(false)
   configs.each do |config|
-    mysql_tuning_cnf config do
+    r = mysql_tuning_cnf config do
       service_name new_resource.service_name
       directory new_resource.directory
       mysql_user new_resource.mysql_user # not used on delete
@@ -48,6 +51,7 @@ action :delete do
       mysql_port new_resource.mysql_port
       action :delete
     end
+    new_resource.updated_by_last_action(true) if r.updated_by_last_action?
   end
 
 end

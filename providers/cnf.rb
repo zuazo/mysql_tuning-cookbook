@@ -55,7 +55,7 @@ action :create do
     false
   end
 
-  template ::File.join(directory, new_resource.filename) do
+  r = template ::File.join(directory, new_resource.filename) do
     owner 'mysql'
     group 'mysql'
     source 'mysql.cnf.erb'
@@ -64,12 +64,13 @@ action :create do
     })
     notifies :restart, "mysql_service[#{service_name}]" if needs_restart
   end
-
+  new_resource.updated_by_last_action(r.updated_by_last_action?)
 end
 
 action :delete do
-  file ::File.join(directory, new_resource.file_name) do
+  r = file ::File.join(directory, new_resource.file_name) do
     action :delete
     notifies :restart, "mysql_service[#{service_name}]"
   end
+  new_resource.updated_by_last_action(r.updated_by_last_action?)
 end
