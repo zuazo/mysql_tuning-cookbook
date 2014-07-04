@@ -1,7 +1,5 @@
 self.class.send(:include, ::MysqlTuning::CookbookHelpers)
 
-default['mysql_tuning']['service_name'] = node['mysql']['service_name']
-
 default['mysql_tuning']['system_percentage'] = 100
 
 default['mysql_tuning']['interpolation'] = 'proximal'
@@ -9,6 +7,8 @@ default['mysql_tuning']['interpolation'] = 'proximal'
 default['mysql_tuning']['non_interpolated_keys']['mysqld'] = %W{
   innodb_log_file_size
 }
+
+default['mysql_tuning']['directory'] = '/etc/mysql/conf.d'
 
 # 45M <= RAM <= 64M (small)
 default['mysql_tuning']['configuration_samples'][45 * MB] = {
