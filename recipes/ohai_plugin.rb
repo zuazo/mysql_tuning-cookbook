@@ -1,3 +1,4 @@
+# encoding: UTF-8
 #
 # Cookbook Name:: mysql_tuning
 # Recipe:: ohai_plugin

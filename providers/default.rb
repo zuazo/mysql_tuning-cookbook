@@ -1,12 +1,22 @@
+# encoding: UTF-8
+
 def interpolation
   new_resource.interpolation(
-    new_resource.interpolation.nil? ? node['mysql_tuning']['interpolation'] : new_resource.interpolation
+    if new_resource.interpolation.nil?
+      node['mysql_tuning']['interpolation']
+    else
+      new_resource.interpolation
+    end
   )
 end
 
 def configuration_samples
   new_resource.configuration_samples(
-    new_resource.configuration_samples.nil? ? node['mysql_tuning']['configuration_samples'] : new_resource.configuration_samples
+    if new_resource.configuration_samples.nil?
+      node['mysql_tuning']['configuration_samples']
+    else
+      new_resource.configuration_samples
+    end
   )
 end
 
@@ -18,13 +28,22 @@ action :create do
   self.class.send(:include, ::MysqlTuning::CookbookHelpers)
 
   # Avoid interpolating already defined configuration values
-  non_interpolated_keys = node['mysql_tuning']['tuning.cnf'].reduce({}) do |r, (ns, cnf)|
-    r[ns] = cnf.keys
-  end
+  non_interpolated_keys =
+    node['mysql_tuning']['tuning.cnf'].reduce({}) do |r, (ns, cnf)|
+      r[ns] = cnf.keys
+    end
 
   # Interpolate configuration values
-  tuning_cnf = cnf_from_samples(configuration_samples, interpolation, non_interpolated_keys)
-  node.default['mysql_tuning']['tuning.cnf'] = Chef::Mixin::DeepMerge.hash_only_merge(tuning_cnf, node['mysql_tuning']['tuning.cnf'])
+  tuning_cnf = cnf_from_samples(
+    configuration_samples,
+    interpolation,
+    non_interpolated_keys
+  )
+  node.default['mysql_tuning']['tuning.cnf'] =
+    Chef::Mixin::DeepMerge.hash_only_merge(
+      tuning_cnf,
+      node['mysql_tuning']['tuning.cnf']
+    )
 
   new_resource.updated_by_last_action(false)
   configs.each do |config|

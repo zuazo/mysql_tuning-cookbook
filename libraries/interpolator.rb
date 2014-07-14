@@ -1,10 +1,11 @@
+# encoding: UTF-8
 
 class MysqlTuning
-
+  # This class contains the interpolation logic.
+  # Does interpolation based on some data points and interpolation type.
   class Interpolator
-
     def self.required_gems
-      %w{interpolator}
+      %w(interpolator)
     end
 
     def initialize(data_points, type)
@@ -14,24 +15,21 @@ class MysqlTuning
 
     # convert all values to float
     def data_points(data_points)
-      @data_points = data_points.reduce({}) do |r, (k, v)|
+      @data_points = data_points.each_with_object({}) do |(k, v), r|
         r[k.to_f] = v.to_f
-        r
       end
     end
 
     def type(type)
-      @type = case type.downcase
-      when 'linear'
-        ::Interpolator::Table::LINEAR
-      when 'cubic'
-        ::Interpolator::Table::CUBIC
+      @type =
+      case type.downcase
+      when 'linear' then ::Interpolator::Table::LINEAR
+      when 'cubic' then ::Interpolator::Table::CUBIC
       when 'bicubic', 'lagrange'
         @data_points.count > 3 ? ::Interpolator::Table::LAGRANGE3 : ::Interpolator::Table::LAGRANGE2
-      when 'catmull'
-        ::Interpolator::Table::CATMULL
+      when 'catmull' then ::Interpolator::Table::CATMULL
       else
-        raise "Unknown interpolation type: #{type}"
+        fail "Unknown interpolation type: #{type}"
       end
     end
 
@@ -44,7 +42,7 @@ class MysqlTuning
       when ::Interpolator::Table::LAGRANGE3
         4
       else
-        raise "Unknown interpolation required data points for: #{@type.inspect}"
+        fail "Unknown interpolation required data points for: #{@type.inspect}"
       end
     end
 
@@ -53,7 +51,5 @@ class MysqlTuning
       t.style = @type
       t.interpolate(value).round
     end
-
   end
-
 end

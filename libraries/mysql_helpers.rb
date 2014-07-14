@@ -1,9 +1,9 @@
+# encoding: UTF-8
 
 class MysqlTuning
-
+  # Some generic helpers related with MySQL
   class MysqlHelpers
-
-    def self.is_numeric?(num)
+    def self.numeric?(num)
       case num
       when Numeric
         true
@@ -15,67 +15,61 @@ class MysqlTuning
     end
 
     def self.mysql2num(num)
-      case num
-      when Numeric
-        num
-      when /^([0-9]+)([GMKB]?)$/
-        case $2
-        when 'G'
-          $1.to_i * 1073741824
-        when 'M'
-          $1.to_i * 1048576
-        when 'K'
-          $1.to_i * 1024
-        else
-          $1.to_i
+      if num =~ /^([0-9]+)([GMKB])$/
+        case Regexp.last_match[2]
+        when 'G' then Regexp.last_match[1].to_i * 1_073_741_824
+        when 'M' then Regexp.last_match[1].to_i * 1_048_576
+        when 'K' then Regexp.last_match[1].to_i * 1024
+        when 'B' then Regexp.last_match[1].to_i
         end
+      else
+        num.to_i
       end
     end
 
     def self.num2mysql(num)
-      if num > 10737418240
-        "#{(num / 1073741824).floor}G"
-      elsif num > 10485760
-        "#{(num / 1048576).floor}M"
-      elsif num > 10240
+      if num > 10_737_418_240
+        "#{(num / 1_073_741_824).floor}G"
+      elsif num > 10_485_760
+        "#{(num / 1_048_576).floor}M"
+      elsif num > 10_240
         "#{(num / 1024).floor}K"
       else
         num.to_s
       end
     end
 
-    # Returns true if all variables has been correctly set
+    # Returns true if all variables has been set correctly
     def self.set_variables(vars, user, password, port)
-      db = self.connect(user, password, port.to_i)
+      db = connect(user, password, port.to_i)
 
       result = vars.reduce(true) do |r, (key, value)|
-        r && if self.variable_exists?(db, key)
-          orig = self.get_variable(db, key)
-          if orig.to_s != value.to_s
-            changed = self.set_variable(db, key, value)
-            if changed
-              Chef::Log.info("Changed MySQL #{key.inspect} variable from #{orig.inspect} to #{value.inspect} dynamically")
+        r &&
+          if variable_exists?(db, key)
+            orig = get_variable(db, key)
+            if orig.to_s != value.to_s
+              changed = set_variable(db, key, value)
+              if changed
+                Chef::Log.info("Changed MySQL #{key.inspect} variable from #{orig.inspect} to #{value.inspect} dynamically")
+              else
+                Chef::Log.info("MySQL #{key.inspect} variable cannot be changed from #{orig.inspect} to #{value.inspect} dynamically.")
+              end
+              changed
             else
-              Chef::Log.info("MySQL #{key.inspect} variable cannot be changed from #{orig.inspect} to #{value.inspect} dynamically.")
+              true
             end
-            changed
           else
-            true
+            false
           end
-        else
-          false
-        end
       end
 
-      self.disconnect(db)
+      disconnect(db)
       result
     end
 
-    private
-
     def self.connect(user, password, port)
       require 'mysql'
-      # TODO use the socket?
+      # TODO: use the socket?
       db = ::Mysql.new('localhost', user, password, nil, port)
       db.set_server_option(::Mysql::OPTION_MULTI_STATEMENTS_ON)
       db
@@ -101,14 +95,19 @@ class MysqlTuning
 
     def self.set_variable(db, name, value)
       # The variable name has been checked in #variable_exists?
-      stmt = db.prepare("SET GLOBAL #{name} = ?");
+      stmt = db.prepare("SET GLOBAL #{name} = ?")
       begin
         stmt.execute(value)
         true
       rescue
         false
       end
-    end
+    end # #self.set_variable
 
+    private_class_method :connect
+    private_class_method :disconnect
+    private_class_method :variable_exists?
+    private_class_method :get_variable
+    private_class_method :set_variable
   end
 end

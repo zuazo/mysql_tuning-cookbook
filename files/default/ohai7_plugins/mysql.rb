@@ -1,3 +1,4 @@
+# encoding: UTF-8
 #
 # Author:: Xabier de Zuazo (<xabier@onddo.com>)
 #
@@ -28,14 +29,17 @@ Ohai.plugin(:Mysql) do
   def collect_version(stdout)
     case stdout.split("\n")[0]
     when /^mysqld +Ver +([0-9][0-9.]*)[^0-9.]/
-      mysql['installed_version'] = $1
+      mysql['installed_version'] = Regexp.last_match[1]
     end
   end
 
   collect_data do
     init_mysql
-    status, stdout, stderr = run_command(:no_status_check => true, :command => 'mysqld --version')
-    collect_version(stdout) if status === 0
+    status, stdout, _stderr = run_command(
+      no_status_check: true,
+      command: 'mysqld --version'
+    )
+    collect_version(stdout) if status == 0
   end
 
 end

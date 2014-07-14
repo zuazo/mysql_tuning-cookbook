@@ -1,3 +1,4 @@
+# encoding: UTF-8
 #
 # Author:: Xabier de Zuazo (<xabier@onddo.com>)
 #
@@ -21,10 +22,13 @@ provides 'mysql/installed_version'
 mysql Mash.new unless mysql
 mysql['installed_version'] = nil unless mysql['installed_version']
 
-status, stdout, stderr = run_command(:no_status_check => true, :command => 'mysqld --version')
-if status === 0
+status, stdout, _stderr = run_command(
+  no_status_check: true,
+  command: 'mysqld --version'
+)
+if status == 0
   case stdout.split("\n")[0]
   when /^mysqld +Ver +([0-9][0-9.]*)[^0-9.]/
-    mysql['installed_version'] = $1
+    mysql['installed_version'] = Regexp.last_match[1]
   end
 end
