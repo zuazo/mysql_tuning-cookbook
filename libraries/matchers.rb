@@ -20,19 +20,35 @@
 if defined?(ChefSpec)
 
   def create_mysql_tuning(name)
-    ChefSpec::Matchers::ResourceMatcher.new(:mysql_tuning, :create, name)
+    ChefSpec::Matchers::ResourceMatcher.new(
+      :mysql_tuning,
+      :create,
+      name
+    )
   end
 
   def delete_mysql_tuning(name)
-    ChefSpec::Matchers::ResourceMatcher.new(:mysql_tuning, :delete, name)
+    ChefSpec::Matchers::ResourceMatcher.new(
+      :mysql_tuning,
+      :delete,
+      name
+    )
   end
 
   def create_mysql_tuning_cnf(filename)
-    ChefSpec::Matchers::ResourceMatcher.new(:mysql_tuning_cnf, :create, filename)
+    ChefSpec::Matchers::ResourceMatcher.new(
+      :mysql_tuning_cnf,
+      :create,
+      filename
+    )
   end
 
   def delete_mysql_tuning_cnf(filename)
-    ChefSpec::Matchers::ResourceMatcher.new(:mysql_tuning_cnf, :delete, filename)
+    ChefSpec::Matchers::ResourceMatcher.new(
+      :mysql_tuning_cnf,
+      :delete,
+      filename
+    )
   end
 
 end

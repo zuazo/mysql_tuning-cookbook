@@ -13,11 +13,12 @@ class MysqlTuning
       type(type)
     end
 
-    # convert all values to float
+    # convert all values to float and sort them
     def data_points(data_points)
-      @data_points = data_points.each_with_object({}) do |(k, v), r|
+      points = data_points.each_with_object({}) do |(k, v), r|
         r[k.to_f] = v.to_f
       end
+      @data_points = Hash[points.sort]
     end
 
     def type(type)
@@ -29,7 +30,7 @@ class MysqlTuning
         @data_points.count > 3 ? ::Interpolator::Table::LAGRANGE3 : ::Interpolator::Table::LAGRANGE2
       when 'catmull' then ::Interpolator::Table::CATMULL
       else
-        fail "Unknown interpolation type: #{type}"
+        @type
       end
     end
 
@@ -39,17 +40,30 @@ class MysqlTuning
         2
       when ::Interpolator::Table::CUBIC, ::Interpolator::Table::LAGRANGE2
         3
-      when ::Interpolator::Table::LAGRANGE3
-        4
+      when ::Interpolator::Table::LAGRANGE3 then 4
+      when 'proximal' then 1
       else
-        fail "Unknown interpolation required data points for: #{@type.inspect}"
+        fail "Unknown required data points for #{@type.inspect} interpolation"
+      end
+    end
+
+    # Lower-neighbor interpolation
+    def proximal_interpolation(value)
+      first_value = @data_points.values.first
+      @data_points.reduce(first_value) do |r, (x, y)|
+        x < value ? y : r
       end
     end
 
     def interpolate(value)
-      t = ::Interpolator::Table.new(@data_points)
-      t.style = @type
-      t.interpolate(value).round
+      case @type
+      when 'proximal'
+        proximal_interpolation(value)
+      else
+        t = ::Interpolator::Table.new(@data_points)
+        t.style = @type
+        t.interpolate(value).round
+      end
     end
   end
 end

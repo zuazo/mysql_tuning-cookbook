@@ -56,58 +56,24 @@ class MysqlTuning
         .round
     end
 
-    # TODO: refactor this method, too complex
+    # interpolates all the cnf_samples values
     def cnf_interpolation(cnf_samples, type, non_interpolated_keys)
+      if samples_minimum_memory(cnf_samples) > memory_for_mysql
+        Chef::Log.warn("Memory for MySQL too low (#{memory_for_mysql}), "\
+          'non-proximal interpolation skipped')
+        return {}
+      end
       mysql_tuning_interpolator_install
 
-      keys_by_ns = keys_to_interpolate(cnf_samples)
-
+      keys_by_ns = keys_to_interpolate(cnf_samples, non_interpolated_keys)
       keys_by_ns.each_with_object({}) do |(ns, keys), result|
-
-        keys.each do |key|
-          # Avoid interpolating some configuration values
-          if (node['mysql_tuning']['non_interpolated_keys'][ns].is_a?(Array) &&
-              node['mysql_tuning']['non_interpolated_keys'][ns].include?(key)) ||
-             (non_interpolated_keys[ns].is_a?(Array) &&
-              non_interpolated_keys[ns].include?(key))
-            next
-          end
-
-          # get integer data points from samples
-          previous_point = nil
-          data_points = cnf_samples.each_with_object({}) do |(mem, cnf), r|
-            r[mem] =
-              if cnf.key?(ns) && MysqlTuning::MysqlHelpers.numeric?(cnf[ns][key])
-                previous_point = MysqlTuning::MysqlHelpers.mysql2num(cnf[ns][key])
-              # set to previous sample value if missing (value not changed)
-              elsif !previous_point.nil?
-                previous_point
-              end
-          end
-
-          # interpolate data points
-          interpolator = MysqlTuning::Interpolator.new(data_points, type)
-          if interpolator.required_data_points <= data_points.count
-            result[ns] = {} unless result.key?(ns)
-            result[ns][key] = interpolator.interpolate(memory_for_mysql)
-            Chef::Log.debug(
-              "Interpolation(#{type}) of #{ns}.#{key}: "\
-              "point = #{memory_for_mysql}, value = #{result[ns][key]}, "\
-              "data_points = #{data_points.inspect}"
-            )
-          else
-            Chef::Log.warn(
-              "Cannot interpolate #{ns}.#{key}: not enough data points "\
-              "(#{data_points.count} for #{interpolator.required_data_points}"
-            )
-          end
-
-        end # keys.each
-      end # keys_by_ns.reduce
+        result[ns] = samples_interpolate_ns(cnf_samples, keys, ns, type)
+      end
     end
 
-    # Lower-neighbor interpolation
     def cnf_proximal_interpolation(cnf_samples)
+      cnf_samples = Hash[cnf_samples.sort] # sort inc by RAM size
+      # TODO: proximal implementation inside Interpolator class should be used
       cnf_samples.reduce({}) do |final_cnf, (mem, cnf)|
         if memory_for_mysql >= mem
           Chef::Mixin::DeepMerge.hash_only_merge(final_cnf, cnf)
@@ -117,60 +83,114 @@ class MysqlTuning
       end
     end
 
+    # generates interpolated cnf file from samples
+    # proximal interpolation is used for non-interpolated values
     def cnf_from_samples(cnf_samples, type, non_interpolated_keys)
-      cnf_samples = Hash[cnf_samples.sort] # sort inc by RAM size
-
       result = cnf_proximal_interpolation(cnf_samples)
-      unless [true, 'proximal'].include?(type)
-        minimum_memory = cnf_samples.keys.sort[0] # first example
-        if memory_for_mysql >= minimum_memory
-          result_i = cnf_interpolation(cnf_samples, type, non_interpolated_keys)
-          result = Chef::Mixin::DeepMerge.hash_only_merge(result, result_i)
-        else
-          Chef::Log.warn(
-            'Memory for MySQL too low '\
-            "(#{MysqlTuning::MysqlHelpers.num2mysql(memory_for_mysql)}), "\
-            'non-proximal interpolation skipped'
-          )
-        end
+      if type != 'proximal'
+        result_i = cnf_interpolation(cnf_samples, type, non_interpolated_keys)
+        result = Chef::Mixin::DeepMerge.hash_only_merge(result, result_i)
       end
       mysql_round_cnf(result)
     end
 
     private
 
-    # returns configuration keys that should be used for interpolation
-    # TODO: refactor this method, too complex
-    def keys_to_interpolate(cnf_samples)
-      cnf_samples = cnf_samples.dup
+    # avoid interpolating some configuration values
+    def non_interpolated_key?(ns, key, non_interpolated_keys = [])
+      (node['mysql_tuning']['non_interpolated_keys'][ns].is_a?(Array) &&
+       node['mysql_tuning']['non_interpolated_keys'][ns].include?(key)) ||
+      (non_interpolated_keys[ns].is_a?(Array) &&
+       non_interpolated_keys[ns].include?(key))
+    end
 
-      # remove keys setted in higher memory samples
+    # get integer data points from samples key
+    def samples_key_numeric_data_points(cnf_samples, ns, key)
+      previous_point = nil
+      cnf_samples.each_with_object({}) do |(mem, cnf), r|
+        if cnf.key?(ns) && MysqlTuning::MysqlHelpers.numeric?(cnf[ns][key])
+          r[mem] = MysqlTuning::MysqlHelpers.mysql2num(cnf[ns][key])
+          previous_point = r[mem]
+        # set to previous sample value if missing (value not changed)
+        elsif !previous_point.nil?
+          r[mem] = previous_point
+        end
+      end
+    end
+
+    # interpolate data points
+    def interpolate_data_points(type, data_points, point)
+      interpolator = MysqlTuning::Interpolator.new(data_points, type)
+      required_points = interpolator.required_data_points
+      points_count = data_points.count
+      if required_points > points_count
+        fail "Not enough data points (#{points_count} for #{required_points})"
+      end
+      result = interpolator.interpolate(point)
+      Chef::Log.debug("Interpolation(#{type}): point = #{point}, "\
+        "value = #{result}, data_points = #{data_points.inspect}")
+      result
+    end
+
+    # remove samples for higher memory values
+    def samples_within_memory_range(cnf_samples)
       higher_memory_values = cnf_samples.keys.sort.select do |x|
         x > memory_for_mysql
       end
       # the first two higher values will be taken into account
       higher_memory_values.shift(2)
-      cnf_samples.delete_if { |k, _v| higher_memory_values.include?(k) }
 
-      # get setted config keys by namespace
-      keys_by_ns = cnf_samples.each_with_object({}) do |(_memory, cnf), r|
+      cnf_samples.select { |k, _v| !higher_memory_values.include?(k) }
+    end
+
+    # get setted config keys by namespace
+    def samples_setted_keys_by_ns(cnf_samples)
+      cnf_samples.each_with_object({}) do |(_memory, cnf), r|
         cnf.each do |ns, ns_cnf|
-          r[ns] = ((r[ns] || []) + ns_cnf.keys).uniq
+          r[ns] ||= []
+          r[ns] = (r[ns] + ns_cnf.keys).uniq
         end
       end
+    end
 
-      # only select keys that have some values as numeric
+    # search this ns,key in cnf_samples and check if numeric
+    def samples_key_numeric?(cnf_samples, ns, key)
+      cnf_samples.reduce(false) do |r, (_mem, cnf)|
+        next true if r
+        if cnf.key?(ns)
+          MysqlTuning::MysqlHelpers.numeric?(cnf[ns][key])
+        else
+          false
+        end
+      end # cnf_samples.reduce
+    end
+
+    def samples_interpolate_ns(cnf_samples, keys, ns, type)
+      keys.each_with_object({}) do |r, key|
+        Chef::Log.debug("Interpolating #{ns}.#{key}")
+        data_points = samples_key_numeric_data_points(cnf_samples, ns, key)
+        begin
+          r[key] = interpolate_data_points(type, data_points, memory_for_mysql)
+        rescue RuntimeError => e
+          Chef::Log.warn("Cannot interpolate #{ns}.#{key}: #{e.message}")
+        end
+      end
+    end
+
+    def samples_minimum_memory(cnf_samples)
+      cnf_samples.keys.sort[0]
+    end
+
+    # returns configuration keys that should be used for interpolation
+    def keys_to_interpolate(cnf_samples, non_interpolated_keys = {})
+      cnf_samples = samples_within_memory_range(cnf_samples)
+      keys_by_ns = samples_setted_keys_by_ns(cnf_samples)
+
+      # select keys that have some values as numeric and not excluded
       keys_by_ns.each_with_object({}) do |(ns, keys), r|
         r[ns] = keys.select do |key|
-          # search this ns,key in cnf_samples and check if numeric
-          cnf_samples.reduce(false) do |b, (_mem, cnf)|
-            b ||
-              if cnf.key?(ns)
-                MysqlTuning::MysqlHelpers.numeric?(cnf[ns][key])
-              else
-                false
-              end
-          end # cnf_samples.reduce
+          !non_interpolated_key?(ns, key, non_interpolated_keys) &&
+          samples_key_numeric?(cnf_samples, ns, key)
         end # r[ns] = keys.select
       end # keys_by_ns.each_with_object
     end # #keys_to_interpolate

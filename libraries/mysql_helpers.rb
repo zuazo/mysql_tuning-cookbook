@@ -44,28 +44,15 @@ class MysqlTuning
       db = connect(user, password, port.to_i)
 
       result = vars.reduce(true) do |r, (key, value)|
-        r &&
-          if variable_exists?(db, key)
-            orig = get_variable(db, key)
-            if orig.to_s != value.to_s
-              changed = set_variable(db, key, value)
-              if changed
-                Chef::Log.info("Changed MySQL #{key.inspect} variable from #{orig.inspect} to #{value.inspect} dynamically")
-              else
-                Chef::Log.info("MySQL #{key.inspect} variable cannot be changed from #{orig.inspect} to #{value.inspect} dynamically.")
-              end
-              changed
-            else
-              true
-            end
-          else
-            false
-          end
+        return false unless r
+        set_variable(db, key, value)
       end
 
       disconnect(db)
       result
     end
+
+    # private
 
     def self.connect(user, password, port)
       require 'mysql'
@@ -74,15 +61,18 @@ class MysqlTuning
       db.set_server_option(::Mysql::OPTION_MULTI_STATEMENTS_ON)
       db
     end
+    private_class_method :connect
 
     def self.disconnect(db)
       db.close rescue nil
     end
+    private_class_method :disconnect
 
     def self.variable_exists?(db, name)
       value = db.query("SHOW GLOBAL VARIABLES LIKE '#{db.escape_string(name)}'")
       value.num_rows > 0
     end
+    private_class_method :variable_exists?
 
     def self.get_variable(db, name)
       value = db.query("SHOW GLOBAL VARIABLES LIKE '#{db.escape_string(name)}'")
@@ -92,22 +82,25 @@ class MysqlTuning
         nil
       end
     end
+    private_class_method :get_variable
+
+    def self.set_variable_query(db, name, value)
+      stmt.execute(db.prepare("SET GLOBAL #{name} = ?"))
+      Chef::Log.info("Changed MySQL #{key.inspect} variable "\
+        "from #{orig.inspect} to #{value.inspect} dynamically")
+      true
+    rescue
+      Chef::Log.info("MySQL #{key.inspect} variable cannot be changed "\
+        "from #{orig.inspect} to #{value.inspect} dynamically.")
+      false
+    end
+    private_class_method :set_variable_query
 
     def self.set_variable(db, name, value)
-      # The variable name has been checked in #variable_exists?
-      stmt = db.prepare("SET GLOBAL #{name} = ?")
-      begin
-        stmt.execute(value)
-        true
-      rescue
-        false
-      end
-    end # #self.set_variable
-
-    private_class_method :connect
-    private_class_method :disconnect
-    private_class_method :variable_exists?
-    private_class_method :get_variable
+      return false unless variable_exists?(db, name)
+      return true if get_variable(db, name).to_s == value.to_s
+      set_variable_query(db, name, value)
+    end
     private_class_method :set_variable
   end
 end
