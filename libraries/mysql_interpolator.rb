@@ -14,23 +14,22 @@ class MysqlTuning
     end
 
     # convert all values to float and sort them
-    def data_points(data_points)
-      points = data_points.each_with_object({}) do |(k, v), r|
-        r[k.to_f] = v.to_f
+    def data_points(data_points = nil)
+      if data_points.nil?
+        @data_points
+      else
+        @data_points = data_points_filter(data_points)
+        # reset internall type
+        type(@raw_type)
       end
-      @data_points = Hash[points.sort]
     end
 
-    def type(type)
-      @type =
-      case type.downcase
-      when 'linear' then ::Interpolator::Table::LINEAR
-      when 'cubic' then ::Interpolator::Table::CUBIC
-      when 'bicubic', 'lagrange'
-        @data_points.count > 3 ? ::Interpolator::Table::LAGRANGE3 : ::Interpolator::Table::LAGRANGE2
-      when 'catmull' then ::Interpolator::Table::CATMULL
-      else
+    def type(type = nil)
+      if type.nil?
         @type
+      else
+        @type_raw = type
+        @type = type_filter(type)
       end
     end
 
@@ -47,14 +46,6 @@ class MysqlTuning
       end
     end
 
-    # Lower-neighbor interpolation
-    def proximal_interpolation(value)
-      first_value = @data_points.values.first
-      @data_points.reduce(first_value) do |r, (x, y)|
-        x < value ? y : r
-      end
-    end
-
     def interpolate(value)
       case @type
       when 'proximal'
@@ -64,6 +55,35 @@ class MysqlTuning
         t.style = @type
         t.interpolate(value).round
       end
+    end
+
+    private
+
+    def data_points_filter(data_points)
+      points = data_points.each_with_object({}) do |(k, v), r|
+        r[k.to_f] = v.to_f
+      end
+      Hash[points.sort]
+    end
+
+    def type_filter(type)
+      case type.to_s
+      when 'linear' then ::Interpolator::Table::LINEAR
+      when 'cubic' then ::Interpolator::Table::CUBIC
+      when 'bicubic', 'lagrange'
+        @data_points.count > 3 ? ::Interpolator::Table::LAGRANGE3 : ::Interpolator::Table::LAGRANGE2
+      when 'catmull' then ::Interpolator::Table::CATMULL
+      else
+        type
+      end
+    end
+
+    # Lower-neighbor interpolation
+    def proximal_interpolation(value)
+      first_value = @data_points.values.first
+      @data_points.reduce(first_value) do |r, (x, y)|
+        x <= value ? y : r
+      end.round
     end
   end
 end

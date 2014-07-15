@@ -98,10 +98,8 @@ class MysqlTuning
 
     # avoid interpolating some configuration values
     def non_interpolated_key?(ns, key, non_interpolated_keys = [])
-      (node['mysql_tuning']['non_interpolated_keys'][ns].is_a?(Array) &&
-       node['mysql_tuning']['non_interpolated_keys'][ns].include?(key)) ||
-      (non_interpolated_keys[ns].is_a?(Array) &&
-       non_interpolated_keys[ns].include?(key))
+      non_interpolated_keys[ns].is_a?(Array) &&
+      non_interpolated_keys[ns].include?(key)
     end
 
     # get integer data points from samples key
