@@ -3,10 +3,10 @@
 class MysqlTuning
   # Some MySQL Helpers to use from Chef cookbooks (recipes, attributes, ...)
   module CookbookHelpers
-    KB = 1024
-    MB = 1024 * KB
-    GB = 1024 * MB
-    IO_SIZE = 4 * KB
+    KB = 1024 unless defined?(KB)
+    MB = 1024 * KB unless defined?(MB)
+    GB = 1024 * MB unless defined?(GB)
+    IO_SIZE = 4 * KB unless defined?(IO_SIZE)
 
     def mysql_tuning_interpolator_install
       return unless node['mysql_tuning']['interpolation'] == true ||
