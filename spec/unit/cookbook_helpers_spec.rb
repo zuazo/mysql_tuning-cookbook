@@ -58,7 +58,8 @@ class FakeRecipe < ::Chef::Node
     if value.nil?
       node['mysql_tuning']['interpolation']
     else
-      node.set['mysql_tuning']['interpolation'] = value end
+      node.set['mysql_tuning']['interpolation'] = value
+    end
   end
 
   def non_interpolated_keys(value = nil)
@@ -68,7 +69,6 @@ class FakeRecipe < ::Chef::Node
       node.set['mysql_tuning']['non_interpolated_keys'] = value
     end
   end
-
 end
 
 describe MysqlTuning::CookbookHelpers do
@@ -90,10 +90,10 @@ describe MysqlTuning::CookbookHelpers do
     context 'proximal interpolation' do
       before do
         subject.interpolation_type('proximal')
-        subject.cnf_samples({
+        subject.cnf_samples(
           1 * GB => { 'mysqld' => { 'key1' => 100 } },
-          4 * GB => { 'mysqld' => { 'key1' => 200 } },
-        })
+          4 * GB => { 'mysqld' => { 'key1' => 200 } }
+        )
       end
 
       it 'should choose the lower sample if below' do
@@ -120,10 +120,10 @@ describe MysqlTuning::CookbookHelpers do
         allow(::Chef::Log).to receive(:warn)
 
         subject.interpolation_type('linear')
-        subject.cnf_samples({
+        subject.cnf_samples(
           1 * GB => { 'mysqld' => { 'key1' => 100 } },
-          4 * GB => { 'mysqld' => { 'key1' => 200 } },
-        })
+          4 * GB => { 'mysqld' => { 'key1' => 200 } }
+        )
       end
 
       it 'should use proximal interpolation for lower values' do
@@ -149,71 +149,71 @@ describe MysqlTuning::CookbookHelpers do
 
       it 'should not interpolate non-integer values' do
         subject.memory(2 * GB)
-        subject.cnf_samples({
+        subject.cnf_samples(
           1 * GB => { 'mysqld' => { 'key1' => 'value1' } },
-          4 * GB => { 'mysqld' => { 'key1' => 'value2' } },
-        })
+          4 * GB => { 'mysqld' => { 'key1' => 'value2' } }
+        )
         expect(cnf_from_samples['mysqld']['key1']).to eql('value1')
       end
 
       it 'should not interpolate non-interpolated keys' do
         subject.memory(2 * GB)
-        subject.cnf_samples({
+        subject.cnf_samples(
           1 * GB => { 'mysqld' => { 'key1' => 100 } },
-          4 * GB => { 'mysqld' => { 'key1' => 200 } },
-        })
+          4 * GB => { 'mysqld' => { 'key1' => 200 } }
+        )
         subject.non_interpolated_keys(mysqld: %w(key1))
         expect(cnf_from_samples['mysqld']['key1']).to eql(100)
       end
 
       it 'should interpolate mysql integer values' do
         subject.memory(2 * GB)
-        subject.cnf_samples({
+        subject.cnf_samples(
           1 * GB => { 'mysqld' => { 'key1' => '100M' } },
-          4 * GB => { 'mysqld' => { 'key1' => '200M' } },
-        })
-        expect(cnf_from_samples['mysqld']['key1']).to eql(139810133)
+          4 * GB => { 'mysqld' => { 'key1' => '200M' } }
+        )
+        expect(cnf_from_samples['mysqld']['key1']).to eql(139_810_133)
       end
 
       it 'should interpolate without rounding to block size' do
         subject.memory(2 * GB)
-        subject.cnf_samples({
+        subject.cnf_samples(
           1 * GB => { 'mysqld' => { 'key1' => '100M' } },
-          4 * GB => { 'mysqld' => { 'key1' => '200M' } },
-        })
+          4 * GB => { 'mysqld' => { 'key1' => '200M' } }
+        )
         expect(cnf_from_samples['mysqld']['key1'] % 1024)
           .not_to be_zero
       end
 
       it 'should interpolate rounding to block size' do
         subject.memory(1 * GB)
-        subject.cnf_samples({
+        subject.cnf_samples(
           1 * GB => { 'mysqld' => { 'innodb_log_buffer_size' => '100M' } },
-          4 * GB => { 'mysqld' => { 'innodb_log_buffer_size' => '200M' } },
-        })
+          4 * GB => { 'mysqld' => { 'innodb_log_buffer_size' => '200M' } }
+        )
         expect(cnf_from_samples['mysqld']['innodb_log_buffer_size'] % 1024)
           .to be_zero
       end
 
       it 'should set keys set for next two higher memory values' do
         subject.memory(1.1 * GB)
-        subject.cnf_samples({
+        subject.cnf_samples(
           1 * GB => { 'mysqld' => { 'key1' => 100 } },
           2 * GB => { 'mysqld' => { 'key2' => 100 } },
           3 * GB => { 'mysqld' => { 'key3' => 100 } },
-          4 * GB => { 'mysqld' => { 'key4' => 100 } },
-        })
+          4 * GB => { 'mysqld' => { 'key4' => 100 } }
+        )
         expect(cnf_from_samples['mysqld'].key?('key3')).to be true
       end
 
       it 'should ignore keys set for far higher memory values' do
         subject.memory(1.1 * GB)
-        subject.cnf_samples({
+        subject.cnf_samples(
           1 * GB => { 'mysqld' => { 'key1' => 100 } },
           2 * GB => { 'mysqld' => { 'key2' => 100 } },
           3 * GB => { 'mysqld' => { 'key3' => 100 } },
-          4 * GB => { 'mysqld' => { 'key4' => 100 } },
-        })
+          4 * GB => { 'mysqld' => { 'key4' => 100 } }
+        )
         expect(cnf_from_samples['mysqld'].key?('key4')).to be false
       end
 
@@ -221,11 +221,12 @@ describe MysqlTuning::CookbookHelpers do
         # cubic requires 3 points
         subject.interpolation_type('cubic')
         subject.memory(1.1 * GB)
-        subject.cnf_samples({
+        subject.cnf_samples(
           1 * GB => { 'mysqld' => { 'key1' => 100 } },
-          4 * GB => { 'mysqld' => { 'key1' => 200 } },
-        })
-        expect(::Chef::Log).to receive(:warn).with(/Cannot interpolate .* Not enough data points/)
+          4 * GB => { 'mysqld' => { 'key1' => 200 } }
+        )
+        expect(::Chef::Log).to receive(:warn)
+          .with(/Cannot interpolate .* Not enough data points/)
         expect(cnf_from_samples['mysqld']['key1']).to eql(100)
       end
 
