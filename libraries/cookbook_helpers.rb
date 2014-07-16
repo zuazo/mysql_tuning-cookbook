@@ -72,9 +72,10 @@ class MysqlTuning
     end
 
     def cnf_proximal_interpolation(cnf_samples)
-      cnf_samples = Hash[cnf_samples.sort] # sort inc by RAM size
       # TODO: proximal implementation inside Interpolator class should be used
-      cnf_samples.reduce({}) do |final_cnf, (mem, cnf)|
+      cnf_samples = Hash[cnf_samples.sort] # sort inc by RAM size
+      first_sample = cnf_samples.values.first
+      cnf_samples.reduce(first_sample) do |final_cnf, (mem, cnf)|
         if memory_for_mysql >= mem
           Chef::Mixin::DeepMerge.hash_only_merge(final_cnf, cnf)
         else

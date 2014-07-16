@@ -24,7 +24,7 @@ describe 'mysql_tuning_cnf resource' do
 
   def node_setup(node, attrs)
     node.set['mysql_tuning']['recipe'] = 'mysql::server'
-    node.set['memory']['total'] = system_memory(512 * MB)
+    node.automatic['memory']['total'] = system_memory(512 * MB)
     attrs.each do |k, v|
       node.set['mysql_tuning'][k] = v
     end
