@@ -92,9 +92,8 @@ end
 
 def include_mysql_recipe
   # include_recipe is required for notifications to work
-  unless node['mysql_tuning']['recipe'].nil?
-    @run_context.include_recipe(node['mysql_tuning']['recipe'])
-  end
+  return if node['mysql_tuning']['recipe'].nil?
+  @run_context.include_recipe(node['mysql_tuning']['recipe'])
 end
 
 action :create do

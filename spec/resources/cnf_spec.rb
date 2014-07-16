@@ -21,19 +21,25 @@ require 'spec_helper'
 require 'mysql_interpolator'
 
 describe 'mysql_tuning_cnf resource' do
+
+  def node_setup(node, attrs)
+    node.set['mysql_tuning']['recipe'] = 'mysql::server'
+    node.set['memory']['total'] = system_memory(512 * MB)
+    attrs.each do |k, v|
+      node.set['mysql_tuning'][k] = v
+    end
+  end
+
   def chef_run(attrs = {})
     runner = ChefSpec::Runner.new(
         platform: 'ubuntu', version: '12.04',
         step_into: %w(mysql_tuning mysql_tuning_cnf)
     ) do |node|
-      node.set['mysql_tuning']['recipe'] = 'mysql::server'
-      node.set['memory']['total'] = system_memory(512 * MB)
-      attrs.each do |k, v|
-        node.set['mysql_tuning'][k] = v
-      end
+      node_setup(node, attrs)
     end
     runner.converge('mysql_tuning::default')
   end
+
   def template(name, attrs = {})
     chef_run(attrs).template(name)
   end
