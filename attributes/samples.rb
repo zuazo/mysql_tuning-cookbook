@@ -67,7 +67,7 @@ default['mysql_tuning']['configuration_samples'][512 * MB] = {
     query_cache_size: '16M',
     innodb_buffer_pool_size: '256M',
     innodb_additional_mem_pool_size: '20M',
-    innodb_log_file_size: '64M'
+    # innodb_log_file_size: '64M'
   },
   myisamchk: {
     key_buffer_size: '128M',
@@ -86,7 +86,7 @@ default['mysql_tuning']['configuration_samples'][1 * GB] = {
     read_rnd_buffer_size: '8M',
     query_cache_size: '32M',
     innodb_buffer_pool_size: '384M',
-    innodb_log_file_size: '100M'
+    # innodb_log_file_size: '100M'
   },
   myisamchk: {
     key_buffer_size: '256M',
@@ -112,7 +112,7 @@ default['mysql_tuning']['configuration_samples'][4 * GB] = {
     binlog_cache_size: '1M',
     innodb_buffer_pool_size: '2G',
     innodb_additional_mem_pool_size: '16M',
-    innodb_log_file_size: '256M',
+    # innodb_log_file_size: '256M',
     innodb_log_buffer_size: '8M',
     innodb_log_files_in_group: 3,
     innodb_lock_wait_timeout: 120,

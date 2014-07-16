@@ -70,27 +70,34 @@ def mysql_port
   )
 end
 
-action :create do
+def install_mysql_gem
+  return unless Gem::Specification.find_all_by_name('mysql').empty?
+  mysql_chef_gem 'default' do
+    action :nothing
+  end.run_action(:install)
+end
 
-  needs_restart =
-    if values.key?('mysqld')
-      if dynamic?
-        # TODO: bad code and executed for every cnf file
-        mysql_chef_gem 'default' do
-          action :nothing
-        end.run_action(:install)
-        !::MysqlTuning::MysqlHelpers.set_variables(
-          values['mysqld'],
-          mysql_user,
-          mysql_password,
-          mysql_port
-        )
-      else
-        true
-      end
-    else
-      false
-    end
+def needs_restart
+  return false unless values.key?('mysqld')
+  return true unless dynamic?
+
+  install_mysql_gem
+  !::MysqlTuning::MysqlHelpers.set_variables(
+    values['mysqld'],
+    mysql_user,
+    mysql_password,
+    mysql_port
+  )
+end
+
+def include_mysql_recipe
+  # include_recipe is required for notifications to work
+  unless node['mysql_tuning']['recipe'].nil?
+    @run_context.include_recipe(node['mysql_tuning']['recipe'])
+  end
+end
+
+action :create do
 
   r = template ::File.join(directory, new_resource.filename) do
     owner 'mysql'
@@ -99,12 +106,16 @@ action :create do
     variables(
       config: values
     )
-    notifies :restart, "mysql_service[#{service_name}]" if needs_restart
+    if needs_restart
+      include_mysql_recipe
+      notifies :restart, "mysql_service[#{service_name}]"
+    end
   end
   new_resource.updated_by_last_action(r.updated_by_last_action?)
 end
 
 action :delete do
+  include_mysql_recipe
   r = file ::File.join(directory, new_resource.file_name) do
     action :delete
     notifies :restart, "mysql_service[#{service_name}]"

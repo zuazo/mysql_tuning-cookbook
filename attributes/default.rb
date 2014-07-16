@@ -2,16 +2,10 @@
 
 self.class.send(:include, ::MysqlTuning::CookbookHelpers)
 
+default['mysql_tuning']['recipe'] = nil
 default['mysql_tuning']['system_percentage'] = 100
-
 default['mysql_tuning']['dynamic_configuration'] = false
-
 default['mysql_tuning']['interpolation'] = 'proximal'
-
-default['mysql_tuning']['non_interpolated_keys']['mysqld'] = %w(
-  innodb_log_file_size
-)
-
 default['mysql_tuning']['directory'] = '/etc/mysql/conf.d'
 
 default['mysql_tuning']['logging.cnf'] = {

@@ -2,6 +2,10 @@
 
 self.class.send(:include, ::MysqlTuning::CookbookHelpers)
 
+default['mysql_tuning']['non_interpolated_keys']['mysqld'] = %w(
+  innodb_log_file_size
+)
+
 default['mysql_tuning']['variables_block_size'] = {
   binlog_cache_size: IO_SIZE,
   binlog_stmt_cache_size: IO_SIZE,

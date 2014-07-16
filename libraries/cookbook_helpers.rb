@@ -164,7 +164,7 @@ class MysqlTuning
     end
 
     def samples_interpolate_ns(cnf_samples, keys, ns, type)
-      keys.each_with_object({}) do |r, key|
+      keys.each_with_object({}) do |key, r|
         Chef::Log.debug("Interpolating #{ns}.#{key}")
         data_points = samples_key_numeric_data_points(cnf_samples, ns, key)
         begin
