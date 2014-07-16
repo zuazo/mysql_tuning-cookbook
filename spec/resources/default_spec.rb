@@ -22,15 +22,24 @@ require 'mysql_interpolator'
 
 describe 'mysql_tuning resource' do
 
-  def chef_run_tuning(data)
+  def chef_run(data = {})
     runner = ChefSpec::Runner.new(
         platform: 'ubuntu', version: '12.04',
         step_into: %w(mysql_tuning)
     ) do |node|
-      node.set['mysql_tuning']['interpolation'] = data[:interpolation]
-      node.set['memory']['total'] = system_memory(data[:memory])
+      unless data[:interpolation].nil?
+        node.set['mysql_tuning']['interpolation'] = data[:interpolation]
+      end
+      node.set['memory']['total'] = system_memory(
+        data[:memory].nil? ? 512 * MB : data[:memory]
+      )
+      node.set['mysql_tuning']['new.cnf'] = {}
     end
     runner.converge('mysql_tuning::default')
+  end
+
+  def chef_run_tuning(data)
+    runner = chef_run(data)
     runner.node['mysql_tuning']['tuning.cnf']
   end
 
@@ -60,4 +69,13 @@ describe 'mysql_tuning resource' do
       end # each do |interpolation|
     end # context with bytes of memory
   end # each do |memory, range_r|
+
+  %w(tuning.cnf logging.cnf new.cnf).each do |cnf|
+
+    it "should create #{cnf} file with mysql_tuning_cnf" do
+      expect(chef_run).to create_mysql_tuning_cnf(cnf)
+    end
+
+  end # cnf.each
+
 end # describe mysql_tuning resource
