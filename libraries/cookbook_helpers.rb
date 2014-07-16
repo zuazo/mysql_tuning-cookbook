@@ -64,7 +64,6 @@ class MysqlTuning
         return {}
       end
       mysql_tuning_interpolator_install
-
       keys_by_ns = keys_to_interpolate(cnf_samples, non_interpolated_keys)
       keys_by_ns.each_with_object({}) do |(ns, keys), result|
         result[ns] = samples_interpolate_ns(cnf_samples, keys, ns, type)
