@@ -81,6 +81,28 @@ describe MysqlTuning::CookbookHelpers do
     )
   end
 
+  context '#mysql_fix_cnf' do
+    let(:cnf) do
+      { 'mysqld' => {
+        'slow_query_log' => 'ON',
+        'slow_query_log_file' => 'foo'
+      } }
+    end
+
+    it 'should not fix conigurations with new versions' do
+      allow(subject).to receive(:mysql_version).and_return('5.5')
+      expect(subject.mysql_fix_cnf(cnf))
+        .to eql(cnf)
+    end
+
+    it 'should fix conigurations with old versions' do
+      allow(subject).to receive(:mysql_version).and_return('5.0')
+      expect(subject.mysql_fix_cnf(cnf))
+        .to eql('mysqld' => { 'log_slow_queries' => 'foo' })
+    end
+
+  end
+
   context '#cnf_from_samples' do
 
     it 'should not throw any error with default examples' do

@@ -2,6 +2,21 @@
 
 self.class.send(:include, ::MysqlTuning::CookbookHelpers)
 
+default['mysql_tuning']['old_names'] = {
+  'general_log' => {
+    '< 5.1.29' => 'log'
+  },
+  'slow_query_log' => {
+    '< 5.1.12' => nil
+  },
+  'slow_query_log_file' => {
+    '< 5.1.12' => 'log_slow_queries'
+  },
+  'table_open_cache' => {
+    '< 5.1.3' => 'table_cache'
+  }
+}
+
 default['mysql_tuning']['non_interpolated_keys']['mysqld'] = %w(
   innodb_log_file_size
 )
