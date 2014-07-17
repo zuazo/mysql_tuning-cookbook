@@ -39,17 +39,29 @@ package_name = package_name_for(
   version
 )
 
+plugin_path = "#{node['ohai']['plugin_path']}/mysql.rb"
+
 ohai 'reload_mysql' do
   plugin 'mysql'
   action :nothing
-  subscribes :reload, "package[#{package_name}]", :immediately
 end
 
-cookbook_file "#{node['ohai']['plugin_path']}/mysql.rb" do
-  source "#{source_dir}/mysql.rb"
+ruby_block 'ohai plugin reload subscriber' do
+  block {}
+  subscribes :create, "package[#{package_name}]", :immediately
+  notifies :create, "template[#{plugin_path}]", :immediately
+  notifies :reload, 'ohai[reload_mysql]', :immediately
+  action :nothing
+end
+
+template plugin_path do
+  source "#{source_dir}/mysql.rb.erb"
   owner 'root'
   group 'root'
   mode '0755'
+  variables(
+    mysql_bin: node['mysql_tuning']['mysqld_bin']
+  )
   notifies :reload, 'ohai[reload_mysql]', :immediately
 end
 

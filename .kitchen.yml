@@ -30,3 +30,8 @@ suites:
     - recipe[mysql::server]
     - recipe[mysql_tuning::default]
   attributes:
+- name: ohai
+  run_list:
+    - recipe[mysql::server]
+    - recipe[mysql_tuning::ohai_plugin]
+  attributes:
