@@ -13,7 +13,7 @@ end
 def directory
   new_resource.directory(
     if new_resource.directory.nil?
-      node['mysql_tuning']['directory']
+      node['mysql_tuning']['include_dir']
     else
       new_resource.directory
     end

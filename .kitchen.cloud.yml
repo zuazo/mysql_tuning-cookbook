@@ -1,0 +1,60 @@
+---
+driver:
+  aws_access_key_id: <%= ENV['AWS_ACCESS_KEY_ID'] %>
+  aws_secret_access_key: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
+  aws_ssh_key_id: <%= ENV['AWS_KEYPAIR_NAME'] %>
+  ssh:
+    forward_agent: true
+
+platforms:
+- name: ubuntu-10.04
+  driver_plugin: digitalocean
+  driver_config:
+    flavor: 512MB
+    region: Amsterdam 2
+  run_list:
+    recipe[apt]
+
+- name: ubuntu-14.04
+  driver_plugin: digitalocean
+  driver_config:
+    flavor: 512MB
+    region: Amsterdam 2
+  run_list:
+    recipe[apt]
+
+- name: centos-5.8
+  driver_plugin: digitalocean
+  driver_config:
+    flavor: 512MB
+    region: Amsterdam 2
+
+- name: centos-6.5
+  driver_plugin: digitalocean
+  driver_config:
+    flavor: 512MB
+    region: Amsterdam 2
+
+- name: debian-7.0
+  driver_plugin: digitalocean
+  driver_config:
+    flavor: 512MB
+    region: Amsterdam 2
+  run_list:
+    recipe[apt]
+
+- name: fedora-20
+  driver_plugin: digitalocean
+  driver_config:
+    flavor: 512MB
+    region: Amsterdam 2
+
+- name: amazon-2013.09.2
+  driver_plugin: ec2
+  driver_config:
+    image_id: ami-bba18dd2
+    flavor_id: t1.micro
+    username: ec2-user
+<% if ENV['SSH_AGENT_PID'].nil? %>
+    ssh_key: <%= ENV['EC2_SSH_KEY_PATH'] %>
+<% end %>

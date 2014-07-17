@@ -8,6 +8,14 @@ description 'Installs/Configures mysql_tuning'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '0.1.0'
 
-depends 'mysql'
+supports 'amazon'
+supports 'centos'
+supports 'debian'
+supports 'fedora'
+supports 'freebsd'
+supports 'redhat'
+supports 'ubuntu'
+
+depends 'mysql', '~> 5.0'
 depends 'ohai'
 depends 'mysql-chef_gem'
