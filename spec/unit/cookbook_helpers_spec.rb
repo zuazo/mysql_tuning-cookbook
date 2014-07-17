@@ -58,7 +58,7 @@ class FakeRecipe < ::Chef::Node
     if value.nil?
       node['mysql_tuning']['interpolation']
     else
-      node.set['mysql_tuning']['interpolation'] = value
+      node.default['mysql_tuning']['interpolation'] = value
     end
   end
 
@@ -66,7 +66,15 @@ class FakeRecipe < ::Chef::Node
     if value.nil?
       node['mysql_tuning']['non_interpolated_keys']
     else
-      node.set['mysql_tuning']['non_interpolated_keys'] = value
+      node.default['mysql_tuning']['non_interpolated_keys'] = value
+    end
+  end
+
+  def system_percentage(value = nil)
+    if value.nil?
+      node['mysql_tuning']['system_percentage']
+    else
+      node.default['mysql_tuning']['system_percentage'] = value
     end
   end
 end
@@ -167,6 +175,12 @@ describe MysqlTuning::CookbookHelpers do
       it 'should interpolate higher' do
         subject.memory(8 * GB)
         expect(cnf_from_samples['mysqld']['key1']).to eql(333)
+      end
+
+      it 'should interpolate with system_percentage' do
+        subject.memory(8 * GB)
+        subject.system_percentage(25)
+        expect(cnf_from_samples['mysqld']['key1']).to eql(133)
       end
 
       it 'should not interpolate non-integer values' do
