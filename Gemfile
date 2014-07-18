@@ -26,3 +26,7 @@ group :integration_cloud, :kitchen_cloud do
   gem 'kitchen-ec2', '~> 0.8'
   gem 'kitchen-digitalocean', '~> 0.7'
 end
+
+group :charts do
+  gem 'gnuplot', '~> 2.6'
+end
