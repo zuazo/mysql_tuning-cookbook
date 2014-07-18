@@ -10,6 +10,16 @@ def interpolation
   )
 end
 
+def interpolation_by_variable
+  new_resource.interpolation_by_variable(
+    if new_resource.interpolation_by_variable.nil?
+      node['mysql_tuning']['interpolation_by_variable']
+    else
+      new_resource.interpolation_by_variable
+    end
+  )
+end
+
 def configuration_samples
   new_resource.configuration_samples(
     if new_resource.configuration_samples.nil?
@@ -41,7 +51,8 @@ action :create do
   tuning_cnf = cnf_from_samples(
     configuration_samples,
     interpolation,
-    non_interpolated_keys
+    non_interpolated_keys,
+    interpolation_by_variable
   )
   node.default['mysql_tuning']['tuning.cnf'] =
     Chef::Mixin::DeepMerge.hash_only_merge(

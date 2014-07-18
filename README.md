@@ -90,6 +90,12 @@ Currently, the following algorithms are supported:
 
 ![query_cache_size Interpolation Chart](https://github.com/onddo/mysql_tuning/raw/master/charts/query_cache_size.png)
 
+You can use different interpolation algorithms for some variables by setting them in the `node['mysql_tuning']['interpolation_by_variable']` attribute or the `mysql_tuning#interpolation_by_variable` resource parameter. This attribute hash the following structure: `interpolation_by_variable[group][variable]`. For example:
+
+```ruby
+node.default['mysql_tuning']['interpolation_by_variable']['mysqld']['key_buffer_size'] = 'catmull'
+```
+
 ## Dynamic Configuration
 
 When there are configuration changes, this cookbook can try to set the configuration values without restarting the MySQL server. The cookbook will go for each variable, and try to set it dynamically.  If any of the variables cannot be changed, the MySQL server will be restarted.
@@ -130,13 +136,18 @@ Attributes
 </tr>
 <tr>
   <td><code>node['mysql_tuning']['dynamic_configuration']</code></td>
-  <td>Tries to change the MySQL configuration without restarting the server, setting variable values dynamically (<a href="#dynamic-configuration">See below</a>).</td>
+  <td>Tries to change the MySQL configuration without restarting the server, setting variable values dynamically (<a href="#dynamic-configuration">See above</a>).</td>
   <td><code>false</code></td>
 </tr>
 <tr>
   <td><code>node['mysql_tuning']['interpolation']</code></td>
-  <td>Interpolation algorithm to use. Possible values: <code>'proximal'</code>, <code>'linear'</code>, <code>'cubic'</code>, <code>'bicubic'</code>, <code>'catmull'</code> (<a href="#configuration-variables-interpolation">See below</a>).</td>
+  <td>Interpolation algorithm to use. Possible values: <code>'proximal'</code>, <code>'linear'</code>, <code>'cubic'</code>, <code>'bicubic'</code>, <code>'catmull'</code> (<a href="#configuration-variables-interpolation">See above</a>).</td>
   <td><code>'proximal'</code></td>
+</tr>
+<tr>
+  <td><code>node['mysql_tuning']['interpolation_by_variable']</code></td>
+  <td>Use different interpolation algorithm for some variables. This attributes is a Hash of Hashes (<a href="#configuration-variables-interpolation">See above</a>).</td>
+  <td><code>{}</code></td>
 </tr>
 <tr>
   <td><code>node['mysql_tuning']['recipe']</code></td>
@@ -234,6 +245,11 @@ Creates MySQL configuration files:
   <td>interpolation</td>
   <td>MySQL interpolation type used.</td>
   <td><code>node['mysql_tuning']['interpolation']</code></td>
+</tr>
+<tr>
+  <td>interpolation_by_variable</code></td>
+  <td>Use different interpolation algorithm for some variables. This attributes is a Hash of Hashes (<a href="#configuration-variables-interpolation">See above</a>).</td>
+  <td><code>{}</code></td>
 </tr>
 <tr>
   <td>configuration_samples</td>

@@ -7,6 +7,8 @@ default['mysql_tuning']['dynamic_configuration'] = false
 default['mysql_tuning']['interpolation'] = 'proximal'
 default['mysql_tuning']['recipe'] = nil
 
+default['mysql_tuning']['interpolation_by_variable'] = {}
+
 case node['platform']
 when 'fedora'
   default['mysql_tuning']['include_dir'] = '/etc/my.cnf.d'
@@ -35,4 +37,4 @@ default['mysql_tuning']['logging.cnf'] = {
 }
 
 # Calculated from samples
-default['mysql_tuning']['tuning.cnf'] = {}
+default['mysql_tuning']['tuning.cnf'] = Mash.new

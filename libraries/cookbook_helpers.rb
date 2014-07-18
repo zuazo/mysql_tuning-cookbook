@@ -100,16 +100,16 @@ class MysqlTuning
     end
 
     # interpolates all the cnf_samples values
-    def cnf_interpolation(cnf_samples, type, non_interpolated_keys)
+    def cnf_interpolation(cnf_samples, dtype, non_interp_keys, types = {})
       if samples_minimum_memory(cnf_samples) > memory_for_mysql
         Chef::Log.warn("Memory for MySQL too low (#{memory_for_mysql}), "\
           'non-proximal interpolation skipped')
         return {}
       end
       mysql_tuning_interpolator_install
-      keys_by_ns = keys_to_interpolate(cnf_samples, non_interpolated_keys)
+      keys_by_ns = keys_to_interpolate(cnf_samples, non_interp_keys)
       keys_by_ns.each_with_object({}) do |(ns, keys), result|
-        result[ns] = samples_interpolate_ns(cnf_samples, keys, ns, type)
+        result[ns] = samples_interpolate_ns(cnf_samples, ns, keys, dtype, types)
       end
     end
 
@@ -128,10 +128,10 @@ class MysqlTuning
 
     # generates interpolated cnf file from samples
     # proximal interpolation is used for non-interpolated values
-    def cnf_from_samples(cnf_samples, type, non_interpolated_keys)
+    def cnf_from_samples(cnf_samples, dtype, non_interp_keys, types = {})
       result = cnf_proximal_interpolation(cnf_samples)
-      if type != 'proximal'
-        result_i = cnf_interpolation(cnf_samples, type, non_interpolated_keys)
+      if dtype != 'proximal' || !types.empty?
+        result_i = cnf_interpolation(cnf_samples, dtype, non_interp_keys, types)
         result = Chef::Mixin::DeepMerge.hash_only_merge(result, result_i)
       end
       mysql_round_cnf(mysql_fix_cnf(result))
@@ -140,9 +140,9 @@ class MysqlTuning
     private
 
     # avoid interpolating some configuration values
-    def non_interpolated_key?(ns, key, non_interpolated_keys = [])
-      non_interpolated_keys[ns].is_a?(Array) &&
-      non_interpolated_keys[ns].include?(key)
+    def non_interpolated_key?(ns, key, non_interp_keys = [])
+      non_interp_keys[ns].is_a?(Array) &&
+      non_interp_keys[ns].include?(key)
     end
 
     # get integer data points from samples key
@@ -206,11 +206,17 @@ class MysqlTuning
       end # cnf_samples.reduce
     end
 
-    def samples_interpolate_ns(cnf_samples, keys, ns, type)
+    def determine_interpolation_type(ns, key, default_type, types)
+      return default_type unless types.key?(ns) && types[ns].key?(key)
+      types[ns][key]
+    end
+
+    def samples_interpolate_ns(cnf_samples, ns, keys, default_type, types)
       keys.each_with_object({}) do |key, r|
         Chef::Log.debug("Interpolating #{ns}.#{key}")
         data_points = samples_key_numeric_data_points(cnf_samples, ns, key)
         begin
+          type = determine_interpolation_type(ns, key, default_type, types)
           r[key] = interpolate_data_points(type, data_points, memory_for_mysql)
         rescue RuntimeError => e
           Chef::Log.warn("Cannot interpolate #{ns}.#{key}: #{e.message}")
@@ -223,14 +229,14 @@ class MysqlTuning
     end
 
     # returns configuration keys that should be used for interpolation
-    def keys_to_interpolate(cnf_samples, non_interpolated_keys = {})
+    def keys_to_interpolate(cnf_samples, non_interp_keys = {})
       cnf_samples = samples_within_memory_range(cnf_samples)
       keys_by_ns = samples_setted_keys_by_ns(cnf_samples)
 
       # select keys that have some values as numeric and not excluded
       keys_by_ns.each_with_object({}) do |(ns, keys), r|
         r[ns] = keys.select do |key|
-          !non_interpolated_key?(ns, key, non_interpolated_keys) &&
+          !non_interpolated_key?(ns, key, non_interp_keys) &&
           samples_key_numeric?(cnf_samples, ns, key)
         end # r[ns] = keys.select
       end # keys_by_ns.each_with_object

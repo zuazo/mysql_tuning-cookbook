@@ -53,6 +53,15 @@ attribute 'mysql_tuning/interpolation',
           required: 'optional',
           default: '"proximal"'
 
+attribute 'mysql_tuning/interpolation_by_variable',
+          display_name: 'mysql configuration interpolation by variable',
+          description:
+            'Use different interpolation algorithm for some variables. '\
+            'This attributes is a Hash of Hashes.',
+          type: 'hash',
+          required: 'optional',
+          default: '{}'
+
 attribute 'mysql_tuning/recipe',
           display_name: 'mysql recipe name',
           description:
