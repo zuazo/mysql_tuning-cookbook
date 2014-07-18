@@ -390,17 +390,17 @@ include_recipe 'mysql_tuning::ohai_plugin'
 Testing
 =======
 
-See the [TESTING.md](https://github.com/onddo/mysql_tuning-cookbook/blob/master/TESTING.md) file.
+See [TESTING.md](https://github.com/onddo/mysql_tuning-cookbook/blob/master/TESTING.md).
 
 Contributing
 ============
 
-See the [CONTRIBUTING.md](https://github.com/onddo/mysql_tuning-cookbook/blob/master/CONTRIBUTING.md) file.
+See [CONTRIBUTING.md](https://github.com/onddo/mysql_tuning-cookbook/blob/master/CONTRIBUTING.md).
 
 TODO
 ====
 
-See the [TODO.md](https://github.com/onddo/mysql_tuning-cookbook/blob/master/TODO.md) file.
+See [TODO.md](https://github.com/onddo/mysql_tuning-cookbook/blob/master/TODO.md).
 
 License and Author
 ==================
