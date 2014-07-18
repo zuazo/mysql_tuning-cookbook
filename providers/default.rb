@@ -53,7 +53,7 @@ action :create do
   configs.each do |config|
     r = mysql_tuning_cnf config do
       service_name new_resource.service_name
-      directory new_resource.directory
+      include_dir new_resource.include_dir
       mysql_port new_resource.mysql_port
       action :create
     end
@@ -68,7 +68,7 @@ action :delete do
   configs.each do |config|
     r = mysql_tuning_cnf config do
       service_name new_resource.service_name
-      directory new_resource.directory
+      include_dir new_resource.include_dir
       mysql_user new_resource.mysql_user # not used on delete
       mysql_password new_resource.mysql_password
       mysql_port new_resource.mysql_port

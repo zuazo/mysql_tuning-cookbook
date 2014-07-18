@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-require 'mixlib/shellout'
+require 'chef/mixin/command'
 
 class MysqlTuning
   # Some MySQL Helpers to use from Chef cookbooks (recipes, attributes, ...)
@@ -66,12 +66,11 @@ class MysqlTuning
     end
 
     def mysql_round_variable(name, value)
-      if node['mysql_tuning']['variables_block_size'].key?(name)
-        base = node['mysql_tuning']['variables_block_size'][name]
-        value = (MysqlTuning::MysqlHelpers.mysql2num(value) / base).round * base
-      else
-        value
-      end
+      MysqlTuning::MysqlHelpers.mysql_round_variable(
+        name,
+        value,
+        node['mysql_tuning']['variables_block_size']
+      )
     end
 
     def mysql_round_cnf(cnf)

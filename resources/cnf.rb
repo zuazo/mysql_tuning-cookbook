@@ -4,7 +4,7 @@ actions :create, :delete
 
 attribute :filename, kind_of: String, name_attribute: true
 attribute :service_name, kind_of: String, default: nil
-attribute :directory, kind_of: String, default: nil
+attribute :include_dir, kind_of: String, default: nil
 attribute :values, kind_of: Hash, default: nil
 attribute :dynamic, kind_of: [TrueClass, FalseClass], default: nil
 attribute :mysql_user, kind_of: String, default: nil

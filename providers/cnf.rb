@@ -10,12 +10,12 @@ def service_name
   )
 end
 
-def directory
-  new_resource.directory(
-    if new_resource.directory.nil?
+def include_dir
+  new_resource.include_dir(
+    if new_resource.include_dir.nil?
       node['mysql_tuning']['include_dir']
     else
-      new_resource.directory
+      new_resource.include_dir
     end
   )
 end
@@ -99,7 +99,7 @@ end
 action :create do
   self.class.send(:include, ::MysqlTuning::CookbookHelpers)
 
-  r = template ::File.join(directory, new_resource.filename) do
+  r = template ::File.join(include_dir, new_resource.filename) do
     owner 'mysql'
     group 'mysql'
     source 'mysql.cnf.erb'
@@ -116,7 +116,7 @@ end
 
 action :delete do
   include_mysql_recipe
-  r = file ::File.join(directory, new_resource.file_name) do
+  r = file ::File.join(include_dir, new_resource.file_name) do
     action :delete
     notifies :restart, "mysql_service[#{service_name}]"
   end

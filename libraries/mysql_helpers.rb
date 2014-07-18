@@ -39,6 +39,15 @@ class MysqlTuning
       end
     end
 
+    def self.mysql_round_variable(name, value, variables_block_size)
+      if variables_block_size.key?(name)
+        base = variables_block_size[name]
+        value = (MysqlTuning::MysqlHelpers.mysql2num(value) / base).round * base
+      else
+        value
+      end
+    end
+
     # Returns true if all variables has been set correctly
     def self.set_variables(vars, user, password, port)
       db = connect(user, password, port.to_i)
