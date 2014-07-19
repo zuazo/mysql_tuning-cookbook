@@ -88,7 +88,7 @@ Currently, the following algorithms are supported:
 * `"bicubic"` or `"lagrange"`: Uses [Lagrange polynomials](http://en.wikipedia.org/wiki/Lagrange_polynomial) for [bicubic interpolation](http://en.wikipedia.org/wiki/Bicubic_interpolation).
 * `"catmull"`: Uses [Centripetal Catmull-Rom spline](http://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline).
 
-![query_cache_size Interpolation Chart](https://github.com/onddo/mysql_tuning/raw/master/charts/query_cache_size.png)
+![query_cache_size Interpolation Chart](https://github.com/onddo/mysql_tuning-cookbook/raw/master/charts/query_cache_size.png)
 
 You can use different interpolation algorithms for some variables by setting them in the `node['mysql_tuning']['interpolation_by_variable']` attribute or the `mysql_tuning#interpolation_by_variable` resource parameter. This attribute hash the following structure: `interpolation_by_variable[group][variable]`. For example:
 
