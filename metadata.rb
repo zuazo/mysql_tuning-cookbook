@@ -56,8 +56,7 @@ attribute 'mysql_tuning/interpolation',
 attribute 'mysql_tuning/interpolation_by_variable',
           display_name: 'mysql configuration interpolation by variable',
           description:
-            'Use different interpolation algorithm for some variables. '\
-            'This attributes is a Hash of Hashes.',
+            'Use different interpolation algorithm for some variables.',
           type: 'hash',
           required: 'optional',
           default: '{}'

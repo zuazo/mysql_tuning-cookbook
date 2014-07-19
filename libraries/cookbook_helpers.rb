@@ -139,9 +139,9 @@ class MysqlTuning
     private
 
     # avoid interpolating some configuration values
-    def non_interpolated_key?(ns, key, non_interp_keys = [])
-      non_interp_keys[ns].is_a?(Array) &&
-      non_interp_keys[ns].include?(key)
+    def non_interpolated_key?(key, non_interpolated_keys = [])
+      non_interpolated_keys.is_a?(Array) &&
+      non_interpolated_keys.include?(key)
     end
 
     # get integer data points from samples key
@@ -205,9 +205,9 @@ class MysqlTuning
       end # cnf_samples.reduce
     end
 
-    def determine_interpolation_type(ns, key, default_type, types)
-      return default_type unless types.key?(ns) && types[ns].key?(key)
-      types[ns][key]
+    def determine_interpolation_type(key, default_type, types)
+      return default_type unless types.key?(key)
+      types[key]
     end
 
     def samples_interpolate_ns(cnf_samples, ns, keys, default_type, types)
@@ -215,7 +215,7 @@ class MysqlTuning
         Chef::Log.debug("Interpolating #{ns}.#{key}")
         data_points = samples_key_numeric_data_points(cnf_samples, ns, key)
         begin
-          type = determine_interpolation_type(ns, key, default_type, types)
+          type = determine_interpolation_type(key, default_type, types)
           r[key] = interpolate_data_points(type, data_points, memory_for_mysql)
         rescue RuntimeError => e
           Chef::Log.warn("Cannot interpolate #{ns}.#{key}: #{e.message}")
@@ -235,7 +235,7 @@ class MysqlTuning
       # select keys that have some values as numeric and not excluded
       keys_by_ns.each_with_object({}) do |(ns, keys), r|
         r[ns] = keys.select do |key|
-          !non_interpolated_key?(ns, key, non_interp_keys) &&
+          !non_interpolated_key?(key, non_interp_keys) &&
           samples_key_numeric?(cnf_samples, ns, key)
         end # r[ns] = keys.select
       end # keys_by_ns.each_with_object

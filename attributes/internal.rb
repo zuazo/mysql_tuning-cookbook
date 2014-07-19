@@ -17,7 +17,7 @@ default['mysql_tuning']['old_names'] = {
   }
 }
 
-default['mysql_tuning']['non_interpolated_keys']['mysqld'] = %w(
+default['mysql_tuning']['non_interpolated_keys'] = %w(
   innodb_log_file_size
 )
 

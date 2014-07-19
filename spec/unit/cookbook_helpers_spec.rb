@@ -198,7 +198,7 @@ describe MysqlTuning::CookbookHelpers do
           1 * GB => { 'mysqld' => { 'key1' => 100 } },
           4 * GB => { 'mysqld' => { 'key1' => 200 } }
         )
-        subject.non_interpolated_keys(mysqld: %w(key1))
+        subject.non_interpolated_keys(%w(key1))
         expect(cnf_from_samples['mysqld']['key1']).to eql(100)
       end
 

@@ -90,10 +90,10 @@ Currently, the following algorithms are supported:
 
 ![query_cache_size Interpolation Chart](https://github.com/onddo/mysql_tuning-cookbook/raw/master/charts/query_cache_size.png)
 
-You can use different interpolation algorithms for some variables by setting them in the `node['mysql_tuning']['interpolation_by_variable']` attribute or the `mysql_tuning#interpolation_by_variable` resource parameter. This attribute hash the following structure: `interpolation_by_variable[group][variable]`. For example:
+You can use different interpolation algorithms for some variables by setting them in the `node['mysql_tuning']['interpolation_by_variable']` attribute or the `mysql_tuning#interpolation_by_variable` resource parameter. This attribute hash the following structure: `interpolation_by_variable[variable]`. For example:
 
 ```ruby
-node.default['mysql_tuning']['interpolation_by_variable']['mysqld']['key_buffer_size'] = 'catmull'
+node.default['mysql_tuning']['interpolation_by_variable']['key_buffer_size'] = 'catmull'
 ```
 
 ## Dynamic Configuration
@@ -146,7 +146,7 @@ Attributes
 </tr>
 <tr>
   <td><code>node['mysql_tuning']['interpolation_by_variable']</code></td>
-  <td>Use different interpolation algorithm for some variables. This attributes is a Hash of Hashes (<a href="#configuration-variables-interpolation">See above</a>).</td>
+  <td>Use different interpolation algorithm for some variables (<a href="#configuration-variables-interpolation">See above</a>).</td>
   <td><code>{}</code></td>
 </tr>
 <tr>
@@ -248,7 +248,7 @@ Creates MySQL configuration files:
 </tr>
 <tr>
   <td>interpolation_by_variable</code></td>
-  <td>Use different interpolation algorithm for some variables. This attributes is a Hash of Hashes (<a href="#configuration-variables-interpolation">See above</a>).</td>
+  <td>Use different interpolation algorithm for some variables (<a href="#configuration-variables-interpolation">See above</a>).</td>
   <td><code>{}</code></td>
 </tr>
 <tr>
