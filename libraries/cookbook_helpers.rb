@@ -83,14 +83,13 @@ class MysqlTuning
     end
 
     def physical_memory
-      @physical_memory ||=
-        case node['memory']['total']
-        when /^([0-9]+)\s*GB$/i then Regexp.last_match[1].to_i * 1_073_741_824
-        when /^([0-9]+)\s*MB$/i then Regexp.last_match[1].to_i * 1_048_576
-        when /^([0-9]+)\s*KB$/i then Regexp.last_match[1].to_i * 1024
-        else
-          node['memory']['total'].to_i
-        end
+      case node['memory']['total']
+      when /^([0-9]+)\s*GB$/i then Regexp.last_match[1].to_i * 1_073_741_824
+      when /^([0-9]+)\s*MB$/i then Regexp.last_match[1].to_i * 1_048_576
+      when /^([0-9]+)\s*KB$/i then Regexp.last_match[1].to_i * 1024
+      else
+        node['memory']['total'].to_i
+      end
     end
 
     def memory_for_mysql
