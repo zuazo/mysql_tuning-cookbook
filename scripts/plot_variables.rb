@@ -16,6 +16,7 @@ end
 
 require cookbook_library('mysql_interpolator')
 require cookbook_library('mysql_helpers')
+require cookbook_library('mysql_helpers_cnf')
 require cookbook_library('cookbook_helpers')
 
 # Parses arguments
@@ -121,7 +122,7 @@ class PlotVariables
   end
 
   def mysql_round_variable(name, value)
-    MysqlTuning::MysqlHelpers.mysql_round_variable(
+    MysqlTuning::MysqlHelpers::Cnf.round_variable(
       name,
       value,
       node['mysql_tuning']['variables_block_size']
