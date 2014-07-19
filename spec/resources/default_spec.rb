@@ -26,7 +26,7 @@ describe 'mysql_tuning resource' do
     unless data[:interpolation].nil?
       node.set['mysql_tuning']['interpolation'] = data[:interpolation]
     end
-    node.set['memory']['total'] = system_memory(
+    node.automatic['memory']['total'] = system_memory(
       data[:memory].nil? ? 512 * MB : data[:memory]
     )
     node.set['mysql_tuning']['new.cnf'] = {}

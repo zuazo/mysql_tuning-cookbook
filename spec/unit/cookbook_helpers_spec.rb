@@ -42,7 +42,7 @@ class FakeRecipe < ::Chef::Node
     if value.nil?
       node['memory']['total']
     else
-      node.set['memory']['total'] = system_memory(value)
+      node.automatic['memory']['total'] = system_memory(value)
     end
   end
 
