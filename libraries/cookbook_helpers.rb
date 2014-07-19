@@ -8,27 +8,28 @@ class MysqlTuning
     GB = 1024 * MB unless defined?(GB)
     IO_SIZE = 4 * KB unless defined?(IO_SIZE)
 
-    def mysql_tuning_interpolator_install
-      return unless node['mysql_tuning']['interpolation'] == true ||
-         node['mysql_tuning']['interpolation'].is_a?(String)
-
-      MysqlTuning::Interpolator.required_gems.each do |g|
-        r = chef_gem g do
-          action :nothing
+    def install_required_gems(o)
+      o.required_gems.each do |g|
+        begin
+          require g
+        rescue LoadError
+          r = chef_gem g
+          r.action(:nothing)
+          r.run_action(:install)
+          require g
         end
-        r.run_action(:install)
-        require g
       end
     end
 
     def physical_memory
-      case node['memory']['total']
-      when /^([0-9]+)\s*GB$/i then Regexp.last_match[1].to_i * 1_073_741_824
-      when /^([0-9]+)\s*MB$/i then Regexp.last_match[1].to_i * 1_048_576
-      when /^([0-9]+)\s*KB$/i then Regexp.last_match[1].to_i * 1024
-      else
-        node['memory']['total'].to_i
-      end
+      memory = node['memory']['total']
+      return memory.to_i unless memory =~ /^([0-9]+)\s*([GMK])B$/i
+      base = case Regexp.last_match[2].upcase
+             when 'G' then 1_073_741_824
+             when 'M' then 1_048_576
+             when 'K' then 1024
+             end
+      Regexp.last_match[1].to_i * base
     end
 
     def memory_for_mysql
@@ -44,7 +45,6 @@ class MysqlTuning
           'non-proximal interpolation skipped')
         return {}
       end
-      mysql_tuning_interpolator_install
       keys_by_ns = keys_to_interpolate(cnf_samples, non_interp_keys)
       keys_by_ns.each_with_object({}) do |(ns, keys), result|
         result[ns] = samples_interpolate_ns(cnf_samples, ns, keys, dtype, types)
@@ -104,10 +104,10 @@ class MysqlTuning
     # interpolate data points
     def interpolate_data_points(type, data_points, point)
       interpolator = MysqlTuning::Interpolator.new(data_points, type)
+      install_required_gems(interpolator)
       required_points = interpolator.required_data_points
-      points_count = data_points.count
-      if required_points > points_count
-        fail "Not enough data points (#{points_count} for #{required_points})"
+      if data_points.count < required_points
+        fail "Not enough data points, #{data_points.count} < #{required_points}"
       end
       result = interpolator.interpolate(point)
       Chef::Log.debug("Interpolation(#{type}): point = #{point}, "\

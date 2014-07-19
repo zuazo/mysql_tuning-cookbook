@@ -63,7 +63,7 @@ describe MysqlTuning::Interpolator do
 
   end # context #data_points
 
-  context '#type' do
+  context '#type_raw' do
 
     {
       'linear' => ::Interpolator::Table::LINEAR,
@@ -76,7 +76,7 @@ describe MysqlTuning::Interpolator do
 
       it "should set #{type} type to #{value} internally" do
         subject.type(type)
-        expect(subject.type).to eql(value)
+        expect(subject.type_raw).to eql(value)
       end
 
     end # each do |type, value|

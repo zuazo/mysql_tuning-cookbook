@@ -36,16 +36,14 @@ class MysqlTuning
     end
 
     def self.mysql2num(num)
-      if num =~ /^([0-9]+)([GMKB])$/
-        case Regexp.last_match[2]
-        when 'G' then Regexp.last_match[1].to_i * 1_073_741_824
-        when 'M' then Regexp.last_match[1].to_i * 1_048_576
-        when 'K' then Regexp.last_match[1].to_i * 1024
-        when 'B' then Regexp.last_match[1].to_i
-        end
-      else
-        num.to_i
-      end
+      return num.to_i unless num =~ /^([0-9]+)([GMKB])$/
+      base = case Regexp.last_match[2]
+             when 'G' then 1_073_741_824
+             when 'M' then 1_048_576
+             when 'K' then 1024
+             when 'B' then 1
+             end
+      Regexp.last_match[1].to_i * base
     end
 
     def self.num2mysql(num)
