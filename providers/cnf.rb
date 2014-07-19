@@ -97,14 +97,12 @@ def include_mysql_recipe
 end
 
 action :create do
-  self.class.send(:include, ::MysqlTuning::CookbookHelpers)
-
   r = template ::File.join(include_dir, new_resource.filename) do
     owner 'mysql'
     group 'mysql'
     source 'mysql.cnf.erb'
     variables(
-      config: mysql_fix_cnf(values)
+      config: ::MysqlTuning::MysqlHelpers::Cnf.fix(values)
     )
     if needs_restart
       include_mysql_recipe

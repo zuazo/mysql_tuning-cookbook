@@ -1,14 +1,35 @@
 # encoding: UTF-8
 
+require 'chef/mixin/command'
+
 class MysqlTuning
   # Some generic helpers related with MySQL
   class MysqlHelpers
+    include Chef::Mixin::Command
+
+    def self.version
+      @version ||= begin
+        _status, stdout, _stderr = run_command_and_return_stdout_stderr(
+          no_status_check: true,
+          command: "#{node['mysql_tuning']['mysqld_bin']} --version")
+        if stdout.split("\n")[0] =~ / +Ver +([0-9][0-9.]*)[^0-9.]/
+          Regexp.last_match[1]
+        end
+      rescue
+        nil
+      end
+    end
+
+    def self.version_satisfies?(requirement)
+      return false if version.nil?
+      gem_ver = Gem::Version.new(version)
+      Gem::Requirement.new(requirement).satisfied_by?(gem_ver)
+    end
+
     def self.numeric?(num)
       case num
-      when Numeric
-        true
-      when /^[0-9]+[GMKB]?$/
-        true
+      when Numeric then true
+      when /^[0-9]+[GMKB]?$/ then true
       else
         false
       end
@@ -36,15 +57,6 @@ class MysqlTuning
         "#{(num / 1024).floor}K"
       else
         num.to_s
-      end
-    end
-
-    def self.mysql_round_variable(name, value, variables_block_size)
-      if variables_block_size.key?(name)
-        base = variables_block_size[name]
-        value = (MysqlTuning::MysqlHelpers.mysql2num(value) / base).round * base
-      else
-        value
       end
     end
 

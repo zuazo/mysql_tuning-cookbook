@@ -1,56 +1,12 @@
 # encoding: UTF-8
 
-require 'chef/mixin/command'
-
 class MysqlTuning
   # Some MySQL Helpers to use from Chef cookbooks (recipes, attributes, ...)
   module CookbookHelpers
-    include Chef::Mixin::Command
-
     KB = 1024 unless defined?(KB)
     MB = 1024 * KB unless defined?(MB)
     GB = 1024 * MB unless defined?(GB)
     IO_SIZE = 4 * KB unless defined?(IO_SIZE)
-
-    def mysql_version
-      @mysql_version ||= begin
-        _status, stdout, _stderr = run_command_and_return_stdout_stderr(
-          no_status_check: true,
-          command: "#{node['mysql_tuning']['mysqld_bin']} --version")
-        if stdout.split("\n")[0] =~ / +Ver +([0-9][0-9.]*)[^0-9.]/
-          Regexp.last_match[1]
-        end
-      rescue
-        nil
-      end
-    end
-
-    def mysql_version_satisfies?(requirement)
-      return false if mysql_version.nil?
-      version = Gem::Version.new(mysql_version)
-      Gem::Requirement.new(requirement).satisfied_by?(version)
-    end
-
-    def mysql_fix_key(name)
-      return name unless node['mysql_tuning']['old_names'].key?(name)
-      result = name
-      node['mysql_tuning']['old_names'][name].each do |requirement, old_name|
-        next unless mysql_version_satisfies?(requirement)
-        Chef::Log.info("Fixing configuration key #{name} by #{old_name}")
-        result = old_name
-      end
-      result
-    end
-
-    def mysql_fix_cnf(cnf)
-      cnf.each_with_object({}) do |(ns, values), r|
-        r[ns] = {}
-        values.each do |key, value|
-          fixed_key = mysql_fix_key(key)
-          r[ns][fixed_key] = value unless fixed_key.nil?
-        end
-      end
-    end
 
     def mysql_tuning_interpolator_install
       return unless node['mysql_tuning']['interpolation'] == true ||
@@ -62,23 +18,6 @@ class MysqlTuning
         end
         r.run_action(:install)
         require g
-      end
-    end
-
-    def mysql_round_variable(name, value)
-      MysqlTuning::MysqlHelpers.mysql_round_variable(
-        name,
-        value,
-        node['mysql_tuning']['variables_block_size']
-      )
-    end
-
-    def mysql_round_cnf(cnf)
-      cnf.each_with_object({}) do |(ns, keys), r|
-        r[ns] = {}
-        keys.each do |key, value|
-          r[ns][key] = mysql_round_variable(key, value)
-        end
       end
     end
 
@@ -133,7 +72,11 @@ class MysqlTuning
         result_i = cnf_interpolation(cnf_samples, dtype, non_interp_keys, types)
         result = Chef::Mixin::DeepMerge.hash_only_merge(result, result_i)
       end
-      mysql_round_cnf(mysql_fix_cnf(result))
+      MysqlHelpers::Cnf.fix(
+        result,
+        node['mysql_tuning']['variables_block_size'],
+        node['mysql_tuning']['old_names']
+      )
     end
 
     private

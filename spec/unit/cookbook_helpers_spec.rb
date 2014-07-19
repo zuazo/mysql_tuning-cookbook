@@ -18,66 +18,11 @@
 #
 
 require 'spec_helper'
-require 'chef/node'
+require 'support/fake_recipe'
 require 'cookbook_helpers'
 require 'mysql_helpers'
+require 'mysql_helpers_cnf'
 require 'mysql_interpolator'
-
-# Class to emulate the current recipe with some helpers
-class FakeRecipe < ::Chef::Node
-  include ::MysqlTuning::CookbookHelpers
-  include ::MemoryHelpers
-
-  def initialize
-    super
-    name('node001')
-    node = self
-    Dir.glob("#{::File.dirname(__FILE__)}/../../attributes/*.rb") do |f|
-      node.from_file(f)
-    end
-    memory(2 * GB)
-  end
-
-  def memory(value = nil)
-    if value.nil?
-      node['memory']['total']
-    else
-      node.automatic['memory']['total'] = system_memory(value)
-    end
-  end
-
-  def cnf_samples(value = nil)
-    if value.nil?
-      node['mysql_tuning']['configuration_samples']
-    else
-      node.default['mysql_tuning']['configuration_samples'] = value
-    end
-  end
-
-  def interpolation_type(value = nil)
-    if value.nil?
-      node['mysql_tuning']['interpolation']
-    else
-      node.default['mysql_tuning']['interpolation'] = value
-    end
-  end
-
-  def non_interpolated_keys(value = nil)
-    if value.nil?
-      node['mysql_tuning']['non_interpolated_keys']
-    else
-      node.default['mysql_tuning']['non_interpolated_keys'] = value
-    end
-  end
-
-  def system_percentage(value = nil)
-    if value.nil?
-      node['mysql_tuning']['system_percentage']
-    else
-      node.default['mysql_tuning']['system_percentage'] = value
-    end
-  end
-end
 
 describe MysqlTuning::CookbookHelpers do
   subject { FakeRecipe.new }
@@ -87,28 +32,6 @@ describe MysqlTuning::CookbookHelpers do
       subject.interpolation_type,
       subject.non_interpolated_keys
     )
-  end
-
-  context '#mysql_fix_cnf' do
-    let(:cnf) do
-      { 'mysqld' => {
-        'slow_query_log' => 'ON',
-        'slow_query_log_file' => 'foo'
-      } }
-    end
-
-    it 'should not fix conigurations with new versions' do
-      allow(subject).to receive(:mysql_version).and_return('5.5')
-      expect(subject.mysql_fix_cnf(cnf))
-        .to eql(cnf)
-    end
-
-    it 'should fix conigurations with old versions' do
-      allow(subject).to receive(:mysql_version).and_return('5.0')
-      expect(subject.mysql_fix_cnf(cnf))
-        .to eql('mysqld' => { 'log_slow_queries' => 'foo' })
-    end
-
   end
 
   context '#cnf_from_samples' do
