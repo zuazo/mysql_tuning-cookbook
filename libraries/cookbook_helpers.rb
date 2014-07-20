@@ -45,9 +45,10 @@ class MysqlTuning
           'non-proximal interpolation skipped')
         return {}
       end
-      keys_by_ns = keys_to_interpolate(cnf_samples, non_interp_keys)
-      keys_by_ns.each_with_object({}) do |(ns, keys), result|
-        result[ns] = samples_interpolate_ns(cnf_samples, ns, keys, dtype, types)
+      keys_by_group = keys_to_interpolate(cnf_samples, non_interp_keys)
+      keys_by_group.each_with_object({}) do |(group, keys), result|
+        result[group] =
+          samples_interpolate_group(cnf_samples, group, keys, dtype, types)
       end
     end
 
@@ -88,11 +89,11 @@ class MysqlTuning
     end
 
     # get integer data points from samples key
-    def samples_key_numeric_data_points(cnf_samples, ns, key)
+    def samples_key_numeric_data_points(cnf_samples, group, key)
       previous_point = nil
       cnf_samples.each_with_object({}) do |(mem, cnf), r|
-        if cnf.key?(ns) && MysqlTuning::MysqlHelpers.numeric?(cnf[ns][key])
-          r[mem] = MysqlTuning::MysqlHelpers.mysql2num(cnf[ns][key])
+        if cnf.key?(group) && MysqlTuning::MysqlHelpers.numeric?(cnf[group][key])
+          r[mem] = MysqlTuning::MysqlHelpers.mysql2num(cnf[group][key])
           previous_point = r[mem]
         # set to previous sample value if missing (value not changed)
         elsif !previous_point.nil?
@@ -126,22 +127,22 @@ class MysqlTuning
       cnf_samples.select { |k, _v| !higher_memory_values.include?(k) }
     end
 
-    # get setted config keys by namespace
-    def samples_setted_keys_by_ns(cnf_samples)
+    # get setted config keys by group
+    def samples_setted_keys_by_group(cnf_samples)
       cnf_samples.each_with_object({}) do |(_memory, cnf), r|
-        cnf.each do |ns, ns_cnf|
-          r[ns] ||= []
-          r[ns] = (r[ns] + ns_cnf.keys).uniq
+        cnf.each do |group, group_cnf|
+          r[group] ||= []
+          r[group] = (r[group] + group_cnf.keys).uniq
         end
       end
     end
 
-    # search this ns,key in cnf_samples and check if numeric
-    def samples_key_numeric?(cnf_samples, ns, key)
+    # search this group,key in cnf_samples and check if numeric
+    def samples_key_numeric?(cnf_samples, group, key)
       cnf_samples.reduce(false) do |r, (_mem, cnf)|
         next true if r
-        if cnf.key?(ns)
-          MysqlTuning::MysqlHelpers.numeric?(cnf[ns][key])
+        if cnf.key?(group)
+          MysqlTuning::MysqlHelpers.numeric?(cnf[group][key])
         else
           false
         end
@@ -153,15 +154,15 @@ class MysqlTuning
       types[key]
     end
 
-    def samples_interpolate_ns(cnf_samples, ns, keys, default_type, types)
+    def samples_interpolate_group(cnf_samples, group, keys, default_type, types)
       keys.each_with_object({}) do |key, r|
-        Chef::Log.debug("Interpolating #{ns}.#{key}")
-        data_points = samples_key_numeric_data_points(cnf_samples, ns, key)
+        Chef::Log.debug("Interpolating #{group}.#{key}")
+        data_points = samples_key_numeric_data_points(cnf_samples, group, key)
         begin
           type = determine_interpolation_type(key, default_type, types)
           r[key] = interpolate_data_points(type, data_points, memory_for_mysql)
         rescue RuntimeError => e
-          Chef::Log.warn("Cannot interpolate #{ns}.#{key}: #{e.message}")
+          Chef::Log.warn("Cannot interpolate #{group}.#{key}: #{e.message}")
         end
       end
     end
@@ -173,15 +174,15 @@ class MysqlTuning
     # returns configuration keys that should be used for interpolation
     def keys_to_interpolate(cnf_samples, non_interp_keys = {})
       cnf_samples = samples_within_memory_range(cnf_samples)
-      keys_by_ns = samples_setted_keys_by_ns(cnf_samples)
+      keys_by_group = samples_setted_keys_by_group(cnf_samples)
 
       # select keys that have some values as numeric and not excluded
-      keys_by_ns.each_with_object({}) do |(ns, keys), r|
-        r[ns] = keys.select do |key|
+      keys_by_group.each_with_object({}) do |(group, keys), r|
+        r[group] = keys.select do |key|
           !non_interpolated_key?(key, non_interp_keys) &&
-          samples_key_numeric?(cnf_samples, ns, key)
-        end # r[ns] = keys.select
-      end # keys_by_ns.each_with_object
+          samples_key_numeric?(cnf_samples, group, key)
+        end # r[group] = keys.select
+      end # keys_by_group.each_with_object
     end # #keys_to_interpolate
   end
 end

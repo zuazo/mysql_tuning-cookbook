@@ -25,12 +25,12 @@ class MysqlTuning
       end
 
       def self.fix(cnf, block_sizes = {}, old_names = {})
-        cnf.each_with_object({}) do |(ns, values), r|
-          r[ns] = {}
+        cnf.each_with_object({}) do |(group, values), r|
+          r[group] = {}
           values.each do |key, value|
             fixed_key = fix_variable(key, old_names)
             fixed_value = round_variable(key, value, block_sizes)
-            r[ns][fixed_key] = fixed_value unless fixed_key.nil?
+            r[group][fixed_key] = fixed_value unless fixed_key.nil?
           end
         end
       end

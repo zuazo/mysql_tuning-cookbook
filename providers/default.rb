@@ -39,8 +39,8 @@ action :create do
 
   # Avoid interpolating already defined configuration values
   non_interpolated_keys =
-    node['mysql_tuning']['tuning.cnf'].each_with_object({}) do |(ns, cnf), r|
-      r[ns] = cnf.keys
+    node['mysql_tuning']['tuning.cnf'].each_with_object({}) do |(group, cnf), r|
+      r[group] = cnf.keys
     end
   Chef::Mixin::DeepMerge.deep_merge!(
     non_interpolated_keys,
