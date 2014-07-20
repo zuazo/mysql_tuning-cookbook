@@ -115,6 +115,7 @@ You can use different interpolation algorithms for some variables by setting the
 ```ruby
 node.default['mysql_tuning']['interpolation_by_variable']['key_buffer_size'] = 'catmull'
 node.default['mysql_tuning']['interpolation_by_variable']['thread_stack'] = 'proximal'
+include_recipe 'mysql_tuning::default'
 ```
 
 Using the resource, it would be as follows:
@@ -433,7 +434,6 @@ Another alternative is to include it in your Run List:
 In a recipe:
 
 ```ruby
-include_recipe 'ohai'
 include_recipe 'mysql::server'
 include_recipe 'mysql_tuning::ohai_plugin'
 ```
