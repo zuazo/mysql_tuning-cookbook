@@ -104,6 +104,7 @@ action :create do
     variables(
       config: ::MysqlTuning::MysqlHelpers::Cnf.fix(values)
     )
+    only_if { new_resource.persist }
     if needs_restart
       include_mysql_recipe
       notifies :restart, "mysql_service[#{service_name}]"

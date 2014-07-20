@@ -9,3 +9,4 @@ TODO
 - Add ChefSpec tests for `ohai_plugin`.
 - Add ChefSpec tests for dynamic configuration updates.
 - Add more unit tests for libraries.
+- Document the libraries code.

@@ -82,6 +82,7 @@ If you want to enable a boolean variable (those with *<span>skip-</span>* prefix
 
 ```ruby
 node.default['mysql_tuning']['tuning.cnf']['mysqld']['skip-innodb'] = true
+node.default['mysql_tuning']['tuning.cnf']['mysqld']['skip-name-resolve'] = true
 ```
 
 For those variables that have different names in different versions of MySQL, the `node['mysql_tuning']['old_names']` attribute will try to help you. This last attribute comes with a recommended default value.
@@ -363,6 +364,11 @@ Restarts the server only when required. Tries to set the configuration without r
     <td>values</td>
     <td>Configuration values as <em>Hash</em>.</td>
     <td><code>node['mysql_tuning'][filename]</code></td>
+  </tr>
+  <tr>
+    <td>persist</td>
+    <td>Whether to create the configuration file on disk.</td>
+    <td><code>true</code></td>
   </tr>
   <tr>
     <td>mysql_user</td>
