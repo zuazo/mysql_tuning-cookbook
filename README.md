@@ -193,7 +193,7 @@ end
 
 When there are configuration changes, this cookbook can try to set the configuration values without restarting the MySQL server. The cookbook will go for each variable and try to set it dynamically. If any of the variables cannot be changed, the MySQL server will be restarted.
 
-If your MySQL password is not in the `node['mysql']['server_root_password']` attribute, you must use the `mysql_tuning` resource and set the MySQL user and password to the correct values instead of calling the *mysql_tuning::default* recipe. For example:
+If your MySQL password is not in the `node['mysql']['server_root_password']` attribute, you must use the `mysql_tuning` resource and set the MySQL user and password to the correct values instead of calling the `mysql_tuning::default` recipe. For example:
 
 ```ruby
 mysql_tuning 'mysql' do
