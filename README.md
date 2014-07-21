@@ -30,7 +30,7 @@ Please, [let us know](https://github.com/onddo/mysql_tuning-cookbook/issues/new?
 
 ## Cookbooks:
 
-* [mysql (~> 5.0)](https://supermarket.getchef.com/cookbooks/mysql)
+* [mysql (~> 5.0)](https://supermarket.getchef.com/cookbooks/mysql) (not included by default)
 * [ohai](https://supermarket.getchef.com/cookbooks/ohai)
 * [mysql-chef_gem](https://supermarket.getchef.com/cookbooks/mysql-chef_gem)
 
@@ -282,7 +282,7 @@ Creates MySQL configuration files:
   <tr>
     <td>service_name</td>
     <td>MySQL service name, recommended to notify the restarts.</td>
-    <td><code>node['mysql']['service_name']</code></td>
+    <td><code>"mysql_service[#{node['mysql']['service_name']}]"</code></td>
   </tr>
   <tr>
     <td>include_dir</td>
@@ -348,7 +348,7 @@ Restarts the server only when required. Tries to set the configuration without r
   <tr>
     <td>service_name</td>
     <td>MySQL service name, recommended to notify the restarts.</td>
-    <td><code>node['mysql']['service_name']</code></td>
+    <td><code>"mysql_service[#{node['mysql']['service_name']}]"</code></td>
   </tr>
   <tr>
     <td>include_dir</td>

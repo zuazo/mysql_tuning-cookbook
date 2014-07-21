@@ -56,4 +56,51 @@ describe MysqlTuning::MysqlHelpers do
 
   end
 
+  context '#set_variables' do
+    before do
+      allow(described_class).to receive(:connect).and_return('db')
+      allow(described_class).to receive(:disconnect)
+      @variables = {
+        'var1' => 100,
+        'var2' => 200,
+        'var3' => 300
+      }.to_a
+    end
+    def variable_returns(returns)
+      @variables.each do |key, value|
+        allow(described_class).to receive(:set_variable).with('db', key, value)
+          .and_return(returns.shift)
+      end
+    end
+
+    it 'should return true if all variables has been set' do
+      variable_returns([true, true, true])
+      expect(described_class.set_variables(
+        @variables, 'user', 'password', 'port'
+      )).to equal(true)
+    end
+
+    it 'should return false if no variables has been set' do
+      variable_returns([false, false, false])
+      expect(described_class.set_variables(
+        @variables, 'user', 'password', 'port'
+      )).to equal(false)
+    end
+
+    it 'should return false if one variable has not been set' do
+      variable_returns([true, false, true])
+      expect(described_class.set_variables(
+        @variables, 'user', 'password', 'port'
+      )).to equal(false)
+    end
+
+    it 'should return false if the last variable has not been set' do
+      variable_returns([true, true, false])
+      expect(described_class.set_variables(
+        @variables, 'user', 'password', 'port'
+      )).to equal(false)
+    end
+
+  end
+
 end

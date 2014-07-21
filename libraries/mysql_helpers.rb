@@ -104,13 +104,14 @@ class MysqlTuning
     private_class_method :get_variable
 
     def self.set_variable_query(db, name, value)
-      stmt.execute(db.prepare("SET GLOBAL #{name} = ?"))
-      Chef::Log.info("Changed MySQL #{key.inspect} variable "\
-        "from #{orig.inspect} to #{value.inspect} dynamically")
+      value = mysql2num(value) if numeric?(value)
+      db.prepare("SET GLOBAL #{name} = ?").execute(value)
+      Chef::Log.info("Changed MySQL #{name.inspect} variable "\
+        "to #{value.inspect} dynamically")
       true
-    rescue
-      Chef::Log.info("MySQL #{key.inspect} variable cannot be changed "\
-        "from #{orig.inspect} to #{value.inspect} dynamically.")
+    rescue Mysql::Error => e
+      Chef::Log.info("MySQL #{name.inspect} variable cannot be changed "\
+        "to #{value.inspect} dynamically: #{e.message}")
       false
     end
     private_class_method :set_variable_query

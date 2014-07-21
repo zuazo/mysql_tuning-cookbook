@@ -3,7 +3,7 @@
 def service_name
   new_resource.service_name(
     if new_resource.service_name.nil?
-      node['mysql']['service_name']
+      "mysql_service[#{node['mysql']['service_name']}]"
     else
       new_resource.service_name
     end
@@ -77,12 +77,12 @@ def install_mysql_gem
   end.run_action(:install)
 end
 
-def needs_restart
-  return false unless values.key?('mysqld')
-  return true unless dynamic?
+def update_configuration_dynamically
+  return true unless values.key?('mysqld')
+  return false unless dynamic?
 
   install_mysql_gem
-  !::MysqlTuning::MysqlHelpers.set_variables(
+  ::MysqlTuning::MysqlHelpers.set_variables(
     values['mysqld'],
     mysql_user,
     mysql_password,
@@ -105,9 +105,9 @@ action :create do
       config: ::MysqlTuning::MysqlHelpers::Cnf.fix(values)
     )
     only_if { new_resource.persist }
-    if needs_restart
+    unless update_configuration_dynamically
       include_mysql_recipe
-      notifies :restart, "mysql_service[#{service_name}]"
+      notifies :restart, service_name
     end
   end
   new_resource.updated_by_last_action(r.updated_by_last_action?)
@@ -117,7 +117,7 @@ action :delete do
   include_mysql_recipe
   r = file ::File.join(include_dir, new_resource.file_name) do
     action :delete
-    notifies :restart, "mysql_service[#{service_name}]"
+    notifies :restart, service_name
   end
   new_resource.updated_by_last_action(r.updated_by_last_action?)
 end
