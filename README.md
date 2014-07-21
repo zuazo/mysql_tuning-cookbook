@@ -63,7 +63,7 @@ Then, make sure that this directory is correctly set in the `node['mysql_tuning'
 
 The official MySQL cookbook takes care of adding the *includedir* itself and should work out of the box.
 
-## Setted Configuration Variables
+## Configured Variables
 
 This cookbook will try to set some variable values depending mainly on the system memory.
 
@@ -161,7 +161,7 @@ Currently, the following algorithms are supported:
 
 * `'proximal'` *(default)*: Sets the configuration values using [nearest-neighbor interpolation](http://en.wikipedia.org/wiki/Nearest-neighbor_interpolation) but taking into account only the neighbors below (with lower RAM).
 * `'linear'`: Uses [linear interpolation](http://en.wikipedia.org/wiki/Linear_interpolation). In theory should give **better results** than `'proximal'`. But may malfunction for machines with lots of memory (> 8 GB). Has not been tested much.
-* `ncubic'`: Uses [cubic interpolation](http://en.wikipedia.org/wiki/Monotone_cubic_interpolation).
+* `cubic'`: Uses [cubic interpolation](http://en.wikipedia.org/wiki/Monotone_cubic_interpolation).
 * `'bicubic'` or `'lagrange'`: Uses [Lagrange polynomials](http://en.wikipedia.org/wiki/Lagrange_polynomial) for [bicubic interpolation](http://en.wikipedia.org/wiki/Bicubic_interpolation).
 * `'catmull'`: Uses [Centripetal Catmull-Rom spline](http://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline).
 
