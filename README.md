@@ -30,7 +30,7 @@ Please, [let us know](https://github.com/onddo/mysql_tuning-cookbook/issues/new?
 
 ## Cookbooks:
 
-* [mysql (~> 5.0)](https://supermarket.getchef.com/cookbooks/mysql) (not included by default)
+* [mysql (~> 5.0)](https://supermarket.getchef.com/cookbooks/mysql) (recommended)
 * [ohai](https://supermarket.getchef.com/cookbooks/ohai)
 * [mysql-chef_gem](https://supermarket.getchef.com/cookbooks/mysql-chef_gem)
 
