@@ -59,9 +59,67 @@ But it could also work with other cookbooks. The only requirement is that the us
 !includedir /etc/mysql/conf.d
 ```
 
-Then, make sure that this directory is correctly set in the `node['mysql_tuning']['include_dir']` attribute. You may also need to set the `node['mysql_tuning']['recipe']` attribute.
+Then, make sure that this directory is correctly set in the `node['mysql_tuning']['include_dir']` attribute. You may also need to set the `node['mysql_tuning']['recipe']` and the `node['mysql']['service_name']` attribute (or the `mysql_tuning#service_name` parameter).
 
 The official MySQL cookbook takes care of adding the *includedir* itself and should work out of the box.
+
+## Setted Configuration Variables
+
+This cookbook will try to set some variable values depending mainly on the system memory.
+
+The following variables will be configured by default inside **tuning.cnf**:
+
+* mysqld
+ * key_buffer_size
+ * max_allowed_packet
+ * table_open_cache
+ * sort_buffer_size
+ * read_buffer_size
+ * read_rnd_buffer_size
+ * join_buffer_size
+ * net_buffer_length
+ * myisam_sort_buffer_size
+ * bulk_insert_buffer_size
+ * myisam_max_sort_file_size
+ * thread_stack
+ * query_cache_size
+ * query_cache_limit
+ * binlog_cache_size
+ * max_allowed_packet
+ * thread_cache_size
+ * innodb_buffer_pool_size
+ * innodb_additional_mem_pool_size
+ * innodb_log_buffer_size
+ * innodb_log_files_in_group
+ * innodb_lock_wait_timeout
+ * innodb_write_io_threads
+ * innodb_read_io_threads
+ * innodb_max_dirty_pages_pct
+ * max_connections
+ * max_connect_errors
+ * max_heap_table_size
+ * tmp_table_size
+* mysqldump
+ * quick
+ * max_allowed_packet
+* mysql
+ * no-auto-rehash
+* myisamchk
+ * key_buffer_size
+ * sort_buffer_size
+ * read_buffer
+ * write_buffer
+* mysqlhotcopy
+ * interactive-timeout
+* mysqld_safe
+ * open-files-limit
+
+The following variables will be configured by default inside **logging.cnf**:
+
+* mysqld
+ * expire_logs_days
+ * slow_query_log
+ * slow_query_log_file
 
 ## Creating Your Own Configuration Files
 
