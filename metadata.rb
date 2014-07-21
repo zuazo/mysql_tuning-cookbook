@@ -18,7 +18,7 @@ supports 'freebsd'
 supports 'redhat'
 supports 'ubuntu'
 
-# depends 'mysql', '~> 5.0'
+recommends 'mysql', '~> 5.0'
 depends 'ohai'
 depends 'mysql-chef_gem'
 
