@@ -9,7 +9,7 @@ This cookbook creates a generic MySQL server configuration, presumably more opti
 
 Of course, depending on your application your requirements may change and MySQL is a really complex application. So, in some cases, this cookbook will not help you much. But hopefully may serve as a point of departure.
 
-**Warning:** This cookbook will **not** configure MySQL for you. Use it with care. But if you have ideas to improve it, [you are more than welcome &#xFF3C;(^o^)&#xFF0F;](#contributing).
+**Warning:** This cookbook will **not** configure MySQL for you. Use it with care. But if you have ideas to improve it, [you are more than welcome &#xFF3C;(&#x5E;o&#x5E;)&#xFF0F;](#contributing).
 
 Requirements
 ============
