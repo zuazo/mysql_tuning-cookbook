@@ -3,13 +3,13 @@ Description
 [![Cookbook Version](https://img.shields.io/cookbook/v/mysql_tuning.svg?style=flat)](https://supermarket.getchef.com/cookbooks/mysql_tuning)
 [![Dependency Status](http://img.shields.io/gemnasium/onddo/mysql_tuning-cookbook.svg?style=flat)](https://gemnasium.com/onddo/mysql_tuning-cookbook)
 [![Code Climate](http://img.shields.io/codeclimate/github/onddo/mysql_tuning-cookbook.svg?style=flat)](https://codeclimate.com/github/onddo/mysql_tuning-cookbook)
-[![Build Status](http://img.shields.io/travis/onddo/mysql_tuning-cookbook/0.1.0.svg?style=flat)](https://travis-ci.org/onddo/mysql_tuning-cookbook)
+[![Build Status](http://img.shields.io/travis/onddo/mysql_tuning-cookbook.svg?style=flat)](https://travis-ci.org/onddo/mysql_tuning-cookbook)
 
 This cookbook creates a generic MySQL server configuration, presumably more optimized for your current machine than the default configuration.
 
 Of course, depending on your application your requirements may change and MySQL is a really complex application. So, in some cases, this cookbook will not help you much. But hopefully may serve as a point of departure.
 
-**Warning:** This cookbook will **not** configure MySQL for you. Use it with care. But if you have ideas to improve it, [you are more than welcome &#xFF3C;(^o^)&#xFF0F;](#contributing).
+**Warning:** This cookbook will **not** configure MySQL for you. Use it with care. But if you have ideas to improve it, [you are more than welcome &#xFF3C;(&#x5E;o&#x5E;)&#xFF0F;](#contributing).
 
 Requirements
 ============
@@ -63,7 +63,7 @@ Then, make sure that this directory is correctly set in the `node['mysql_tuning'
 
 The official MySQL cookbook takes care of adding the *includedir* itself and should work out of the box.
 
-## Setted Configuration Variables
+## Configured Variables
 
 This cookbook will try to set some variable values depending mainly on the system memory.
 
@@ -161,7 +161,7 @@ Currently, the following algorithms are supported:
 
 * `'proximal'` *(default)*: Sets the configuration values using [nearest-neighbor interpolation](http://en.wikipedia.org/wiki/Nearest-neighbor_interpolation) but taking into account only the neighbors below (with lower RAM).
 * `'linear'`: Uses [linear interpolation](http://en.wikipedia.org/wiki/Linear_interpolation). In theory should give **better results** than `'proximal'`. But may malfunction for machines with lots of memory (> 8 GB). Has not been tested much.
-* `ncubic'`: Uses [cubic interpolation](http://en.wikipedia.org/wiki/Monotone_cubic_interpolation).
+* `cubic'`: Uses [cubic interpolation](http://en.wikipedia.org/wiki/Monotone_cubic_interpolation).
 * `'bicubic'` or `'lagrange'`: Uses [Lagrange polynomials](http://en.wikipedia.org/wiki/Lagrange_polynomial) for [bicubic interpolation](http://en.wikipedia.org/wiki/Bicubic_interpolation).
 * `'catmull'`: Uses [Centripetal Catmull-Rom spline](http://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline).
 
@@ -193,7 +193,7 @@ end
 
 When there are configuration changes, this cookbook can try to set the configuration values without restarting the MySQL server. The cookbook will go for each variable and try to set it dynamically. If any of the variables cannot be changed, the MySQL server will be restarted.
 
-If your MySQL password is not in the `node['mysql']['server_root_password']` attribute, you must use the `mysql_tuning` resource and set the MySQL user and password to the correct values instead of calling the *mysql_tuning::default* recipe. For example:
+If your MySQL password is not in the `node['mysql']['server_root_password']` attribute, you must use the `mysql_tuning` resource and set the MySQL user and password to the correct values instead of calling the `mysql_tuning::default` recipe. For example:
 
 ```ruby
 mysql_tuning 'mysql' do
