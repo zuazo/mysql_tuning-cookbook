@@ -3,7 +3,7 @@ Description
 [![Cookbook Version](https://img.shields.io/cookbook/v/mysql_tuning.svg?style=flat)](https://supermarket.getchef.com/cookbooks/mysql_tuning)
 [![Dependency Status](http://img.shields.io/gemnasium/onddo/mysql_tuning-cookbook.svg?style=flat)](https://gemnasium.com/onddo/mysql_tuning-cookbook)
 [![Code Climate](http://img.shields.io/codeclimate/github/onddo/mysql_tuning-cookbook.svg?style=flat)](https://codeclimate.com/github/onddo/mysql_tuning-cookbook)
-[![Build Status](http://img.shields.io/travis/onddo/mysql_tuning-cookbook.svg?style=flat)](https://travis-ci.org/onddo/mysql_tuning-cookbook)
+[![Build Status](http://img.shields.io/travis/onddo/mysql_tuning-cookbook/0.1.1.svg?style=flat)](https://travis-ci.org/onddo/mysql_tuning-cookbook)
 
 This cookbook creates a generic MySQL server configuration, presumably more optimized for your current machine than the default configuration.
 
