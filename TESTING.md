@@ -38,7 +38,7 @@ Or:
 
 ### Running Integration Tests in the Cloud
 
-#### Requirements:
+#### Requirements
 
 * `kitchen-vagrant`
 * `kitchen-digitalocean`
@@ -61,7 +61,7 @@ Then, you must configure test-kitchen to use `.kitchen.cloud.yml` configuration 
     $ bundle exec kitchen list
     [...]
 
-## ChefSpec matchers
+## ChefSpec Matchers
 
 ### create_mysql_tuning(name)
 

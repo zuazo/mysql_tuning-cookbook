@@ -14,7 +14,7 @@ Of course, depending on your application your requirements may change and MySQL 
 Requirements
 ============
 
-## Platform:
+## Supported Platforms
 
 This cookbook has been tested on the following platforms:
 
@@ -28,16 +28,16 @@ This cookbook has been tested on the following platforms:
 
 Please, [let us know](https://github.com/onddo/mysql_tuning-cookbook/issues/new?title=I%20have%20used%20it%20successfully%20on%20...) if you use it successfully on any other platform.
 
-## Cookbooks:
+## Required Cookbooks
 
 * [mysql (~> 5.0)](https://supermarket.getchef.com/cookbooks/mysql) (recommended)
 * [ohai](https://supermarket.getchef.com/cookbooks/ohai)
 * [mysql-chef_gem](https://supermarket.getchef.com/cookbooks/mysql-chef_gem)
 
-## Applications:
+## Required Applications
 
-* Ruby 1.9.3 or higher.
-* MySQL 5.0 or higher.
+* Ruby `1.9.3` or higher.
+* MySQL `5.0` or higher.
 
 Documentation
 =============
@@ -324,12 +324,12 @@ Creates MySQL configuration files:
 
 [See above](#documentation) for more information.
 
-### mysql_tuning actions
+### mysql_tuning Actions
 
 * `create`: Creates configuration files.
 * `delete`: Deletes configuration files.
 
-### mysql_tuning parameters
+### mysql_tuning Parameters
 
 <table>
   <tr>
@@ -385,12 +385,12 @@ Creates a MySQL configuration file.
 
 Restarts the server only when required. Tries to set the configuration without restarting if `dynamic` enabled.
 
-### mysql_tuning_cnf actions
+### mysql_tuning_cnf Actions
 
 * `create`: Creates the configuration file.
 * `delete`: Deletes the configuration file.
 
-### mysql_tuning_cnf parameters
+### mysql_tuning_cnf Parameters
 
 <table>
   <tr>
