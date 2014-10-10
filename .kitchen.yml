@@ -6,6 +6,9 @@ provisioner:
   name: chef_zero
 
 platforms:
+- name: centos-5.10
+- name: centos-6.5
+- name: centos-7.0
 - name: ubuntu-10.04
   run_list:
   - recipe[apt]
@@ -15,12 +18,14 @@ platforms:
 - name: ubuntu-14.04
   run_list:
   - recipe[apt]
-- name: debian-7.4
+- name: debian-6.0.10
   run_list:
   - recipe[apt]
-- name: centos-5.10
-- name: centos-6.4
+- name: debian-7.6
+  run_list:
+  - recipe[apt]
 - name: fedora-19
+- name: fedora-20
 # TODO: bash and ports need to be installed by hand
 # - name: freebsd-9.2
 

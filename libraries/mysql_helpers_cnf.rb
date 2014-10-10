@@ -29,8 +29,10 @@ class MysqlTuning
           r[group] = {}
           values.each do |key, value|
             fixed_key = fix_variable(key, old_names)
-            fixed_value = round_variable(key, value, block_sizes)
-            r[group][fixed_key] = fixed_value unless fixed_key.nil?
+            unless fixed_key.nil?
+              fixed_value = round_variable(key, value, block_sizes)
+              r[group][fixed_key] = fixed_value
+            end
           end
         end
       end
