@@ -180,7 +180,7 @@ include_recipe 'mysql_tuning::default'
 Using the resource, it would be as follows:
 
 ```ruby
-mysql_tuning 'mysql' do
+mysql_tuning 'default' do
   interpolation 'linear'
   interpolation_by_variable(
     key_buffer_size: 'catmull',
@@ -196,7 +196,7 @@ When there are configuration changes, this cookbook can try to set the configura
 If your MySQL password is not in the `node['mysql']['server_root_password']` attribute, you must use the `mysql_tuning` resource and set the MySQL user and password to the correct values instead of calling the `mysql_tuning::default` recipe. For example:
 
 ```ruby
-mysql_tuning 'mysql' do
+mysql_tuning 'default' do
   mysql_user 'root'
   mysql_password 'PWMzIv4ACtwhbNx9VF8wumsuVIAVVMTzE8$N#,t0'
 end

@@ -18,4 +18,4 @@
 # limitations under the License.
 #
 
-mysql_tuning 'mysql'
+mysql_tuning 'default'
