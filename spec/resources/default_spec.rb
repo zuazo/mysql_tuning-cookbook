@@ -21,6 +21,7 @@ require 'spec_helper'
 require 'mysql_interpolator'
 
 describe 'mysql_tuning resource' do
+  let(:root_password) { 'r00t_p4ssw0rd' }
 
   def node_setup(node, data)
     unless data[:interpolation].nil?
@@ -39,7 +40,7 @@ describe 'mysql_tuning resource' do
     ) do |node|
       node_setup(node, data)
     end
-    runner.converge('mysql_tuning::default')
+    runner.converge('mysql_tuning_test::lwrp')
   end
 
   def chef_run_tuning(data)
@@ -78,6 +79,12 @@ describe 'mysql_tuning resource' do
 
     it "should create #{cnf} file with mysql_tuning_cnf" do
       expect(chef_run).to create_mysql_tuning_cnf(cnf)
+    end
+
+    it "should pass the credentials to mysql_tuning_cnf[#{cnf}]" do
+      expect(chef_run).to create_mysql_tuning_cnf(cnf)
+        .with_mysql_user('root')
+        .with_mysql_password(root_password)
     end
 
   end # cnf.each

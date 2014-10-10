@@ -65,6 +65,8 @@ action :create do
     r = mysql_tuning_cnf config do
       service_name new_resource.service_name
       include_dir new_resource.include_dir
+      mysql_user new_resource.mysql_user
+      mysql_password new_resource.mysql_password
       mysql_port new_resource.mysql_port
       action :create
     end

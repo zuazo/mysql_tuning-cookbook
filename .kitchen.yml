@@ -8,16 +8,16 @@ provisioner:
 platforms:
 - name: ubuntu-10.04
   run_list:
-    - recipe[apt]
+  - recipe[apt]
 - name: ubuntu-12.04
   run_list:
-    - recipe[apt]
+  - recipe[apt]
 - name: ubuntu-14.04
   run_list:
-    - recipe[apt]
+  - recipe[apt]
 - name: debian-7.4
   run_list:
-    - recipe[apt]
+  - recipe[apt]
 - name: centos-5.10
 - name: centos-6.4
 - name: fedora-19
@@ -27,11 +27,10 @@ platforms:
 suites:
 - name: default
   run_list:
-    - recipe[mysql::server]
-    - recipe[mysql_tuning::default]
-  attributes:
+  - recipe[mysql_tuning_test::default]
+- name: lwrp
+  run_list:
+  - recipe[mysql_tuning_test::lwrp]
 - name: ohai
   run_list:
-    - recipe[mysql::server]
-    - recipe[mysql_tuning::ohai_plugin]
-  attributes:
+  - recipe[mysql_tuning_test::ohai_plugin]
