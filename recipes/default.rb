@@ -18,4 +18,4 @@
 # limitations under the License.
 #
 
-mysql_tuning 'default'
+mysql_tuning node['mysql']['service_name']

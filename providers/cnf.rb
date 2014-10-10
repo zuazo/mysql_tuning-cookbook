@@ -1,13 +1,17 @@
 # encoding: UTF-8
 
+def complete_service_name(name)
+  name.include?('[') ? name : "mysql_service[#{name}]"
+end
+
 def service_name
-  new_resource.service_name(
+  new_resource.service_name(complete_service_name(
     if new_resource.service_name.nil?
-      "mysql_service[#{node['mysql']['service_name']}]"
+      node['mysql']['service_name']
     else
       new_resource.service_name
     end
-  )
+  ))
 end
 
 def include_dir

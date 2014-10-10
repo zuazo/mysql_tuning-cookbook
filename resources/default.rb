@@ -2,7 +2,7 @@
 
 actions :create, :delete
 
-attribute :service_name, kind_of: String, default: nil
+attribute :service_name, kind_of: String, name_attribute: true
 attribute :include_dir, kind_of: String, default: nil
 attribute :interpolation, kind_of: [String, FalseClass], default: nil
 attribute :interpolation_by_variable, kind_of: Hash, default: nil

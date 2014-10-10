@@ -314,7 +314,7 @@ Enables MySQL ohai plugin (optional).
 Resources
 =========
 
-## mysql_tuning[name]
+## mysql_tuning[service_name]
 
 Creates MySQL configuration files:
 
@@ -339,8 +339,8 @@ Creates MySQL configuration files:
   </tr>
   <tr>
     <td>service_name</td>
-    <td>MySQL service name, recommended to notify the restarts.</td>
-    <td><code>"mysql_service[#{node['mysql']['service_name']}]"</code></td>
+    <td>MySQL service name, recommended to notify the restarts. See <a href="#mysql_tuning-name-parameter">below</a>.</td>
+    <td><em>name</em></td>
   </tr>
   <tr>
     <td>include_dir</td>
@@ -379,6 +379,21 @@ Creates MySQL configuration files:
   </tr>
 </table>
 
+#### mysql_tuning Name Parameter
+
+The `mysql_tuning` resource *name* is the MySQL Chef *service_name*, like for example `"default"` or `"mysql_service[default]". In most cases this will be `"default"`.
+
+Service type (`"mysql_service"`) is added if not specified, assuming that the official MySQL cookbook is used. The MySQL official cookbook uses `"default"` as service name by default.
+
+For example, using the official MySQL cookbook:
+
+```ruby
+include_recipe 'mysql::server'
+
+mysql_tuning node['mysql']['service_name']
+# This is equivalent to mysql_tuning "default"
+```
+
 ## mysql_tuning_cnf[filename]
 
 Creates a MySQL configuration file.
@@ -406,7 +421,7 @@ Restarts the server only when required. Tries to set the configuration without r
   <tr>
     <td>service_name</td>
     <td>MySQL service name, recommended to notify the restarts.</td>
-    <td><code>"mysql_service[#{node['mysql']['service_name']}]"</code></td>
+    <td><code>nil</code></td>
   </tr>
   <tr>
     <td>include_dir</td>
