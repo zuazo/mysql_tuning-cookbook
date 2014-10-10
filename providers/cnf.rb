@@ -98,6 +98,7 @@ end
 
 action :create do
   r = template ::File.join(include_dir, new_resource.filename) do
+    cookbook 'mysql_tuning'
     owner 'mysql'
     group 'mysql'
     source 'mysql.cnf.erb'

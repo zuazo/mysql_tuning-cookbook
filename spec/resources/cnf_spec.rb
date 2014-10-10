@@ -53,6 +53,14 @@ describe 'mysql_tuning_cnf resource' do
         expect(chef_run).to create_template(path)
       end
 
+      it 'should create template with the correct properties' do
+        expect(chef_run).to create_template(path)
+          .with_cookbook('mysql_tuning')
+          .with_owner('mysql')
+          .with_group('mysql')
+          .with_source('mysql.cnf.erb')
+      end
+
       it 'should notify mysql by default' do
         expect(template(path)).to notify('mysql_service[default]')
       end
