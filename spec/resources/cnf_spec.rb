@@ -32,7 +32,6 @@ describe 'mysql_tuning_cnf resource' do
 
   def chef_run(attrs = {})
     runner = ChefSpec::Runner.new(
-        platform: 'ubuntu', version: '12.04',
         step_into: %w(mysql_tuning mysql_tuning_cnf)
     ) do |node|
       node_setup(node, attrs)

@@ -41,6 +41,8 @@ RSpec.configure do |config|
   config.color = true
   config.formatter = :documentation
   config.tty = true
+  config.platform = 'ubuntu'
+  config.version = '12.04'
 
   config.include MemoryHelpers
 end
