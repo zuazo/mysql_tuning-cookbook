@@ -4,28 +4,30 @@
 
 source 'https://rubygems.org'
 
-group :test, :development do
+group :test do
   gem 'rake'
-  gem 'rspec', '~> 3.0'
-  gem 'interpolator', '~> 0.15'
+  gem 'berkshelf', '~> 2.0'
 end
 
-group :test do
-  gem 'berkshelf', '~> 2.0'
-  gem 'chefspec', '~> 4.0'
+group :style do
   gem 'foodcritic', '~> 4.0'
   gem 'rubocop', '~> 0.24'
 end
 
-group :integration, :kitchen do
+group :unit do
+  gem 'chefspec', '~> 4.0'
+  gem 'interpolator', '~> 0.15'
+end
+
+group :integration do
   gem 'vagrant', github: 'mitchellh/vagrant'
   gem 'test-kitchen', '~> 1.2'
   gem 'kitchen-vagrant', '~> 0.10'
 end
 
-group :integration_cloud, :kitchen_cloud do
+group :integration, :integration_cloud do
   gem 'kitchen-ec2', '~> 0.8'
-  gem 'kitchen-digitalocean', '~> 0.7'
+  gem 'kitchen-digitalocean', '~> 0.8'
 end
 
 group :charts do
