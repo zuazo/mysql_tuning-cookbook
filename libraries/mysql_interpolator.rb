@@ -56,12 +56,19 @@ class MysqlTuning
       end
     end
 
+    def bicubic_type_raw
+      if @data_points.count > 3
+        ::Interpolator::Table::LAGRANGE3
+      else
+        ::Interpolator::Table::LAGRANGE2
+      end
+    end
+
     def type_raw
       case @type.to_s
       when 'linear' then ::Interpolator::Table::LINEAR
       when 'cubic' then ::Interpolator::Table::CUBIC
-      when 'bicubic', 'lagrange'
-        @data_points.count > 3 ? ::Interpolator::Table::LAGRANGE3 : ::Interpolator::Table::LAGRANGE2
+      when 'bicubic', 'lagrange' then bicubic_type_raw
       when 'catmull' then ::Interpolator::Table::CATMULL
       else
         @type

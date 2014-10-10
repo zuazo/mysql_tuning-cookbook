@@ -92,7 +92,8 @@ class MysqlTuning
     def samples_key_numeric_data_points(cnf_samples, group, key)
       previous_point = nil
       cnf_samples.each_with_object({}) do |(mem, cnf), r|
-        if cnf.key?(group) && MysqlTuning::MysqlHelpers.numeric?(cnf[group][key])
+        if cnf.key?(group) &&
+           MysqlTuning::MysqlHelpers.numeric?(cnf[group][key])
           r[mem] = MysqlTuning::MysqlHelpers.mysql2num(cnf[group][key])
           previous_point = r[mem]
         # set to previous sample value if missing (value not changed)

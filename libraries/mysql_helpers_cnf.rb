@@ -18,7 +18,7 @@ class MysqlTuning
       def self.round_variable(name, value, variables_block_size)
         if variables_block_size.key?(name)
           base = variables_block_size[name]
-          value = (MysqlHelpers.mysql2num(value) / base).round * base
+          (MysqlHelpers.mysql2num(value) / base).round * base
         else
           value
         end
