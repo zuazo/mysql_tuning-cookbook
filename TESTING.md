@@ -3,6 +3,7 @@ Testing
 
 ## Requirements
 
+* `interpolator`
 * `vagrant`
 * `foodcritic`
 * `rubocop`
