@@ -45,7 +45,6 @@ end
 template plugin_path do
   source "#{source_dir}/mysql.rb.erb"
   owner 'root'
-  group 'root'
   mode '0755'
   variables(
     mysql_bin: node['mysql_tuning']['mysqld_bin']

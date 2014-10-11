@@ -25,7 +25,6 @@ describe 'mysql_tuning::ohai_plugin' do
   it 'should install mysql plugin' do
     expect(chef_run).to create_template('/etc/chef/ohai_plugins/mysql.rb')
       .with_owner('root')
-      .with_group('root')
       .with_mode('0755')
   end
 
