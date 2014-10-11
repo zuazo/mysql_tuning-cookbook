@@ -18,27 +18,14 @@
 # limitations under the License.
 #
 
+Chef::Recipe.send(:include, ::MysqlTuning::MysqlCookbookHelpers)
+
 def ohai7?
   Gem::Requirement.new('>= 7').satisfied_by?(Gem::Version.new(Ohai::VERSION))
 end
 
 source_dir = ohai7? ? 'ohai7_plugins' : 'ohai_plugins'
-
-Chef::Recipe.send(:include, ::Opscode::Mysql::Helpers)
-
-version = default_version_for(
-  node['platform'],
-  node['platform_family'],
-  node['platform_version']
-)
-
-package_name = package_name_for(
-  node['platform'],
-  node['platform_family'],
-  node['platform_version'],
-  version
-)
-
+package_name = parsed_package_name
 plugin_path = "#{node['ohai']['plugin_path']}/mysql.rb"
 
 ohai 'reload_mysql' do
