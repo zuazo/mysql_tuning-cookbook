@@ -5,7 +5,6 @@ require 'mixlib/shellout'
 class MysqlTuning
   # Some MySQL Cookbook Helpers to get MySQL internal package names
   module MysqlCookbookHelpers
-
     def package_from_helper_library?
       defined?(Opscode::Mysql::Helpers) &&
       Opscode::Mysql::Helpers.respond_to?(:default_version_for) &&
@@ -32,7 +31,7 @@ class MysqlTuning
 
     def package_from_mysql_service
       return nil unless package_from_mysql_service?
-      package_name = mysql_service 'get mysql package name (monkey-patch)' do
+      mysql_service 'get mysql package name (monkey-patch)' do
         action :nothing
       end.parsed_package_name
     end
