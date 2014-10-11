@@ -1,0 +1,95 @@
+# encoding: UTF-8
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# See TESTING.md file.
+
+Vagrant.configure('2') do |config|
+  # All Vagrant configuration is done here. The most common configuration
+  # options are documented and commented below. For a complete reference, please
+  # see the online documentation at vagrantup.com.
+
+  config.vm.hostname = 'mysql.local'
+
+  # Opscode Chef Vagrant box to use.
+  # More boxes here: https://github.com/opscode/bento
+  opscode_box = 'opscode-ubuntu-12.04'
+
+  # Every Vagrant virtual environment requires a box to build off of.
+  config.vm.box = opscode_box
+
+  # The url from where the 'config.vm.box' box will be fetched if it doesn't
+  # already exist on the user's system.
+  config.vm.box_url =
+    'http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/'\
+    "#{opscode_box.sub('-', '_')}_chef-provisionerless.box"
+
+  # Assign this VM to a host-only network IP, allowing you to access it via the
+  # IP. Host-only networks can talk to the host machine as well as any other
+  # machines on the same network, but cannot be accessed (through this network
+  # interface) by any external networks.
+  config.vm.network :private_network, ip: '10.73.57.124'
+
+  # Create a public network, which generally matched to bridged network. Bridged
+  # networks make the machine appear as another physical device on your network.
+
+  # config.vm.network :public_network
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine. In the example below,
+  # accessing 'localhost:64738' will access port 64738 on the guest machine.
+  config.vm.network :forwarded_port, guest: 64_738, host: 64_738,
+                    auto_correct: true
+
+  # The time in seconds that Vagrant will wait for the machine to boot and be
+  # accessible.
+  config.vm.boot_timeout = 120
+
+  # Share an additional folder to the guest VM. The first argument is the path
+  # on the host to the actual folder. The second argument is the path on the
+  # guest to mount the folder. And the optional third argument is a set of
+  # non-required options.
+  # config.vm.synced_folder '../data', '/vagrant_data'
+
+  # Provider-specific configuration so you can fine-tune various backing
+  # providers for Vagrant. These expose provider-specific options.
+  # Example for VirtualBox:
+  #
+  # config.vm.provider :virtualbox do |vb|
+  #   # Don't boot with headless mode
+  #   vb.gui = true
+  #
+  #   # Use VBoxManage to customize the VM. For example to change memory:
+  #   vb.memory = 1024
+  # end
+  #
+  # View the documentation for the provider you're using for more information on
+  # available options.
+
+  # Install the latest version of Chef.
+  config.omnibus.chef_version = :latest
+
+  # Enabling the Berkshelf plugin. To enable this globally, add this
+  # configuration option to your ~/.vagrant.d/Vagrantfile file.
+  config.berkshelf.enabled = true
+
+  # The path to the Berksfile to use with Vagrant Berkshelf.
+  # config.berkshelf.berksfile_path = './Berksfile'
+
+  # An array of symbols representing groups of cookbook described in the
+  # Vagrantfile to exclusively install and copy to Vagrant's shelf.
+  # config.berkshelf.only = []
+
+  # An array of symbols representing groups of cookbook described in the
+  # Vagrantfile to skip installing and copying to Vagrant's shelf.
+  # config.berkshelf.except = []
+
+  config.vm.provision :chef_solo do |chef|
+    chef.json = {}
+
+    chef.run_list = %w(
+      recipe[apt]
+      recipe[mysql_tuning_test]
+    )
+  end
+end
