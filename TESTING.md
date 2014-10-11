@@ -76,14 +76,21 @@ Then, you must configure test-kitchen to use `.kitchen.cloud.yml` configuration 
 
 ## ChefSpec Matchers
 
+### mysql_tuning(name)
+
+Helper method for locating a `mysql_tuning` resource in the collection.
+
+```ruby
+resource = chef_run.mysql_tuning('default')
+expect(resource).to notify('service[apache2]').to(:restart)
+```
+
 ### create_mysql_tuning(name)
 
 Assert that the Chef run creates mysql_tuning.
 
 ```ruby
-expect(chef_run).to create_mysql_tuning(name).with(
-  :service_name => 'mysql'
-)
+expect(chef_run).to create_mysql_tuning('default')
 ```
 
 ### delete_mysql_tuning(name)
@@ -91,7 +98,16 @@ expect(chef_run).to create_mysql_tuning(name).with(
 Assert that the Chef run deletes mysql_tuning.
 
 ```ruby
-expect(chef_run).to delete_mysql_tuning(name)
+expect(chef_run).to delete_mysql_tuning('default')
+```
+
+### mysql_tuning_cnf(name)
+
+Helper method for locating a `mysql_tuning_cnf` resource in the collection.
+
+```ruby
+resource = chef_run.mysql_tuning_cnf('tuning.cnf')
+expect(resource).to notify('service[apache2]').to(:restart)
 ```
 
 ### create_mysql_tuning_cnf(filename)
@@ -99,9 +115,8 @@ expect(chef_run).to delete_mysql_tuning(name)
 Assert that the Chef run creates mysql_tuning_cnf.
 
 ```ruby
-expect(chef_run).to create_mysql_tuning_cnf(filename).with(
-  :service_filename => 'mysql'
-)
+expect(chef_run).to create_mysql_tuning_cnf('tuning.cnf')
+  .with_service_name('default')
 ```
 
 ### delete_mysql_tuning_cnf(filename)
@@ -109,5 +124,5 @@ expect(chef_run).to create_mysql_tuning_cnf(filename).with(
 Assert that the Chef run deletes mysql_tuning_cnf.
 
 ```ruby
-expect(chef_run).to delete_mysql_tuning_cnf(filename)
+expect(chef_run).to delete_mysql_tuning_cnf('tuning.cnf')
 ```
