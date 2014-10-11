@@ -18,15 +18,18 @@ else
   default['mysql_tuning']['include_dir'] = '/etc/mysql/conf.d'
 end
 
-case node['platform']
-when 'redhat', 'centos', 'scientific', 'fedora', 'suse', 'amazon'
-  default['mysql_tuning']['mysqld_bin'] = '/usr/libexec/mysqld'
-when 'freebsd'
-  default['mysql_tuning']['mysqld_bin'] = '/usr/local/libexec/mysqld'
-# when 'debian', 'ubuntu' then
-else
-  default['mysql_tuning']['mysqld_bin'] = 'mysqld'
-end
+default['mysql_tuning']['mysqld_bin'] =
+  case node['platform']
+  when 'centos'
+    node['platform_version'].to_i >= 7 ?  'mysqld' : '/usr/libexec/mysqld'
+  when 'redhat', 'scientific', 'fedora', 'suse', 'amazon'
+    '/usr/libexec/mysqld'
+  when 'freebsd'
+    '/usr/local/libexec/mysqld'
+  # when 'debian', 'ubuntu' then
+  else
+    'mysqld'
+  end
 
 default['mysql_tuning']['logging.cnf'] = {
   mysqld: {
