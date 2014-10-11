@@ -1,9 +1,5 @@
 #!/usr/bin/env bats
 
-@test "mysqld should be runing" {
-  ps axu | grep mysql[d]
-}
-
 @test "should pass configuration file checking" {
   if [ -f /usr/libexec/mysqld ]
   then

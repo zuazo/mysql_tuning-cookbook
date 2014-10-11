@@ -10,24 +10,19 @@ platforms:
 - name: centos-6.5
 - name: centos-7.0
 - name: ubuntu-10.04
-  run_list:
-  - recipe[apt]
+  run_list: ["recipe[apt]"]
 - name: ubuntu-12.04
-  run_list:
-  - recipe[apt]
+  run_list: ["recipe[apt]"]
 - name: ubuntu-14.04
-  run_list:
-  - recipe[apt]
+  run_list: ["recipe[apt]"]
 - name: debian-6.0.10
-  run_list:
-  - recipe[apt]
+  run_list: ["recipe[apt]"]
 - name: debian-7.6
-  run_list:
-  - recipe[apt]
+  run_list: ["recipe[apt]"]
 - name: fedora-19
 - name: fedora-20
-# TODO: bash and ports need to be installed by hand
-# - name: freebsd-9.2
+- name: freebsd-10.0
+  run_list: ["recipe[freebsd::portsnap]"]
 
 suites:
 - name: default

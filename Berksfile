@@ -14,6 +14,7 @@ end
 
 metadata
 cookbook 'apt'
+cookbook 'freebsd'
 cookbook 'mysql', '~> 5.0'
 
 # Minitest Chef Handler
