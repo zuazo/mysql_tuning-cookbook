@@ -1,5 +1,7 @@
 # encoding: UTF-8
 
+require 'mixlib/shellout'
+
 class MysqlTuning
   # Some MySQL Helpers to use from Chef cookbooks (recipes, attributes, ...)
   module CookbookHelpers
@@ -18,6 +20,13 @@ class MysqlTuning
           r.run_action(:install)
           require g
         end
+      end
+    end
+
+    def mysql_version
+      @version ||= begin
+        cmd = run_command("#{node['mysql_tuning']['mysqld_bin']} --version")
+        parse_mysql_version(cmd.split("\n")[0])
       end
     end
 
@@ -74,13 +83,29 @@ class MysqlTuning
         result = Chef::Mixin::DeepMerge.hash_only_merge(result, result_i)
       end
       MysqlHelpers::Cnf.fix(
-        result,
-        node['mysql_tuning']['variables_block_size'],
-        node['mysql_tuning']['old_names']
+        result, node['mysql_tuning']['variables_block_size'],
+        node['mysql_tuning']['old_names'], mysql_version
       )
     end
 
     private
+
+    def run_command(cmd)
+      result = Mixlib::ShellOut.new(cmd).run_command
+      result.error!
+      result.stdout
+    end
+
+    def parse_mysql_version(stdout)
+      case stdout
+      when / +Ver +[0-9][0-9.]+ Distrib ([0-9][0-9.]*)[^0-9.]/
+        Regexp.last_match[1]
+      when / +Ver +([0-9][0-9.]*)[^0-9.]/
+        Regexp.last_match[1]
+      else
+        fail "Unknown MySQL version: #{stdout}"
+      end
+    end
 
     # avoid interpolating some configuration values
     def non_interpolated_key?(key, non_interpolated_keys = [])

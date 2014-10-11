@@ -36,22 +36,20 @@ describe MysqlTuning::MysqlHelpers::Cnf do
     end
 
     it 'should not fix conigurations with new versions' do
-      allow(MysqlTuning::MysqlHelpers)
-        .to receive(:version) .and_return('5.5')
       expect(described_class.fix(
         cnf,
         node['mysql_tuning']['variables_block_size'],
-        node['mysql_tuning']['old_names']
+        node['mysql_tuning']['old_names'],
+        '5.5'
       )).to eql(cnf)
     end
 
     it 'should fix conigurations with old versions' do
-      allow(MysqlTuning::MysqlHelpers)
-        .to receive(:version).and_return('5.0')
       expect(described_class.fix(
         cnf,
         node['mysql_tuning']['variables_block_size'],
-        node['mysql_tuning']['old_names']
+        node['mysql_tuning']['old_names'],
+        '5.0'
       )).to eql('mysqld' => { 'log_slow_queries' => 'foo' })
     end
 

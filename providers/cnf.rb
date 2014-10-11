@@ -101,13 +101,18 @@ def include_mysql_recipe
 end
 
 action :create do
+  self.class.send(:include, ::MysqlTuning::CookbookHelpers)
+
   r = template ::File.join(include_dir, new_resource.filename) do
     cookbook 'mysql_tuning'
     owner 'mysql'
     group 'mysql'
     source 'mysql.cnf.erb'
     variables(
-      config: ::MysqlTuning::MysqlHelpers::Cnf.fix(values)
+      config: ::MysqlTuning::MysqlHelpers::Cnf.fix(
+        values, node['mysql_tuning']['variables_block_size'],
+        node['mysql_tuning']['old_names'], mysql_version
+      )
     )
     only_if { new_resource.persist }
     unless update_configuration_dynamically

@@ -28,7 +28,9 @@ Ohai.plugin(:Mysql) do
 
   def collect_version(stdout)
     case stdout.split("\n")[0]
-    when /^mysqld +Ver +([0-9][0-9.]*)[^0-9.]/
+    when / +Ver +[0-9][0-9.]+ Distrib ([0-9][0-9.]*)[^0-9.]/
+      mysql['installed_version'] = Regexp.last_match[1]
+    when / +Ver +([0-9][0-9.]*)[^0-9.]/
       mysql['installed_version'] = Regexp.last_match[1]
     end
   end

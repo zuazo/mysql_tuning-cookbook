@@ -21,7 +21,19 @@ require 'spec_helper'
 require 'mysql_interpolator'
 
 describe 'mysql_tuning resource' do
+  let(:my_shell_out) { instance_double('Mixlib::ShellOut') }
+  let(:my_version_stdout) do
+    'mysql  Ver 14.12 Distrib 5.0.95, for redhat-linux-gnu (x86_64) using '\
+    'readline 5.1'
+  end
   let(:root_password) { 'r00t_p4ssw0rd' }
+  before do
+    allow(Mixlib::ShellOut).to receive(:new)
+      .with('mysqld --version').and_return(my_shell_out)
+    allow(my_shell_out).to receive(:run_command).and_return(my_shell_out)
+    allow(my_shell_out).to receive(:error!)
+    allow(my_shell_out).to receive(:stdout).and_return(my_version_stdout)
+  end
 
   def node_setup(node, data)
     unless data[:interpolation].nil?

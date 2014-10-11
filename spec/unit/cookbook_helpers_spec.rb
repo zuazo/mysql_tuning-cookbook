@@ -33,6 +33,83 @@ describe MysqlTuning::CookbookHelpers do
       subject.non_interpolated_keys
     )
   end
+  let(:my_shell_out) { instance_double('Mixlib::ShellOut') }
+  let(:my_version_stdout) do
+    'mysql  Ver 14.12 Distrib 5.0.95, for redhat-linux-gnu (x86_64) using '\
+    'readline 5.1'
+  end
+  before do
+    allow(Mixlib::ShellOut).to receive(:new)
+      .with('mysqld --version').and_return(my_shell_out)
+    allow(my_shell_out).to receive(:run_command).and_return(my_shell_out)
+    allow(my_shell_out).to receive(:error!)
+    allow(my_shell_out).to receive(:stdout).and_return(my_version_stdout)
+  end
+
+  context '#mysql_version' do
+    {
+      centos5: [
+        '5.0.95',
+        'mysql  Ver 14.12 Distrib 5.0.95, for redhat-linux-gnu (x86_64) using '\
+        'readline 5.1'
+      ],
+      centos6: [
+        '5.1.73',
+        '/usr/libexec/mysqld  Ver 5.1.73 for redhat-linux-gnu on x86_64 '\
+        '(Source distribution)'
+      ],
+      centos7: [
+        '5.5.40',
+        'mysqld  Ver 5.5.40 for Linux on x86_64 (MySQL Community Server (GPL))'
+      ],
+      ubuntu10: [
+        '5.1.73',
+        'mysqld  Ver 5.1.73-0ubuntu0.10.04.1 for debian-linux-gnu on x86_64 '\
+        '((Ubuntu))'
+      ],
+      ubuntu12: [
+        '5.5.38',
+        'mysqld  Ver 5.5.38-0ubuntu0.12.04.1-log for debian-linux-gnu on '\
+        'x86_64 ((Ubuntu))'
+      ],
+      ubuntu14: [
+        '5.5.38',
+        'mysqld  Ver 5.5.38-0ubuntu0.14.04.1-log for debian-linux-gnu on '\
+        'x86_64 ((Ubuntu))'
+      ],
+      debian6: [
+        '5.1.73',
+        'mysqld  Ver 5.1.73-1 for debian-linux-gnu on x86_64 ((Debian))'
+      ],
+      debian7: [
+        '5.5.38',
+        'mysqld  Ver 5.5.38-0+wheezy1-log for debian-linux-gnu on x86_64 '\
+        '((Debian))'
+      ],
+      fedora19: [
+        '5.5.38',
+        '/usr/libexec/mysqld  Ver 5.5.38-log for Linux on x86_64 (MySQL '\
+        'Community Server (GPL))'
+      ],
+      fedora20: [
+        '5.5.38',
+        '/usr/libexec/mysqld  Ver 5.5.38-log for Linux on x86_64 (MySQL '\
+        'Community Server (GPL))'
+      ],
+      freebsd10: [
+        '5.5.40',
+        '/usr/local/libexec/mysqld  Ver 5.5.40-log for FreeBSD10.0 on amd64 '\
+        '(Source distribution)'
+      ]
+    }.each do |platform, version_info|
+      it "should parse #{platform} mysql versions" do
+        version = version_info[0]
+        stdout = version_info[1]
+        expect(my_shell_out).to receive(:stdout).and_return(stdout)
+        expect(subject.mysql_version).to eql(version)
+      end
+    end # each platform version_info
+  end # context #mysql_version
 
   context '#cnf_from_samples' do
 
