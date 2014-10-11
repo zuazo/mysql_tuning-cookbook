@@ -119,15 +119,18 @@ action :create do
       include_mysql_recipe
       notifies :restart, service_name
     end
+    action :nothing
   end
+  r.run_action(:create)
   new_resource.updated_by_last_action(r.updated_by_last_action?)
 end
 
 action :delete do
   include_mysql_recipe
   r = file ::File.join(include_dir, new_resource.file_name) do
-    action :delete
     notifies :restart, service_name
+    action :nothing
   end
+  r.run_action(:delete)
   new_resource.updated_by_last_action(r.updated_by_last_action?)
 end

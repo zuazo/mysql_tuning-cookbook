@@ -68,8 +68,9 @@ action :create do
       mysql_user new_resource.mysql_user
       mysql_password new_resource.mysql_password
       mysql_port new_resource.mysql_port
-      action :create
+      action :nothing
     end
+    r.run_action(:create)
     new_resource.updated_by_last_action(true) if r.updated_by_last_action?
   end
 
@@ -85,8 +86,9 @@ action :delete do
       mysql_user new_resource.mysql_user # not used on delete
       mysql_password new_resource.mysql_password
       mysql_port new_resource.mysql_port
-      action :delete
+      action :nothing
     end
+    r.run_action(:delete)
     new_resource.updated_by_last_action(true) if r.updated_by_last_action?
   end
 
