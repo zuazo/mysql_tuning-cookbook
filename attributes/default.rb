@@ -20,10 +20,13 @@ end
 
 default['mysql_tuning']['mysqld_bin'] =
   case node['platform']
-  when 'centos'
-    node['platform_version'].to_i >= 7 ?  'mysqld' : '/usr/libexec/mysqld'
-  when 'redhat', 'scientific', 'fedora', 'suse', 'amazon'
-    '/usr/libexec/mysqld'
+  when 'centos', 'redhat', 'scientific', 'fedora', 'suse', 'amazon'
+    if %w(centos).include?(node['platform']) &&
+       node['platform_version'].to_i >= 7
+      'mysqld'
+    else
+      '/usr/libexec/mysqld'
+    end
   when 'freebsd'
     '/usr/local/libexec/mysqld'
   # when 'debian', 'ubuntu' then
