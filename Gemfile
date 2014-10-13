@@ -15,7 +15,7 @@ group :style do
 end
 
 group :unit do
-  gem 'chefspec', '~> 4.0'
+  gem 'chefspec', '~> 4.1'
   gem 'interpolator', '~> 0.15'
 end
 

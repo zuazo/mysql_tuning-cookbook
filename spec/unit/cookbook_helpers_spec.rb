@@ -20,6 +20,7 @@
 require 'spec_helper'
 require 'support/fake_recipe'
 require 'cookbook_helpers'
+require 'mysql_version'
 require 'mysql_helpers'
 require 'mysql_helpers_cnf'
 require 'mysql_interpolator'

@@ -43,7 +43,7 @@ describe 'mysql_tuning_cnf resource' do
   end
 
   def chef_run(attrs = {})
-    runner = ChefSpec::Runner.new(
+    runner = ChefSpec::SoloRunner.new(
         step_into: %w(mysql_tuning mysql_tuning_cnf)
     ) do |node|
       node_setup(node, attrs)
