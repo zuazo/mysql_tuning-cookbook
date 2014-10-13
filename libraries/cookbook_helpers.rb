@@ -43,10 +43,8 @@ class MysqlTuning
     end
 
     def mysql_version
-      @version ||= begin
-        cmd = run_command("#{node['mysql_tuning']['mysqld_bin']} --version")
-        parse_mysql_version(cmd.split("\n")[0])
-      end
+      mysql_bin = node['mysql_tuning']['mysqld_bin']
+      @version ||= MysqlTuning::MysqlVersion.get(mysql_bin)
     end
 
     def physical_memory
@@ -108,23 +106,6 @@ class MysqlTuning
     end
 
     private
-
-    def run_command(cmd)
-      result = Mixlib::ShellOut.new(cmd).run_command
-      result.error!
-      result.stdout
-    end
-
-    def parse_mysql_version(stdout)
-      case stdout
-      when / +Ver +[0-9][0-9.]+ Distrib ([0-9][0-9.]*)[^0-9.]/
-        Regexp.last_match[1]
-      when / +Ver +([0-9][0-9.]*)[^0-9.]/
-        Regexp.last_match[1]
-      else
-        fail "Unknown MySQL version: #{stdout}"
-      end
-    end
 
     # avoid interpolating some configuration values
     def non_interpolated_key?(key, non_interpolated_keys = [])
