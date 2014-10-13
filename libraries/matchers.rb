@@ -20,7 +20,15 @@
 #
 
 if defined?(ChefSpec)
-  ChefSpec.define_matcher :mysql_tuning
+
+  if ChefSpec.respond_to?(:define_matche)
+    ChefSpec.define_matcher :mysql_tuning
+    ChefSpec.define_matcher :mysql_tuning_cnf
+  elsif defined?(ChefSpec::Runner) &&
+     ChefSpec::Runner.respond_to?(:define_runner_method)
+    ChefSpec::Runner.define_runner_method :mysql_tuning
+    ChefSpec::Runner.define_runner_method :mysql_tuning_cnf
+  end
 
   def create_mysql_tuning(name)
     ChefSpec::Matchers::ResourceMatcher.new(
@@ -37,8 +45,6 @@ if defined?(ChefSpec)
       name
     )
   end
-
-  ChefSpec.define_matcher :mysql_tuning_cnf
 
   def create_mysql_tuning_cnf(filename)
     ChefSpec::Matchers::ResourceMatcher.new(
