@@ -22,10 +22,12 @@
 if defined?(ChefSpec)
 
   if ChefSpec.respond_to?(:define_matche)
+    # ChefSpec >= 4.1
     ChefSpec.define_matcher :mysql_tuning
     ChefSpec.define_matcher :mysql_tuning_cnf
   elsif defined?(ChefSpec::Runner) &&
      ChefSpec::Runner.respond_to?(:define_runner_method)
+    # ChefSpec < 4.1
     ChefSpec::Runner.define_runner_method :mysql_tuning
     ChefSpec::Runner.define_runner_method :mysql_tuning_cnf
   end
