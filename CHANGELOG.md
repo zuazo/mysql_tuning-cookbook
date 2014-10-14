@@ -37,6 +37,7 @@ This file is used to list changes made in each version of the `mysql_tuning` coo
 * Add license header file to all ruby files.
 * README:
  * Add example using the mysql_service resource, encrypted attributes and chef-vault.
+ * Change tables to use Markdown format.
 * CONTRIBUTING: tests before changes.
 * TODO: use checkboxes.
 * Some small documentation fixes.
