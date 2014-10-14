@@ -227,78 +227,21 @@ Keep in mind that this plugin will not be enabled by the `mysql_tuning::default`
 Attributes
 ==========
 
-<table>
-  <tr>
-    <th>Attribute</th>
-    <th>Description</th>
-    <th>Default</th>
-  </tr>
-  <tr>
-    <td><code>node['mysql_tuning']['system_percentage']</code></td>
-    <td>System percentage used for MySQL. Use <code>100</code> for MySQL dedicated servers.</td>
-    <td><code>100</code></td>
-  </tr>
-  <tr>
-    <td><code>node['mysql_tuning']['dynamic_configuration']</code></td>
-    <td>Tries to change the MySQL configuration without restarting the server, setting variable values dynamically (<a href="#dynamic-configuration">See above</a>).</td>
-    <td><code>false</code></td>
-  </tr>
-  <tr>
-    <td><code>node['mysql_tuning']['interpolation']</code></td>
-    <td>Interpolation algorithm to use. Possible values: <code>'proximal'</code>, <code>'linear'</code>, <code>'cubic'</code>, <code>'bicubic'</code>, <code>'catmull'</code> (<a href="#configuration-variables-interpolation">See above</a>).</td>
-    <td><code>'proximal'</code></td>
-  </tr>
-  <tr>
-    <td><code>node['mysql_tuning']['interpolation_by_variable']</code></td>
-    <td>Use different interpolation algorithms for some variables (<a href="#configuration-variables-interpolation">See above</a>).</td>
-    <td><code>{}</code></td>
-  </tr>
-  <tr>
-    <td><code>node['mysql_tuning']['recipe']</code></td>
-    <td>MySQL recipe name, required if not included beforehand.</td>
-    <td><code>nil</code></td>
-  </tr>
-  <tr>
-    <td><code>node['mysql_tuning']['include_dir']</code></td>
-    <td>MySQL configuration include directory.</td>
-    <td><em>calculated</em></td>
-  </tr>
-  <tr>
-    <td><code>node['mysql_tuning']['mysqld_bin']</code></td>
-    <td>MySQL daemon binary path.</td>
-    <td><em>calculated</em></td>
-  </tr>
-  <tr>
-    <td><code>node['mysql_tuning']['logging.cnf']</code></td>
-    <td>MySQL <em>logging.cnf</em> configuration.</td>
-    <td><em>calculated</em></td>
-  </tr>
-  <tr>
-    <td><code>node['mysql_tuning']['tuning.cnf']</code></td>
-    <td>MySQL <em>tuning.cnf</em> configuration.</td>
-    <td><em>calculated</em></td>
-  </tr>
-  <tr>
-    <td><code>node['mysql_tuning']['configuration_samples']</code></td>
-    <td>MySQL configuration samples.</td>
-    <td><em>calculated</em></td>
-  </tr>
-  <tr>
-    <td><code>node['mysql_tuning']['old_names']</code></td>
-    <td>MySQL configuration variable old names hash. <em>(internal)</em></td>
-    <td><em>calculated</em></td>
-  </tr>
-  <tr>
-    <td><code>node['mysql_tuning']['non_interpolated_keys']</code></td>
-    <td>MySQL keys that should not be interpolated. <em>(internal)</em></td>
-    <td><em>calculated</em></td>
-  </tr>
-  <tr>
-    <td><code>node['mysql_tuning']['variables_block_size']</code></td>
-    <td>MySQL variables block size. <em>(internal)</em></td>
-    <td><em>calculated</em></td>
-  </tr>
-</table>
+| Attribute                                           | Default      | Description                       |
+|-----------------------------------------------------|:------------:|-----------------------------------|
+| `node['mysql_tuning']['system_percentage']`         | `100`        | System percentage used for MySQL. Use `100` for MySQL dedicated servers. |
+| `node['mysql_tuning']['dynamic_configuration']`     | `false`      | Tries to change the MySQL configuration without restarting the server, setting variable values dynamically [See above](#dynamic-configuration). |
+| `node['mysql_tuning']['interpolation']`             | `'proximal'` | Interpolation algorithm to use. Possible values: `'proximal'`, `'linear'`, `'cubic'`, `'bicubic'`, `'catmull'` [See above](#configuration-variables-interpolation). |
+| `node['mysql_tuning']['interpolation_by_variable']` | `{}`         | Use different interpolation algorithms for some variables [See above](#configuration-variables-interpolation). |
+| `node['mysql_tuning']['recipe']`                    | `nil`        | MySQL recipe name, required if not included beforehand. |
+| `node['mysql_tuning']['include_dir']`               | *calculated* | MySQL configuration include directory. |
+| `node['mysql_tuning']['mysqld_bin']`                | *calculated* | MySQL daemon binary path. |
+| `node['mysql_tuning']['logging.cnf']`               | *calculated* | MySQL *logging.cnf* configuration. |
+| `node['mysql_tuning']['tuning.cnf']`                | *calculated* | MySQL *tuning.cnf* configuration. |
+| `node['mysql_tuning']['configuration_samples']`     | *calculated* | MySQL configuration samples. |
+| `node['mysql_tuning']['old_names']`                 | *calculated* | MySQL configuration variable old names hash. *(internal)* |
+| `node['mysql_tuning']['non_interpolated_keys']`     | *calculated* | MySQL keys that should not be interpolated. *(internal)* |
+| `node['mysql_tuning']['variables_block_size']`      | *calculated* | MySQL variables block size. *(internal)* |
 
 Recipes
 =======
@@ -331,53 +274,16 @@ Creates MySQL configuration files:
 
 ### mysql_tuning Parameters
 
-<table>
-  <tr>
-    <th>Parameter</th>
-    <th>Description</th>
-    <th>Default</th>
-  </tr>
-  <tr>
-    <td>service_name</td>
-    <td>MySQL service name, recommended to notify the restarts. See <a href="#mysql_tuning-name-parameter">below</a>.</td>
-    <td><em>name</em></td>
-  </tr>
-  <tr>
-    <td>include_dir</td>
-    <td>MySQL configuration directory.</td>
-    <td><code>node['mysql_tuning']['include_dir']</code></td>
-  </tr>
-  <tr>
-    <td>interpolation</td>
-    <td>MySQL interpolation type used.</td>
-    <td><code>node['mysql_tuning']['interpolation']</code></td>
-  </tr>
-  <tr>
-    <td>interpolation_by_variable</code></td>
-    <td>Use different interpolation algorithms for some variables (<a href="#configuration-variables-interpolation">See above</a>).</td>
-    <td><code>{}</code></td>
-  </tr>
-  <tr>
-    <td>configuration_samples</td>
-    <td>MySQL tuning configuration samples.</td>
-    <td><code>node['mysql_tuning']['configuration_samples']</code></td>
-  </tr>
-  <tr>
-    <td>mysql_user</td>
-    <td>MySQL login user.</td>
-    <td><code>'root'</code></td>
-  </tr>
-  <tr>
-    <td>mysql_password</td>
-    <td>MySQL login password. Required mainly if you enable dynamic configuration and change the default password.</td>
-    <td><code>node['mysql']['server_root_password']</code></td>
-  </tr>
-  <tr>
-    <td>mysql_port</td>
-    <td>MySQL port.</td>
-    <td><code>node['mysql']['port']</code></td>
-  </tr>
-</table>
+| Parameter                 | Default                                         | Description                       |
+|---------------------------|:-----------------------------------------------:|-----------------------------------|
+| service_name              | *name attribute*                                | MySQL service name, recommended to notify the restarts. [See below](#mysql_tuning-name-parameter). |
+| include_dir               | `node['mysql_tuning']['include_dir']`           | MySQL configuration directory. |
+| interpolation             | `node['mysql_tuning']['interpolation']`         | MySQL interpolation type used. |
+| interpolation_by_variable | `{}`                                            | Use different interpolation algorithms for some variables [See above](#configuration-variables-interpolation). |
+| configuration_samples     | `node['mysql_tuning']['configuration_samples']` | MySQL tuning configuration samples. |
+| mysql_user                | `'root'`                                        | MySQL login user.MySQL login user. |
+| mysql_password            | `node['mysql']['server_root_password']`         | MySQL login password. Required mainly if you enable dynamic configuration and change the default password. |
+| mysql_port                | `node['mysql']['port']`                         | MySQL port. |
 
 #### mysql_tuning Name Parameter
 
@@ -407,58 +313,17 @@ Restarts the server only when required. Tries to set the configuration without r
 
 ### mysql_tuning_cnf Parameters
 
-<table>
-  <tr>
-    <th>Parameter</th>
-    <th>Description</th>
-    <th>Default</th>
-  </tr>
-  <tr>
-    <td>filename</td>
-    <td>Configuration file name.</td>
-    <td><em>name attribute</name></td>
-  </tr>
-  <tr>
-    <td>service_name</td>
-    <td>MySQL service name, recommended to notify the restarts.</td>
-    <td><code>nil</code></td>
-  </tr>
-  <tr>
-    <td>include_dir</td>
-    <td>MySQL configuration directory.</td>
-    <td><code>node['mysql_tuning']['include_dir']</code></td>
-  </tr>
-  <tr>
-    <td>dynamic</td>
-    <td>Whether to enable dynamic configuration. This tries to set the configuration without restarting the server.</td>
-    <td><code>node['mysql_tuning']['dynamic_configuration']</code></td>
-  </tr>
-  <tr>
-    <td>values</td>
-    <td>Configuration values as <em>Hash</em>.</td>
-    <td><code>node['mysql_tuning'][filename]</code></td>
-  </tr>
-  <tr>
-    <td>persist</td>
-    <td>Whether to create the configuration file on disk.</td>
-    <td><code>true</code></td>
-  </tr>
-  <tr>
-    <td>mysql_user</td>
-    <td>MySQL login user.</td>
-    <td><code>'root'</code></td>
-  </tr>
-  <tr>
-    <td>mysql_password</td>
-    <td>MySQL login password. Required mainly if you enabled dynamic configuration and changed the default password.</td>
-    <td><code>node['mysql']['server_root_password']</code></td>
-  </tr>
-  <tr>
-    <td>mysql_port</td>
-    <td>MySQL port.</td>
-    <td><code>node['mysql']['port']</code></td>
-  </tr>
-</table>
+| Parameter      | Default                                         | Description                       |
+|----------------|:-----------------------------------------------:|-----------------------------------|
+| filename       | *name attribute*                                | Configuration file name. |
+| service_name   | `nil`                                           | MySQL service name, recommended to notify the restarts. |
+| include_dir    | `node['mysql_tuning']['include_dir']`           | MySQL configuration directory. |
+| dynamic        | `node['mysql_tuning']['dynamic_configuration']` | Whether to enable dynamic configuration. This tries to set the configuration without restarting the server. |
+| values         | `node['mysql_tuning'][filename]`                | Configuration values as *Hash*. |
+| persist        | `true`                                          | Whether to create the configuration file on disk. |
+| mysql_user     | `'root'`                                        | MySQL login user. |
+| mysql_password | `node['mysql']['server_root_password']`         | MySQL login password. Required mainly if you enabled dynamic configuration and changed the default password. |
+| mysql_port     | `node['mysql']['port']`                         | MySQL port. |
 
 Usage
 =====
