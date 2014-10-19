@@ -21,7 +21,7 @@
 
 if defined?(ChefSpec)
 
-  if ChefSpec.respond_to?(:define_matche)
+  if ChefSpec.respond_to?(:define_matcher)
     # ChefSpec >= 4.1
     ChefSpec.define_matcher :mysql_tuning
     ChefSpec.define_matcher :mysql_tuning_cnf
