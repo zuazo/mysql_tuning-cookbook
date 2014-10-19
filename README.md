@@ -276,7 +276,7 @@ Creates MySQL configuration files:
 
 | Parameter                 | Default                                         | Description                       |
 |---------------------------|:-----------------------------------------------:|-----------------------------------|
-| service_name              | *name attribute*                                | MySQL service name, recommended to notify the restarts. [See below](#mysql_tuning-name-parameter). |
+| service_name              | *name parameter*                                | MySQL service name, recommended to notify the restarts. [See below](#mysql_tuning-name-parameter). |
 | include_dir               | `node['mysql_tuning']['include_dir']`           | MySQL configuration directory. |
 | interpolation             | `node['mysql_tuning']['interpolation']`         | MySQL interpolation type used. |
 | interpolation_by_variable | `{}`                                            | Use different interpolation algorithms for some variables [See above](#configuration-variables-interpolation). |
@@ -315,7 +315,7 @@ Restarts the server only when required. Tries to set the configuration without r
 
 | Parameter      | Default                                         | Description                       |
 |----------------|:-----------------------------------------------:|-----------------------------------|
-| filename       | *name attribute*                                | Configuration file name. |
+| filename       | *name parameter*                                | Configuration file name. |
 | service_name   | `nil`                                           | MySQL service name, recommended to notify the restarts. |
 | include_dir    | `node['mysql_tuning']['include_dir']`           | MySQL configuration directory. |
 | dynamic        | `node['mysql_tuning']['dynamic_configuration']` | Whether to enable dynamic configuration. This tries to set the configuration without restarting the server. |
