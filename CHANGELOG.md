@@ -3,6 +3,11 @@ CHANGELOG for mysql_tuning
 
 This file is used to list changes made in each version of the `mysql_tuning` cookbook.
 
+## v0.2.1 (2014-10-19)
+
+* Add .rubocop.yml.
+* ChefSpec `:define_matcher` check fix.
+
 ## v0.2.0 (2014-10-14)
 
 * `mysql_tuning[name]` renamed to `mysql_tuning[service_name]` (**breaking change**).
