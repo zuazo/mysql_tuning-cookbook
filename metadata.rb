@@ -38,7 +38,7 @@ supports 'ubuntu'
 
 depends 'mysql', '>= 5.0.0'
 depends 'ohai'
-depends 'mysql-chef_gem', '~> 1.0'
+depends 'mysql-chef_gem', '< 2'
 
 recipe 'mysql_tuning::default', 'Creates MySQL configuration files.'
 recipe 'mysql_tuning::ohai_plugin', 'Enables MySQL ohai plugin.'
