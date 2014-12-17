@@ -22,9 +22,9 @@
 mysql_service 'default' do
   # mysql cookbook 5
   if self.respond_to?(:initial_root_password)
-    action :create
+    action [:create, :start]
   # mysql cookbook 6
   else
-    action [:create, :start]
+    action :create
   end
 end
