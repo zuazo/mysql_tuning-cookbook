@@ -37,7 +37,7 @@ supports 'redhat'
 supports 'ubuntu'
 
 depends 'mysql', '>= 5.0.0'
-depends 'ohai'
+depends 'ohai', '~> 2.0'
 depends 'mysql-chef_gem', '< 2'
 
 recipe 'mysql_tuning::default', 'Creates MySQL configuration files.'
