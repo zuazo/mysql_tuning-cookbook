@@ -5,7 +5,12 @@
 source 'https://supermarket.getchef.com'
 my_cookbook = ::File.basename(Dir.pwd).sub(/[-_]?cookbook$/, '')
 
-# Helper to include a local cookbook from disk
+# Berkshelf helper to include a local cookbook from disk.
+#
+# @param name [String] cookbook name.
+# @param version [String] cookbook version requirement.
+# @param options [Hash] #cookbook method options.
+# return void
 def local_cookbook(name, version = '>= 0.0.0', options = {})
   cookbook(name, version, {
     path: "../../cookbooks/#{name}"
@@ -15,7 +20,7 @@ end
 metadata
 cookbook 'apt'
 cookbook 'freebsd'
-cookbook 'mysql', '~> 5.0'
+cookbook 'mysql', '>= 6.0.0' # Required for ChefSpec tests.
 
 # Minitest Chef Handler
 # More info at https://github.com/calavera/minitest-chef-handler

@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-class MysqlTuning
+class MysqlTuningCookbook
   # This class contains the interpolation logic.
   # Does interpolation based on some data points and interpolation type.
   class Interpolator

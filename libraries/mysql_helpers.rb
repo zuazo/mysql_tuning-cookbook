@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-class MysqlTuning
+class MysqlTuningCookbook
   # Some generic helpers related with MySQL
   class MysqlHelpers
     def self.numeric?(num)

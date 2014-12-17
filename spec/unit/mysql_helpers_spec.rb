@@ -20,7 +20,7 @@
 require 'spec_helper'
 require 'mysql_helpers'
 
-describe MysqlTuning::MysqlHelpers do
+describe MysqlTuningCookbook::MysqlHelpers do
 
   context '#numeric?' do
 

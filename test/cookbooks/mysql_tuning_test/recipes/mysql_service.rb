@@ -1,7 +1,7 @@
 # encoding: UTF-8
 #
-# Cookbook Name:: mysql_tuning
-# Recipe:: default
+# Cookbook Name:: mysql_tuning_test
+# Recipe:: mysql_service
 # Author:: Xabier de Zuazo (<xabier@onddo.com>)
 # Copyright:: Copyright (c) 2014 Onddo Labs, SL. (www.onddo.com)
 # License:: Apache License, Version 2.0
@@ -19,11 +19,12 @@
 # limitations under the License.
 #
 
-service_name =
-  if node['mysql'].nil? || node['mysql']['service_name'].nil?
-    'default'
+mysql_service 'default' do
+  # mysql cookbook 5
+  if self.respond_to?(:initial_root_password)
+    action :create
+  # mysql cookbook 6
   else
-    node['mysql']['service_name']
+    action [:create, :start]
   end
-
-mysql_tuning service_name
+end

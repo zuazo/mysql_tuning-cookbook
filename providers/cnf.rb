@@ -23,10 +23,18 @@ def complete_service_name(name)
   name.include?('[') ? name : "mysql_service[#{name}]"
 end
 
+def default_service_name
+  if node['mysql'].nil? || node['mysql']['service_name'].nil?
+    'default'
+  else
+    node['mysql']['service_name']
+  end
+end
+
 def service_name
   new_resource.service_name(complete_service_name(
     if new_resource.service_name.nil?
-      node['mysql']['service_name']
+      default_service_name
     else
       new_resource.service_name
     end
@@ -73,20 +81,36 @@ def mysql_user
   )
 end
 
+def default_mysql_password
+  if node['mysql'].nil? || node['mysql']['server_root_password'].nil?
+    'ilikerandompasswords'
+  else
+    node['mysql']['server_root_password']
+  end
+end
+
 def mysql_password
   new_resource.mysql_password(
     if new_resource.mysql_password.nil?
-      node['mysql']['server_root_password']
+      default_mysql_password
     else
       new_resource.mysql_password
     end
   )
 end
 
+def default_mysql_port
+  if node['mysql'].nil? || node['mysql']['port'].nil?
+    '3306'
+  else
+    node['mysql']['port']
+  end
+end
+
 def mysql_port
   new_resource.mysql_port(
     if new_resource.mysql_port.nil?
-      node['mysql']['port']
+      default_mysql_port
     else
       new_resource.mysql_port
     end
@@ -105,7 +129,7 @@ def update_configuration_dynamically
   return false unless dynamic?
 
   install_mysql_gem
-  ::MysqlTuning::MysqlHelpers.set_variables(
+  ::MysqlTuningCookbook::MysqlHelpers.set_variables(
     values['mysqld'],
     mysql_user,
     mysql_password,
@@ -116,11 +140,12 @@ end
 def include_mysql_recipe
   # include_recipe is required for notifications to work
   return if node['mysql_tuning']['recipe'].nil?
+  puts node['mysql_tuning']['recipe']
   @run_context.include_recipe(node['mysql_tuning']['recipe'])
 end
 
 action :create do
-  self.class.send(:include, ::MysqlTuning::CookbookHelpers)
+  self.class.send(:include, ::MysqlTuningCookbook::CookbookHelpers)
 
   r = template ::File.join(include_dir, new_resource.filename) do
     cookbook 'mysql_tuning'
@@ -128,9 +153,9 @@ action :create do
     group 'mysql'
     source 'mysql.cnf.erb'
     variables(
-      config: ::MysqlTuning::MysqlHelpers::Cnf.fix(
+      config: ::MysqlTuningCookbook::MysqlHelpers::Cnf.fix(
         values, node['mysql_tuning']['variables_block_size'],
-        node['mysql_tuning']['old_names'], mysql_version
+        node['mysql_tuning']['old_names'], mysql_ver
       )
     )
     only_if { new_resource.persist }

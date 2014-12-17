@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-self.class.send(:include, ::MysqlTuning::CookbookHelpers)
+self.class.send(:include, ::MysqlTuningCookbook::CookbookHelpers)
 
 default['mysql_tuning']['old_names'] = {
   'general_log' => {

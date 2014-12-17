@@ -27,27 +27,24 @@ describe 'mysql_tuning_cnf resource' do
     'readline 5.1'
   end
   before do
-    allow(Mixlib::ShellOut).to receive(:new)
-      .with('mysqld --version').and_return(my_shell_out)
+    allow(Mixlib::ShellOut).to receive(:new).with('mysqld --version')
+      .and_return(my_shell_out)
     allow(my_shell_out).to receive(:run_command).and_return(my_shell_out)
     allow(my_shell_out).to receive(:error!)
     allow(my_shell_out).to receive(:stdout).and_return(my_version_stdout)
   end
 
   def node_setup(node, attrs)
-    node.set['mysql_tuning']['recipe'] = 'mysql::server'
+    node.set['mysql_tuning']['recipe'] = 'mysql_tuning_test::mysql_service'
     node.automatic['memory']['total'] = system_memory(512 * MB)
-    attrs.each do |k, v|
-      node.set['mysql_tuning'][k] = v
-    end
+    attrs.each { |k, v| node.set['mysql_tuning'][k] = v }
   end
 
   def chef_run(attrs = {})
-    runner = ChefSpec::SoloRunner.new(
+    runner =
+      ChefSpec::SoloRunner.new(
         step_into: %w(mysql_tuning mysql_tuning_cnf)
-    ) do |node|
-      node_setup(node, attrs)
-    end
+      ) { |node| node_setup(node, attrs) }
     runner.converge('mysql_tuning::default')
   end
 

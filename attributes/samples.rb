@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-self.class.send(:include, ::MysqlTuning::CookbookHelpers)
+self.class.send(:include, ::MysqlTuningCookbook::CookbookHelpers)
 
 # 45M <= RAM <= 64M (small)
 default['mysql_tuning']['configuration_samples'][45 * MB] = {

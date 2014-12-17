@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-self.class.send(:include, ::MysqlTuning::CookbookHelpers)
+self.class.send(:include, ::MysqlTuningCookbook::CookbookHelpers)
 
 default['mysql_tuning']['system_percentage'] = 100
 default['mysql_tuning']['dynamic_configuration'] = false

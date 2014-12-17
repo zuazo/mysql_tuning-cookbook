@@ -21,7 +21,7 @@
 
 require 'mixlib/shellout'
 
-class MysqlTuning
+class MysqlTuningCookbook
   # Some MySQL Helpers to get mysql version
   module MysqlVersion
     def self.get(bin = 'mysqld')

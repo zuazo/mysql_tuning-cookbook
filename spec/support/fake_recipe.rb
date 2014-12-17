@@ -23,7 +23,7 @@ require 'support/memory_helpers'
 
 # Class to emulate the current recipe with some helpers
 class FakeRecipe < ::Chef::Node
-  include ::MysqlTuning::CookbookHelpers
+  include ::MysqlTuningCookbook::CookbookHelpers
   include ::MemoryHelpers
 
   def initialize

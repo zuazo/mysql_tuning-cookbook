@@ -21,7 +21,7 @@
 
 require 'mixlib/shellout'
 
-class MysqlTuning
+class MysqlTuningCookbook
   # Some MySQL Helpers to use from Chef cookbooks (recipes, attributes, ...)
   module CookbookHelpers
     KB = 1024 unless defined?(KB)
@@ -42,9 +42,9 @@ class MysqlTuning
       end
     end
 
-    def mysql_version
+    def mysql_ver
       mysql_bin = node['mysql_tuning']['mysqld_bin']
-      @version ||= MysqlTuning::MysqlVersion.get(mysql_bin)
+      @version ||= MysqlTuningCookbook::MysqlVersion.get(mysql_bin)
     end
 
     def physical_memory
@@ -101,7 +101,7 @@ class MysqlTuning
       end
       MysqlHelpers::Cnf.fix(
         result, node['mysql_tuning']['variables_block_size'],
-        node['mysql_tuning']['old_names'], mysql_version
+        node['mysql_tuning']['old_names'], mysql_ver
       )
     end
 
@@ -118,8 +118,8 @@ class MysqlTuning
       previous_point = nil
       cnf_samples.each_with_object({}) do |(mem, cnf), r|
         if cnf.key?(group) &&
-           MysqlTuning::MysqlHelpers.numeric?(cnf[group][key])
-          r[mem] = MysqlTuning::MysqlHelpers.mysql2num(cnf[group][key])
+           MysqlTuningCookbook::MysqlHelpers.numeric?(cnf[group][key])
+          r[mem] = MysqlTuningCookbook::MysqlHelpers.mysql2num(cnf[group][key])
           previous_point = r[mem]
         # set to previous sample value if missing (value not changed)
         elsif !previous_point.nil?
@@ -130,7 +130,7 @@ class MysqlTuning
 
     # interpolate data points
     def interpolate_data_points(type, data_points, point)
-      interpolator = MysqlTuning::Interpolator.new(data_points, type)
+      interpolator = MysqlTuningCookbook::Interpolator.new(data_points, type)
       install_required_gems(interpolator)
       required_points = interpolator.required_data_points
       if data_points.count < required_points
@@ -168,7 +168,7 @@ class MysqlTuning
       cnf_samples.reduce(false) do |r, (_mem, cnf)|
         next true if r
         if cnf.key?(group)
-          MysqlTuning::MysqlHelpers.numeric?(cnf[group][key])
+          MysqlTuningCookbook::MysqlHelpers.numeric?(cnf[group][key])
         else
           false
         end

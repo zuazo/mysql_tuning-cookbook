@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-class MysqlTuning
+class MysqlTuningCookbook
   class MysqlHelpers
     # Some generic helpers related with configuration files
     class Cnf

@@ -24,7 +24,7 @@ require 'mysql_helpers'
 require 'mysql_helpers_cnf'
 # require 'mysql_interpolator'
 
-describe MysqlTuning::MysqlHelpers::Cnf do
+describe MysqlTuningCookbook::MysqlHelpers::Cnf do
   subject(:node) { FakeRecipe.new.node }
 
   context '#fix' do

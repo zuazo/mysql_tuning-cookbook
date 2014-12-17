@@ -21,7 +21,7 @@
 
 require 'mixlib/shellout'
 
-class MysqlTuning
+class MysqlTuningCookbook
   # Some MySQL Cookbook Helpers to get MySQL internal package names
   module MysqlCookbookHelpers
     def package_from_helper_library?

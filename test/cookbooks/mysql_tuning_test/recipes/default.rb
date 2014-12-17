@@ -19,5 +19,5 @@
 # limitations under the License.
 #
 
-include_recipe 'mysql::server'
+include_recipe 'mysql_tuning_test::mysql_service'
 include_recipe 'mysql_tuning'

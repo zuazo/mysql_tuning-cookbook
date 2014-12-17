@@ -136,12 +136,13 @@ class PlotVariables
     samples.each_with_object({}) do |(mem, sample), r|
       next unless sample.key?('mysqld')
       next unless sample['mysqld'].key?(variable)
-      r[mem] = MysqlTuning::MysqlHelpers.mysql2num(sample['mysqld'][variable])
+      r[mem] =
+        MysqlTuningCookbook::MysqlHelpers.mysql2num(sample['mysqld'][variable])
     end
   end
 
   def mysql_round_variable(name, value)
-    MysqlTuning::MysqlHelpers::Cnf.round_variable(
+    MysqlTuningCookbook::MysqlHelpers::Cnf.round_variable(
       name,
       value,
       node['mysql_tuning']['variables_block_size']
@@ -166,7 +167,7 @@ class PlotVariables
 
   def calculate_interpolated_values(variable, samples, algorithm)
     first, last, step = first_last_step(samples)
-    interpolator = MysqlTuning::Interpolator.new(samples, algorithm)
+    interpolator = MysqlTuningCookbook::Interpolator.new(samples, algorithm)
     begin
       (first..last).step(step).each_with_object([[], []]) do |x, r|
         r[1] << mysql_round_variable(variable, interpolator.interpolate(x))

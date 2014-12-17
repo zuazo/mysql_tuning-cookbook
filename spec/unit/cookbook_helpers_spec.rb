@@ -25,7 +25,7 @@ require 'mysql_helpers'
 require 'mysql_helpers_cnf'
 require 'mysql_interpolator'
 
-describe MysqlTuning::CookbookHelpers do
+describe MysqlTuningCookbook::CookbookHelpers do
   subject { FakeRecipe.new }
   let(:cnf_from_samples) do
     subject.cnf_from_samples(
@@ -47,7 +47,7 @@ describe MysqlTuning::CookbookHelpers do
     allow(my_shell_out).to receive(:stdout).and_return(my_version_stdout)
   end
 
-  context '#mysql_version' do
+  context '#mysql_ver' do
     {
       centos5: [
         '5.0.95',
@@ -107,10 +107,10 @@ describe MysqlTuning::CookbookHelpers do
         version = version_info[0]
         stdout = version_info[1]
         expect(my_shell_out).to receive(:stdout).and_return(stdout)
-        expect(subject.mysql_version).to eql(version)
+        expect(subject.mysql_ver).to eql(version)
       end
     end # each platform version_info
-  end # context #mysql_version
+  end # context #mysql_ver
 
   context '#cnf_from_samples' do
 

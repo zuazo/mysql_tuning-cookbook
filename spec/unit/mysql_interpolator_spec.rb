@@ -21,7 +21,7 @@ require 'spec_helper'
 require 'mysql_interpolator'
 require 'interpolator'
 
-describe MysqlTuning::Interpolator do
+describe MysqlTuningCookbook::Interpolator do
   subject { described_class.new({}, 'linear') }
 
   context '#new' do

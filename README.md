@@ -30,7 +30,7 @@ Please, [let us know](https://github.com/onddo/mysql_tuning-cookbook/issues/new?
 
 ## Required Cookbooks
 
-* [mysql (~> 5.0)](https://supermarket.getchef.com/cookbooks/mysql) (recommended)
+* [mysql (>= 5.0)](https://supermarket.getchef.com/cookbooks/mysql)
 * [ohai](https://supermarket.getchef.com/cookbooks/ohai)
 * [mysql-chef_gem](https://supermarket.getchef.com/cookbooks/mysql-chef_gem)
 
@@ -46,13 +46,29 @@ Documentation
 
 This cookbook has been created to be used mainly with the [Chef's official MySQL cookbook](https://supermarket.getchef.com/cookbooks/mysql). The MySQL cookbook must be included before calling this cookbook recipes or using the resources:
 
+### With MySQL Cookbook `~> 5.0`
+
 ```ruby
 # in your recipe
 include_recipe 'mysql::server'
 include_recipe 'mysql_tuning::default'
 ```
 
-But it could also work with other cookbooks. The only requirement is that the used MySQL cookbook creates an included directory in the MySQL configuration file. For example:
+### With MySQL Cookbook `~> 6.0`
+
+```ruby
+service_name = 'default'
+
+mysql_service service_name do
+  action [:create, :start]
+end
+
+mysql_tuning service_name
+```
+
+### Other MySQL Cookbooks
+
+It could also work with other cookbooks. The only requirement is that the used MySQL cookbook creates an included directory in the MySQL configuration file. For example:
 
 ```cfg
 # my.cnf
@@ -294,10 +310,10 @@ Service type (`"mysql_service"`) is added if not specified, assuming that the of
 For example, using the official MySQL cookbook:
 
 ```ruby
-include_recipe 'mysql::server'
+service_name = 'default'
 
-mysql_tuning node['mysql']['service_name']
-# This is equivalent to mysql_tuning "default"
+mysql_service service_name
+mysql_tuning service_name
 ```
 
 ## mysql_tuning_cnf[filename]
@@ -336,7 +352,7 @@ You can simply include it in a recipe, after installing MySQL:
 # in your recipe
 node.default['mysql_tuning']['tuning.cnf']['mysqld']['table_open_cache'] = 520
 
-include_recipe 'mysql::server'
+mysql_service 'default'
 include_recipe 'mysql_tuning::default'
 ```
 
@@ -377,18 +393,22 @@ Another alternative is to include it in your Run List:
 
 In case you want to use the official MySQL cookbook's `mysql_service` example:
 
-```ruby
-root_password = 'r00t_p4ssw0rd'
-debian_password = 'd3b14n_p4ssw0rd'
-repl_password = 'r3pl_p4ssw0rd'
+### With MySQL Cookbook `~> 5.0`
 
-mysql_service node['mysql']['service_name'] do
+```ruby
+service_name = 'default'
+
+mysql_root_password = 'r00t_p4ssw0rd'
+mysql_debian_password = 'd3b14n_p4ssw0rd'
+mysql_repl_password = 'r3pl_p4ssw0rd'
+
+mysql_service service_name do
   version node['mysql']['version']
   port node['mysql']['port']
   data_dir node['mysql']['data_dir']
-  server_root_password root_password
-  server_debian_password debian_password
-  server_repl_password repl_password
+  server_root_password mysql_root_password
+  server_debian_password mysql_debian_password
+  server_repl_password mysql_repl_password
   allow_remote_root node['mysql']['allow_remote_root']
   remove_anonymous_users node['mysql']['remove_anonymous_users']
   remove_test_database node['mysql']['remove_test_database']
@@ -397,9 +417,29 @@ mysql_service node['mysql']['service_name'] do
 end
 
 # Pass the credentials to the mysql_tuning resource
-mysql_tuning node['mysql']['service_name'] do
+mysql_tuning service_name do
   mysql_user 'root'
-  mysql_password root_password
+  mysql_password mysql_root_password
+end
+```
+
+### With MySQL Cookbook `~> 6.0`
+
+```ruby
+mysql_root_password = 'r00t_p4ssw0rd'
+
+# Set MySQL service resource name
+service_name = 'default'
+
+mysql_service service_name do
+  initial_root_password mysql_root_password
+  action [:create, :start]
+end
+
+# Pass the credentials to the mysql_tuning resource
+mysql_tuning service_name do
+  mysql_user 'root'
+  mysql_password mysql_root_password
 end
 ```
 
@@ -408,6 +448,8 @@ end
 To save the MySQL passwords encrypted, we need to use the `mysql_service` and `mysql_tuning` resources.
 
 In this example we are using the [openssl](https://supermarket.getchef.com/cookbooks/openssl) and the [encrypted_attributes](https://supermarket.getchef.com/cookbooks/encrypted_attributes) cookbooks to generate and encrypt the MySQL credentials:
+
+### With MySQL Cookbook `~> 5.0`
 
 ```ruby
 # Include the #secure_password method from the openssl cookbook
@@ -455,9 +497,52 @@ mysql_tuning node['mysql']['service_name'] do
 end
 ```
 
+### With MySQL Cookbook `~> 6.0`
+
+```ruby
+# Include the #secure_password method from the openssl cookbook
+Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
+
+# Install Encrypted Attributes gem
+include_recipe 'encrypted_attributes'
+
+# Include the Encrypted Attributes cookbook helpers
+Chef::Recipe.send(:include, Chef::EncryptedAttributesHelpers)
+
+# We can use an attribute to enable or disable encryption (recommended for tests)
+# self.encrypted_attributes_enabled = node['myapp']['encrypt_attributes']
+
+# Encrypted Attributes will be generated randomly and saved in in the
+# node['myapp']['mysql'] attribute encrypted.
+def generate_mysql_password(user)
+  key = "server_#{user}_password"
+  encrypted_attribute_write(['myapp', 'mysql', key]) { secure_password }
+end
+
+# Generate the encrypted passwords
+mysql_root_password = generate_mysql_password('root')
+
+# Set MySQL service resource name
+service_name = 'default'
+
+mysql_service service_name do
+  mysql_user 'root'
+  mysql_password mysql_root_password
+  action [:create, :start]
+end
+
+# Pass the root credentials to the mysql_tuning resource
+mysql_tuning service_name do
+  mysql_user 'root'
+  mysql_password mysql_root_password
+end
+```
+
 ## Reading Encrypted MySQL Passwords from Chef-Vault
 
 Another secure solution is to read the passwords from a previously generated [Chef-Vault](https://github.com/Nordstrom/chef-vault) bag item. The following example uses the [chef-vault](https://supermarket.getchef.com/cookbooks/chef-vault) cookbook:
+
+### With MySQL Cookbook `~> 5.0`
 
 ```ruby
 # Install chef-vault gem
@@ -496,12 +581,44 @@ end
 
 See the [Chef-Vault documentation](https://github.com/Nordstrom/chef-vault/blob/master/README.md) to learn how to create chef-vault bags.
 
+### With MySQL Cookbook `~> 6.0`
+
+```ruby
+# Install chef-vault gem
+include_recipe 'chef-vault'
+
+# Read the secret from "dbsecrets" chef-vault
+def read_mysql_password(user)
+  chef_vault_item('dbsecrets', user)
+end
+
+mysql_root_password = read_mysql_password('root')
+
+# Set MySQL service resource name
+service_name = 'default'
+
+# Read the encrypted passwords
+mysql_service service_name do
+  mysql_user 'root'
+  mysql_password mysql_root_password
+  action [:create, :start]
+end
+
+# Pass the root credentials to the mysql_tuning resource
+mysql_tuning service_name do
+  mysql_user 'root'
+  mysql_password mysql_root_password
+end
+```
+
+See the [Chef-Vault documentation](https://github.com/Nordstrom/chef-vault/blob/master/README.md) to learn how to create chef-vault bags.
+
 ## *mysql_tuning::ohai_plugin* Recipe Usage Example
 
 In a recipe:
 
 ```ruby
-include_recipe 'mysql::server'
+mysql_service 'default'
 include_recipe 'mysql_tuning::ohai_plugin'
 ```
 

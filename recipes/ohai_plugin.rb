@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-Chef::Recipe.send(:include, ::MysqlTuning::MysqlCookbookHelpers)
+Chef::Recipe.send(:include, ::MysqlTuningCookbook::MysqlCookbookHelpers)
 
 def ohai7?
   Gem::Requirement.new('>= 7').satisfied_by?(Gem::Version.new(Ohai::VERSION))

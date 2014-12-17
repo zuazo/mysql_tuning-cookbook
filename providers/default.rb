@@ -54,7 +54,7 @@ def configs
 end
 
 action :create do
-  self.class.send(:include, ::MysqlTuning::CookbookHelpers)
+  self.class.send(:include, ::MysqlTuningCookbook::CookbookHelpers)
 
   # Avoid interpolating already defined configuration values
   non_interpolated_keys =
