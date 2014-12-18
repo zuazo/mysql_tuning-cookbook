@@ -113,7 +113,6 @@ describe MysqlTuningCookbook::CookbookHelpers do
   end # context #mysql_ver
 
   context '#cnf_from_samples' do
-
     it 'should not throw any error with default examples' do
       expect { cnf_from_samples }.not_to raise_error
     end
@@ -141,7 +140,6 @@ describe MysqlTuningCookbook::CookbookHelpers do
         subject.memory(8 * GB)
         expect(cnf_from_samples['mysqld']['key1']).to eql(200)
       end
-
     end # context proximal interpolation
 
     context 'non-proximal interpolation' do
@@ -266,8 +264,6 @@ describe MysqlTuningCookbook::CookbookHelpers do
           .with(/Cannot interpolate .* Not enough data points/)
         expect(cnf_from_samples['mysqld']['key1']).to eql(100)
       end
-
     end
-
   end
 end

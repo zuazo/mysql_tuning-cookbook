@@ -56,7 +56,6 @@ describe 'mysql_tuning_cnf resource' do
     path = "/etc/mysql/conf.d/#{cnf}"
 
     context cnf do
-
       it 'should create the file with template' do
         expect(chef_run).to create_template(path)
       end
@@ -74,9 +73,6 @@ describe 'mysql_tuning_cnf resource' do
       end
 
       # TODO: dynamic conf tests, cannot stub chef library methods
-
     end # context cnf
-
   end # cnf.each
-
 end # describe mysql_tuning resource

@@ -21,9 +21,7 @@ require 'spec_helper'
 require 'mysql_helpers'
 
 describe MysqlTuningCookbook::MysqlHelpers do
-
   context '#numeric?' do
-
     [5, 5.0, '5', '5G', '5M', '5K', '5B'].each do |value|
       it "returns true for #{value.inspect}" do
         expect(described_class.numeric?(value)).to be true
@@ -35,11 +33,9 @@ describe MysqlTuningCookbook::MysqlHelpers do
         expect(described_class.numeric?(value)).to be false
       end
     end
-
   end
 
   context '#mysql2num' do
-
     {
       5 => 5,
       5.0 => 5,
@@ -53,7 +49,6 @@ describe MysqlTuningCookbook::MysqlHelpers do
         expect(described_class.mysql2num(value)).to eql(numeric)
       end
     end
-
   end
 
   context '#set_variables' do
@@ -100,7 +95,5 @@ describe MysqlTuningCookbook::MysqlHelpers do
         @variables, 'user', 'password', 'port'
       )).to equal(false)
     end
-
   end
-
 end

@@ -63,10 +63,7 @@ class PlotVariablesOptionParser
   ]
 
   def initialize(args)
-    @options = {
-      algorithms: DEFAULT_ALGORITHMS,
-      colors: DEFAULT_COLORS
-    }
+    @options = { algorithms: DEFAULT_ALGORITHMS, colors: DEFAULT_COLORS }
     parse_args(args)
   end
 
@@ -143,9 +140,7 @@ class PlotVariables
 
   def mysql_round_variable(name, value)
     MysqlTuningCookbook::MysqlHelpers::Cnf.round_variable(
-      name,
-      value,
-      node['mysql_tuning']['variables_block_size']
+      name, value, node['mysql_tuning']['variables_block_size']
     )
   end
 
@@ -178,13 +173,17 @@ class PlotVariables
     end
   end
 
+  def plot_style_font(plot, font)
+    plot.arbitrary_lines << "set xlabel font \"#{font}\""
+    plot.arbitrary_lines << "set title font \"#{font}\""
+    plot.arbitrary_lines << "set key font \"#{font}\""
+    plot.arbitrary_lines << "set xtics font \"#{font}\""
+    plot.arbitrary_lines << "set ytics font \"#{font}\""
+  end
+
   def plot_style(plot)
     plot.arbitrary_lines << 'unset ylabel'
-    plot.arbitrary_lines << 'set xlabel font "Verdana, 10"'
-    plot.arbitrary_lines << 'set title font "Verdana, 10"'
-    plot.arbitrary_lines << 'set key font "Verdana, 10"'
-    plot.arbitrary_lines << 'set xtics font "Verdana, 10"'
-    plot.arbitrary_lines << 'set ytics font "Verdana, 10"'
+    plot_style_font(plot, 'Verdana 10')
     plot.arbitrary_lines << 'set key opaque'
     plot.arbitrary_lines << 'set format x "%.1s %cB"'
     plot.arbitrary_lines << 'set format y "%.1s %cB"'

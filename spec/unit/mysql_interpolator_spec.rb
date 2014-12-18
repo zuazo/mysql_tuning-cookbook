@@ -41,11 +41,9 @@ describe MysqlTuningCookbook::Interpolator do
         .to receive(:type).with('type')
       described_class.new('data_points', 'type')
     end
-
   end # context #new
 
   context '#data_points' do
-
     it 'should convert all values to floats' do
       subject.data_points(
         '1' => '2',
@@ -60,11 +58,9 @@ describe MysqlTuningCookbook::Interpolator do
         7.0 => 8.0
       )
     end
-
   end # context #data_points
 
   context '#type_raw' do
-
     {
       'linear' => ::Interpolator::Table::LINEAR,
       'cubic' => ::Interpolator::Table::CUBIC,
@@ -73,18 +69,14 @@ describe MysqlTuningCookbook::Interpolator do
       'proximal' => 'proximal',
       'randomtype' => 'randomtype'
     }.each do |type, value|
-
       it "should set #{type} type to #{value} internally" do
         subject.type(type)
         expect(subject.type_raw).to eql(value)
       end
-
     end # each do |type, value|
-
   end # context #type
 
   context '#required_data_points' do
-
     {
       'proximal' => 1,
       'linear' => 2,
@@ -98,12 +90,10 @@ describe MysqlTuningCookbook::Interpolator do
       ::Interpolator::Table::LAGRANGE2 => 3,
       ::Interpolator::Table::LAGRANGE3 => 4
     }.each do |type, points|
-
       it "should require #{points} points for #{type}" do
         subject.type(type)
         expect(subject.required_data_points).to eql(points)
       end
-
     end # each do |type, points|
 
     it 'should raise an error for unknown types' do
@@ -111,7 +101,6 @@ describe MysqlTuningCookbook::Interpolator do
       expect { subject.required_data_points }
         .to raise_error(RuntimeError, /Unknown required data points/)
     end
-
   end # context #required_data_points
 
   context '#interpolate' do
@@ -140,7 +129,6 @@ describe MysqlTuningCookbook::Interpolator do
       it 'should interpolate higher values correctly' do
         expect(subject.interpolate(35)).to eql(40)
       end
-
     end # context proximal type
 
     context 'linear type' do
@@ -164,7 +152,6 @@ describe MysqlTuningCookbook::Interpolator do
       it 'should interpolate high values correctly' do
         expect(subject.interpolate(60)).to eql(48)
       end
-
     end # context linear type
 
     context 'cubic type' do
@@ -188,7 +175,6 @@ describe MysqlTuningCookbook::Interpolator do
       it 'should interpolate high values correctly' do
         expect(subject.interpolate(60)).to eql(46)
       end
-
     end # context cubic type
 
     context 'bicubic type' do
@@ -212,7 +198,6 @@ describe MysqlTuningCookbook::Interpolator do
       it 'should interpolate high values correctly (?)' do
         expect(subject.interpolate(60)).to eql(33)
       end
-
     end # context bicubic type
 
     context 'catmull type' do
@@ -236,7 +221,6 @@ describe MysqlTuningCookbook::Interpolator do
       it 'should interpolate high values correctly' do
         expect(subject.interpolate(60)).to eql(49)
       end
-
     end # context catmull type
 
     it 'should raise an error for unknown types' do
@@ -244,7 +228,5 @@ describe MysqlTuningCookbook::Interpolator do
       expect { subject.interpolate(10) }
         .to raise_error(RuntimeError, /invalid interpolation type/)
     end
-
   end # context #interpolate
-
 end

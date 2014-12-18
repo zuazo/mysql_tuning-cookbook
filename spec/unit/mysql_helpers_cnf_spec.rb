@@ -52,6 +52,5 @@ describe MysqlTuningCookbook::MysqlHelpers::Cnf do
         '5.0'
       )).to eql('mysqld' => { 'log_slow_queries' => 'foo' })
     end
-
   end
 end

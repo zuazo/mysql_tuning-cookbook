@@ -91,11 +91,7 @@ class MysqlTuningCookbook
 
     def self.get_variable(db, name)
       value = db.query("SHOW GLOBAL VARIABLES LIKE '#{db.escape_string(name)}'")
-      if value.num_rows > 0
-        value.fetch_row[1]
-      else
-        nil
-      end
+      value.num_rows > 0 ? value.fetch_row[1] : nil
     end
     private_class_method :get_variable
 

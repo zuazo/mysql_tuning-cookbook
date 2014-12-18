@@ -35,13 +35,15 @@ describe 'mysql_tuning resource' do
     allow(my_shell_out).to receive(:stdout).and_return(my_version_stdout)
   end
 
+  def node_setup_interpolation(node, data)
+    return if data[:interpolation].nil?
+    node.set['mysql_tuning']['interpolation'] = data[:interpolation]
+  end
+
   def node_setup(node, data)
-    unless data[:interpolation].nil?
-      node.set['mysql_tuning']['interpolation'] = data[:interpolation]
-    end
-    node.automatic['memory']['total'] = system_memory(
-      data[:memory].nil? ? 512 * MB : data[:memory]
-    )
+    node_setup_interpolation(node, data)
+    node.automatic['memory']['total'] =
+      system_memory(data[:memory].nil? ? 512 * MB : data[:memory])
     node.set['mysql_tuning']['new.cnf'] = {}
   end
 
@@ -66,13 +68,9 @@ describe 'mysql_tuning resource' do
   }
 
   key_buffer_size_values.each do |memory, range_r|
-
     context "with #{memory} bytes of memory" do
-
       %w(proximal linear catmull).each do |interpolation|
-
         context "with #{interpolation} interpolation type" do
-
           it 'should set variable values from samples' do
             tuning = chef_run_tuning(
               memory: memory,
@@ -87,7 +85,6 @@ describe 'mysql_tuning resource' do
   end # each do |memory, range_r|
 
   %w(tuning.cnf logging.cnf new.cnf).each do |cnf|
-
     it "should create #{cnf} file with mysql_tuning_cnf" do
       expect(chef_run).to create_mysql_tuning_cnf(cnf)
     end
@@ -97,7 +94,5 @@ describe 'mysql_tuning resource' do
         .with_mysql_user('root')
         .with_mysql_password(root_password)
     end
-
   end # cnf.each
-
 end # describe mysql_tuning resource

@@ -26,17 +26,21 @@ class MysqlTuningCookbook
   module MysqlCookbookHelpers
     def package_from_helper_library?
       defined?(Opscode::Mysql::Helpers) &&
-      Opscode::Mysql::Helpers.respond_to?(:default_version_for) &&
-      Opscode::Mysql::Helpers.respond_to?(:package_name_for)
+        Opscode::Mysql::Helpers.respond_to?(:default_version_for) &&
+        Opscode::Mysql::Helpers.respond_to?(:package_name_for)
+    end
+
+    def package_version_from_helper_library
+      default_version_for(
+        node['platform'], node['platform_family'],
+        node['platform_version']
+      )
     end
 
     def package_from_helper_library
       return nil unless package_from_helper_library?
       self.class.include(::Opscode::Mysql::Helpers)
-      version = default_version_for(
-        node['platform'], node['platform_family'],
-        node['platform_version']
-      )
+      version = package_version_from_helper_library
       package_name_for(
         node['platform'], node['platform_family'],
         node['platform_version'], version
@@ -45,7 +49,7 @@ class MysqlTuningCookbook
 
     def package_from_mysql_service?
       defined?(Chef::MysqlService) &&
-      Chef::MysqlService.respond_to?(:parsed_package_name)
+        Chef::MysqlService.respond_to?(:parsed_package_name)
     end
 
     def package_from_mysql_service
@@ -57,7 +61,7 @@ class MysqlTuningCookbook
 
     def parsed_package_name
       package_from_mysql_service ||
-      package_from_helper_library
+        package_from_helper_library
     end
   end
 end

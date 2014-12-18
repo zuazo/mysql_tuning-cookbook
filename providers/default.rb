@@ -92,11 +92,9 @@ action :create do
     r.run_action(:create)
     new_resource.updated_by_last_action(true) if r.updated_by_last_action?
   end
-
 end
 
 action :delete do
-
   new_resource.updated_by_last_action(false)
   configs.each do |config|
     r = mysql_tuning_cnf config do
@@ -110,5 +108,4 @@ action :delete do
     r.run_action(:delete)
     new_resource.updated_by_last_action(true) if r.updated_by_last_action?
   end
-
 end

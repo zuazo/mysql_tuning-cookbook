@@ -110,7 +110,7 @@ class MysqlTuningCookbook
     # avoid interpolating some configuration values
     def non_interpolated_key?(key, non_interpolated_keys = [])
       non_interpolated_keys.is_a?(Array) &&
-      non_interpolated_keys.include?(key)
+        non_interpolated_keys.include?(key)
     end
 
     # get integer data points from samples key
