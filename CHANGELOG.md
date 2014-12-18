@@ -3,6 +3,20 @@ CHANGELOG for mysql_tuning
 
 This file is used to list changes made in each version of the `mysql_tuning` cookbook.
 
+## v0.3.0 (2014-12-18)
+
+* Fix Chef `12` support.
+* Fix MySQL cookbook `6` support.
+* metadata:
+ * `mysql-chef_gem` cookbook `< 2`.
+ * `ohai` cookbook `~> 2.0`.
+* Update RuboCop to `0.28.0`.
+* Gemfile:
+ * Use fixed foodcritic and RuboCop versions.
+ * Update vagrant-wrapper version `2`.
+* README: `s/name attribute/name parameter/`.
+* TESTING.md: Update to use *Digital Ocean Access Token*.
+
 ## v0.2.1 (2014-10-19)
 
 * Add .rubocop.yml.
