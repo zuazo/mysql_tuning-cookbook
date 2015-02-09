@@ -171,7 +171,7 @@ You can avoid the interpolation of some variables by setting them directly in th
 node.default['mysql_tuning']['tuning.cnf']['mysqld']['table_open_cache'] = 200
 ```
 
-This cookbook will use `'proximal'` interpolation by default. But your can choose another algorithm changing the `node['mysql_tuning']['interpolation']` attribute. Be careful when using this feature because it **should be considered experimental**.
+This cookbook will use `'proximal'` interpolation by default. You can change the algorithm used with the `node['mysql_tuning']['interpolation']` attribute. Be careful when using this feature because it **should be considered experimental**.
 
 Currently, the following algorithms are supported:
 
@@ -645,7 +645,7 @@ License and Author
 |                      |                                          |
 |:---------------------|:-----------------------------------------|
 | **Author:**          | [Xabier de Zuazo](https://github.com/zuazo) (<xabier@onddo.com>)
-| **Copyright:**       | Copyright (c) 2014, Onddo Labs, SL. (www.onddo.com)
+| **Copyright:**       | Copyright (c) 2014-2015, Onddo Labs, SL. (www.onddo.com)
 | **License:**         | Apache License, Version 2.0
 
     Licensed under the Apache License, Version 2.0 (the "License");
