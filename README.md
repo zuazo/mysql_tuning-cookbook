@@ -175,7 +175,7 @@ This cookbook will use `'proximal'` interpolation by default. You can change the
 
 Currently, the following algorithms are supported:
 
-* `'proximal'` *(default)*: Sets the configuration values using [nearest-neighbor interpolation](http://en.wikipedia.org/wiki/Nearest-neighbor_interpolation) but taking into account only the neighbors below (with lower RAM).
+* `'proximal'` *(default)*: Sets the configuration values using [nearest-neighbor interpolation](http://en.wikipedia.org/wiki/Nearest-neighbor_interpolation) but taking only the neighbors below into account (with lower RAM).
 * `'linear'`: Uses [linear interpolation](http://en.wikipedia.org/wiki/Linear_interpolation). In theory should give **better results** than `'proximal'`. But may malfunction for machines with lots of memory (> 8 GB). Has not been tested much.
 * `cubic'`: Uses [cubic interpolation](http://en.wikipedia.org/wiki/Monotone_cubic_interpolation).
 * `'bicubic'` or `'lagrange'`: Uses [Lagrange polynomials](http://en.wikipedia.org/wiki/Lagrange_polynomial) for [bicubic interpolation](http://en.wikipedia.org/wiki/Bicubic_interpolation).
@@ -224,7 +224,7 @@ This feature is **disabled by default** because it is considered **a bit experim
 
 ## Ohai Plugin
 
-The `mysql_tuning::ohai_plugin` recipe installs an Ohai plugin for MySQL. This recipe will install and activate the plugin automatically.
+The `mysql_tuning::ohai_plugin` recipe installs an Ohai plugin for MySQL. This recipe will install and enable the plugin automatically.
 
 It will set the following attributes:
 
@@ -238,7 +238,7 @@ This is an output example:
 }
 ```
 
-Keep in mind that this plugin will not be enabled by the `mysql_tuning::default` recipe, you need to use the `mysql_tuning::ohai_plugin` if you want to enable it.
+Keep in mind that this plugin will not be enabled by the `mysql_tuning::default` recipe. You need to use the `mysql_tuning::ohai_plugin` if you want to enable it.
 
 Attributes
 ==========
@@ -445,7 +445,7 @@ end
 
 ## Generating and Using Encrypted MySQL Passwords
 
-To save the MySQL passwords encrypted, we need to use the `mysql_service` and `mysql_tuning` resources.
+We need to use the `mysql_service` and `mysql_tuning` resources if we want to save the MySQL passwords encrypted.
 
 In this example we are using the [openssl](https://supermarket.getchef.com/cookbooks/openssl) and the [encrypted_attributes](https://supermarket.getchef.com/cookbooks/encrypted_attributes) cookbooks to generate and encrypt the MySQL credentials:
 
@@ -611,7 +611,7 @@ mysql_tuning service_name do
 end
 ```
 
-See the [Chef-Vault documentation](https://github.com/Nordstrom/chef-vault/blob/master/README.md) to learn how to create chef-vault bags.
+See the [Chef-Vault documentation](https://github.com/Nordstrom/chef-vault/blob/master/README.md) to learn how to create Chef Vault bags.
 
 ## *mysql_tuning::ohai_plugin* Recipe Usage Example
 
