@@ -1,8 +1,9 @@
 # encoding: UTF-8
 #
 # Cookbook Name:: mysql_tuning
-# Author:: Xabier de Zuazo (<xabier@onddo.com>)
-# Copyright:: Copyright (c) 2014 Onddo Labs, SL. (www.onddo.com)
+# Author:: Xabier de Zuazo (<xabier@zuazo.org>)
+# Copyright:: Copyright (c) 2015 Xabier de Zuazo
+# Copyright:: Copyright (c) 2014 Onddo Labs, SL.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,7 +39,7 @@ supports 'ubuntu'
 
 depends 'mysql', '>= 5.0.0'
 depends 'ohai', '~> 2.0'
-depends 'mysql-chef_gem', '< 2.0'
+depends 'mysql_chef_gem', '~> 2.0'
 
 recipe 'mysql_tuning::default', 'Creates MySQL configuration files.'
 recipe 'mysql_tuning::ohai_plugin', 'Enables MySQL ohai plugin.'
