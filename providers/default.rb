@@ -83,10 +83,12 @@ action :create do
   configs.each do |config|
     r = mysql_tuning_cnf config do
       service_name new_resource.service_name
-      include_dir new_resource.include_dir
-      mysql_user new_resource.mysql_user
-      mysql_password new_resource.mysql_password
-      mysql_port new_resource.mysql_port
+      include_dir new_resource.include_dir unless new_resource.include_dir.nil?
+      mysql_user new_resource.mysql_user unless new_resource.mysql_user.nil?
+      unless new_resource.mysql_password.nil?
+        mysql_password new_resource.mysql_password
+      end
+      mysql_port new_resource.mysql_port unless new_resource.mysql_port.nil?
       action :nothing
     end
     r.run_action(:create)
