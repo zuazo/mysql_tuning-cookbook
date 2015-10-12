@@ -31,7 +31,7 @@ default['mysql_tuning']['interpolation_by_variable'] = {}
 if mysql_cookbook_version_major >= 6
   default['mysql_tuning']['include_dir'] = '/etc/mysql-default/conf.d'
 else
-  case node['platform']
+  case node['platform_family']
   when 'fedora'
     default['mysql_tuning']['include_dir'] = '/etc/my.cnf.d'
   when 'freebsd'
@@ -42,10 +42,9 @@ else
 end
 
 default['mysql_tuning']['mysqld_bin'] =
-  case node['platform']
-  when 'centos', 'redhat', 'scientific', 'fedora', 'suse', 'amazon'
-    if %w(centos).include?(node['platform']) &&
-       node['platform_version'].to_i >= 7
+  case node['platform_family']
+  when 'fedora', 'rhel'
+    if platform?('centos') && node['platform_version'].to_i >= 7
       'mysqld'
     else
       '/usr/libexec/mysqld'
