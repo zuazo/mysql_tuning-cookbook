@@ -21,6 +21,13 @@ require 'chef/node'
 require 'cookbook_helpers'
 require 'support/memory_helpers'
 
+# Class to emulate a mysql cookbook version.
+class FakeMysqlCookbook
+  def version
+    '6.1.2'
+  end
+end
+
 # Class to emulate the current recipe with some helpers
 class FakeRecipe < ::Chef::Node
   include ::MysqlTuningCookbook::CookbookHelpers
@@ -34,6 +41,16 @@ class FakeRecipe < ::Chef::Node
       node.from_file(f)
     end
     memory(2 * GB)
+  end
+
+  def cookbook_collection
+    Mash.new(mysql: FakeMysqlCookbook.new)
+  end
+
+  def run_context
+    @run_context ||= begin
+      Chef::RunContext.new(node, cookbook_collection, nil)
+    end
   end
 
   def memory(value = nil)

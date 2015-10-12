@@ -28,13 +28,17 @@ default['mysql_tuning']['recipe'] = nil
 
 default['mysql_tuning']['interpolation_by_variable'] = {}
 
-case node['platform']
-when 'fedora'
-  default['mysql_tuning']['include_dir'] = '/etc/my.cnf.d'
-when 'freebsd'
-  default['mysql_tuning']['include_dir'] = '/usr/local/etc/mysql/conf.d'
+if mysql_cookbook_version_major >= 6
+  default['mysql_tuning']['include_dir'] = '/etc/mysql-default/conf.d'
 else
-  default['mysql_tuning']['include_dir'] = '/etc/mysql/conf.d'
+  case node['platform']
+  when 'fedora'
+    default['mysql_tuning']['include_dir'] = '/etc/my.cnf.d'
+  when 'freebsd'
+    default['mysql_tuning']['include_dir'] = '/usr/local/etc/mysql/conf.d'
+  else
+    default['mysql_tuning']['include_dir'] = '/etc/mysql/conf.d'
+  end
 end
 
 default['mysql_tuning']['mysqld_bin'] =

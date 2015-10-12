@@ -47,6 +47,19 @@ describe MysqlTuningCookbook::CookbookHelpers do
     allow(my_shell_out).to receive(:stdout).and_return(my_version_stdout)
   end
 
+  context '#mysql_cookbook_version' do
+    it 'returns the mysql cookbook version' do
+      expect(subject.mysql_cookbook_version)
+        .to match(/^[0-9]+\.[0-9]+\.[0-9]+$/)
+    end
+  end
+
+  context '#mysql_cookbook_version_major' do
+    it 'returns the mysql cookbook major version' do
+      expect(subject.mysql_cookbook_version_major).to be_a(Integer)
+    end
+  end
+
   context '#mysql_ver' do
     {
       centos5: [

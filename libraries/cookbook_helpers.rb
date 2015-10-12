@@ -29,6 +29,14 @@ class MysqlTuningCookbook
     GB = 1024 * MB unless defined?(GB)
     IO_SIZE = 4 * KB unless defined?(IO_SIZE)
 
+    def mysql_cookbook_version
+      run_context.cookbook_collection['mysql'].version
+    end
+
+    def mysql_cookbook_version_major
+      mysql_cookbook_version.split('.', 2)[0].to_i
+    end
+
     def install_required_gems(o)
       o.required_gems.each do |g|
         begin

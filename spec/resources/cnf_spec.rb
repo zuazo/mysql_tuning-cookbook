@@ -53,7 +53,7 @@ describe 'mysql_tuning_cnf resource' do
   end
 
   %w(tuning.cnf logging.cnf).each do |cnf|
-    path = "/etc/mysql/conf.d/#{cnf}"
+    path = "/etc/mysql-default/conf.d/#{cnf}"
 
     context cnf do
       it 'should create the file with template' do
