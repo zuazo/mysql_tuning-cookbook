@@ -3,7 +3,8 @@
 load test_helper
 
 @test "should pass configuration file checking" {
-  "${MYSQLD_BIN}" --help
+  su -l nobody -s /bin/sh -c \
+    "${MYSQLD_BIN} --verbose --help"
 }
 
 @test "should create tuning.cnf file" {
