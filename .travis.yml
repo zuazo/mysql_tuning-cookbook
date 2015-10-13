@@ -17,4 +17,4 @@ matrix:
 
 bundler_args: --without='doc integration integration_cloud guard'
 
-script: bundle exec rake travis:ci
+script: bundle exec rake style unit
