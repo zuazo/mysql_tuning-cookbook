@@ -79,7 +79,9 @@ class MysqlTuningCookbook
     private_class_method :connect
 
     def self.disconnect(db)
-      db.close rescue nil
+      db.close
+    rescue
+      nil
     end
     private_class_method :disconnect
 

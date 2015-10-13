@@ -13,7 +13,7 @@ end
 
 group :style do
   gem 'foodcritic', '~> 5.0.0'
-  gem 'rubocop', '= 0.28.0'
+  gem 'rubocop', '~> 0.34.0'
 end
 
 group :unit do
