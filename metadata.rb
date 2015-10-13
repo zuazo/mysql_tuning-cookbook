@@ -20,8 +20,8 @@
 #
 
 name 'mysql_tuning'
-maintainer 'Onddo Labs, Sl.'
-maintainer_email 'team@onddo.com'
+maintainer 'Xabier de Zuazo'
+maintainer_email 'xabier@zuazo.org'
 license 'Apache 2.0'
 description <<-EOS
 Tries to create MySQL configuraiton better suited for your system.

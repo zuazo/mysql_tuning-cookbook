@@ -1,9 +1,9 @@
 Description
 ===========
 [![Cookbook Version](https://img.shields.io/cookbook/v/mysql_tuning.svg?style=flat)](https://supermarket.chef.io/cookbooks/mysql_tuning)
-[![Dependency Status](http://img.shields.io/gemnasium/onddo/mysql_tuning-cookbook.svg?style=flat)](https://gemnasium.com/onddo/mysql_tuning-cookbook)
-[![Code Climate](http://img.shields.io/codeclimate/github/onddo/mysql_tuning-cookbook.svg?style=flat)](https://codeclimate.com/github/onddo/mysql_tuning-cookbook)
-[![Build Status](http://img.shields.io/travis/onddo/mysql_tuning-cookbook.svg?style=flat)](https://travis-ci.org/onddo/mysql_tuning-cookbook)
+[![Dependency Status](http://img.shields.io/gemnasium/zuazo/mysql_tuning-cookbook.svg?style=flat)](https://gemnasium.com/zuazo/mysql_tuning-cookbook)
+[![Code Climate](http://img.shields.io/codeclimate/github/zuazo/mysql_tuning-cookbook.svg?style=flat)](https://codeclimate.com/github/zuazo/mysql_tuning-cookbook)
+[![Build Status](http://img.shields.io/travis/zuazo/mysql_tuning-cookbook.svg?style=flat)](https://travis-ci.org/zuazo/mysql_tuning-cookbook)
 
 This cookbook creates a generic MySQL server configuration, presumably more optimized for your current machine than the default configuration.
 
@@ -26,7 +26,7 @@ This cookbook has been tested on the following platforms:
 * Red Hat
 * Ubuntu
 
-Please, [let us know](https://github.com/onddo/mysql_tuning-cookbook/issues/new?title=I%20have%20used%20it%20successfully%20on%20...) if you use it successfully on any other platform.
+Please, [let us know](https://github.com/zuazo/mysql_tuning-cookbook/issues/new?title=I%20have%20used%20it%20successfully%20on%20...) if you use it successfully on any other platform.
 
 ## Required Cookbooks
 
@@ -163,7 +163,7 @@ For those variables that have different names in different versions of MySQL, th
 
 ## Configuration Variables Interpolation
 
-MySQL variable values can be interpolated from configuration samples. The default samples are in `node['mysql_tuning']['configuration_samples']` and are based on [MySQL 5.5.38 example configuration files](https://github.com/onddo/mysql_tuning-cookbook/tree/master/my.cnf-example-files). These samples will be used to generate the **tuning.cnf** configuration file.
+MySQL variable values can be interpolated from configuration samples. The default samples are in `node['mysql_tuning']['configuration_samples']` and are based on [MySQL 5.5.38 example configuration files](https://github.com/zuazo/mysql_tuning-cookbook/tree/master/my.cnf-example-files). These samples will be used to generate the **tuning.cnf** configuration file.
 
 You can avoid the interpolation of some variables by setting them directly in the `node['mysql_tuning']['tuning.cnf']` attribute:
 
@@ -181,9 +181,9 @@ Currently, the following algorithms are supported:
 * `'bicubic'` or `'lagrange'`: Uses [Lagrange polynomials](http://en.wikipedia.org/wiki/Lagrange_polynomial) for [bicubic interpolation](http://en.wikipedia.org/wiki/Bicubic_interpolation).
 * `'catmull'`: Uses [Centripetal Catmull-Rom spline](http://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline).
 
-![query_cache_size Interpolation Chart](https://github.com/onddo/mysql_tuning-cookbook/raw/master/charts/query_cache_size.png)
+![query_cache_size Interpolation Chart](https://github.com/zuazo/mysql_tuning-cookbook/raw/master/charts/query_cache_size.png)
 
-There are some charts for variables generated from configuration samples [here](https://github.com/onddo/mysql_tuning-cookbook/tree/master/charts).
+There are some charts for variables generated from configuration samples [here](https://github.com/zuazo/mysql_tuning-cookbook/tree/master/charts).
 
 You can use different interpolation algorithms for some variables by setting them in the `node['mysql_tuning']['interpolation_by_variable']` attribute or the `mysql_tuning#interpolation_by_variable` resource parameter. This attribute has the following structure: `interpolation_by_variable[variable_name]`. For example:
 
@@ -370,7 +370,7 @@ Another alternative is to include it in your Run List:
 
 ```json
 {
-  "name": "mysql001.onddo.com",
+  "name": "mysql001.example.com",
   [...]
   "normal": {
     "mysql_tuning": {
@@ -625,27 +625,28 @@ include_recipe 'mysql_tuning::ohai_plugin'
 Testing
 =======
 
-See [TESTING.md](https://github.com/onddo/mysql_tuning-cookbook/blob/master/TESTING.md).
+See [TESTING.md](https://github.com/zuazo/mysql_tuning-cookbook/blob/master/TESTING.md).
 
 Contributing
 ============
 
-Please do not hesitate to [open an issue](https://github.com/onddo/mysql_tuning-cookbook/issues/new) with any questions or problems.
+Please do not hesitate to [open an issue](https://github.com/zuazo/mysql_tuning-cookbook/issues/new) with any questions or problems.
 
-See [CONTRIBUTING.md](https://github.com/onddo/mysql_tuning-cookbook/blob/master/CONTRIBUTING.md).
+See [CONTRIBUTING.md](https://github.com/zuazo/mysql_tuning-cookbook/blob/master/CONTRIBUTING.md).
 
 TODO
 ====
 
-See [TODO.md](https://github.com/onddo/mysql_tuning-cookbook/blob/master/TODO.md).
+See [TODO.md](https://github.com/zuazo/mysql_tuning-cookbook/blob/master/TODO.md).
 
 License and Author
 ==================
 
 |                      |                                          |
 |:---------------------|:-----------------------------------------|
-| **Author:**          | [Xabier de Zuazo](https://github.com/zuazo) (<xabier@onddo.com>)
-| **Copyright:**       | Copyright (c) 2014-2015, Onddo Labs, SL. (www.onddo.com)
+| **Author:**          | [Xabier de Zuazo](https://github.com/zuazo) (<xabier@zuazo.org>)
+| **Copyright:**       | Copyright (c) 2015, Xabier de Zuazo
+| **Copyright:**       | Copyright (c) 2014-2015, Onddo Labs, SL.
 | **License:**         | Apache License, Version 2.0
 
     Licensed under the Apache License, Version 2.0 (the "License");
