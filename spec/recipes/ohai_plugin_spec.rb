@@ -22,13 +22,13 @@ require 'spec_helper'
 describe 'mysql_tuning::ohai_plugin' do
   let(:chef_run) { ChefSpec::SoloRunner.new.converge(described_recipe) }
 
-  it 'should install mysql plugin' do
+  it 'installs mysql plugin' do
     expect(chef_run).to create_template('/etc/chef/ohai_plugins/mysql.rb')
       .with_owner('root')
       .with_mode('0755')
   end
 
-  it 'mysql plugin installation should notify ohai reload' do
+  it 'mysql plugin installation notifies ohai reload' do
     resource = chef_run.template('/etc/chef/ohai_plugins/mysql.rb')
     expect(resource).to notify('ohai[reload_mysql]').to(:reload).immediately
   end
@@ -38,7 +38,7 @@ describe 'mysql_tuning::ohai_plugin' do
       stub_const('Ohai::VERSION', '6.24.2')
     end
 
-    it 'should use the template from plugins/' do
+    it 'uses the template from plugins/' do
       expect(chef_run).to create_template('/etc/chef/ohai_plugins/mysql.rb')
         .with_source('ohai_plugins/mysql.rb.erb')
     end
@@ -49,13 +49,13 @@ describe 'mysql_tuning::ohai_plugin' do
       stub_const('Ohai::VERSION', '7.0.0')
     end
 
-    it 'should use the template from plugins7/' do
+    it 'uses the template from plugins7/' do
       expect(chef_run).to create_template('/etc/chef/ohai_plugins/mysql.rb')
         .with_source('ohai7_plugins/mysql.rb.erb')
     end
   end # context with Ohai 6
 
-  it 'should include ohai::default recipe' do
+  it 'includes ohai::default recipe' do
     expect(chef_run).to include_recipe('ohai::default')
   end
 end

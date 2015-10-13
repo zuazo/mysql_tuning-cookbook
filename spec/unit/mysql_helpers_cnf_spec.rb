@@ -35,7 +35,7 @@ describe MysqlTuningCookbook::MysqlHelpers::Cnf do
       } }
     end
 
-    it 'should not fix conigurations with new versions' do
+    it 'does not fix conigurations with new versions' do
       expect(described_class.fix(
         cnf,
         node['mysql_tuning']['variables_block_size'],
@@ -44,7 +44,7 @@ describe MysqlTuningCookbook::MysqlHelpers::Cnf do
       )).to eql(cnf)
     end
 
-    it 'should fix conigurations with old versions' do
+    it 'fixes conigurations with old versions' do
       expect(described_class.fix(
         cnf,
         node['mysql_tuning']['variables_block_size'],

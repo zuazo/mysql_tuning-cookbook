@@ -22,7 +22,7 @@ require 'spec_helper'
 describe 'mysql_tuning::default' do
   let(:chef_run) { ChefSpec::SoloRunner.new.converge(described_recipe) }
 
-  it 'should use mysql_tuning resource' do
+  it 'uses mysql_tuning resource' do
     expect(chef_run).to create_mysql_tuning('default')
   end
 end

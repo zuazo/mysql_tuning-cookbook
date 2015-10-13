@@ -68,28 +68,28 @@ describe MysqlTuningCookbook::MysqlHelpers do
       end
     end
 
-    it 'should return true if all variables has been set' do
+    it 'returns true if all variables has been set' do
       variable_returns([true, true, true])
       expect(described_class.set_variables(
         @variables, 'user', 'password', 'port'
       )).to equal(true)
     end
 
-    it 'should return false if no variables has been set' do
+    it 'returns false if no variables has been set' do
       variable_returns([false, false, false])
       expect(described_class.set_variables(
         @variables, 'user', 'password', 'port'
       )).to equal(false)
     end
 
-    it 'should return false if one variable has not been set' do
+    it 'returns false if one variable has not been set' do
       variable_returns([true, false, true])
       expect(described_class.set_variables(
         @variables, 'user', 'password', 'port'
       )).to equal(false)
     end
 
-    it 'should return false if the last variable has not been set' do
+    it 'returns false if the last variable has not been set' do
       variable_returns([true, true, false])
       expect(described_class.set_variables(
         @variables, 'user', 'password', 'port'

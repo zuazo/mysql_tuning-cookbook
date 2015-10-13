@@ -71,7 +71,7 @@ describe 'mysql_tuning resource' do
     context "with #{memory} bytes of memory" do
       %w(proximal linear catmull).each do |interpolation|
         context "with #{interpolation} interpolation type" do
-          it 'should set variable values from samples' do
+          it 'sets variable values from samples' do
             tuning = chef_run_tuning(
               memory: memory,
               interpolation: interpolation
@@ -85,11 +85,11 @@ describe 'mysql_tuning resource' do
   end # each do |memory, range_r|
 
   %w(tuning.cnf logging.cnf new.cnf).each do |cnf|
-    it "should create #{cnf} file with mysql_tuning_cnf" do
+    it "creates #{cnf} file with mysql_tuning_cnf" do
       expect(chef_run).to create_mysql_tuning_cnf(cnf)
     end
 
-    it "should pass the credentials to mysql_tuning_cnf[#{cnf}]" do
+    it "passes the credentials to mysql_tuning_cnf[#{cnf}]" do
       expect(chef_run).to create_mysql_tuning_cnf(cnf)
         .with_mysql_user('root')
         .with_mysql_password(root_password)

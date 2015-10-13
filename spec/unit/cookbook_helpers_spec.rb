@@ -116,7 +116,7 @@ describe MysqlTuningCookbook::CookbookHelpers do
         '(Source distribution)'
       ]
     }.each do |platform, version_info|
-      it "should parse #{platform} mysql versions" do
+      it "parses #{platform} mysql versions" do
         version = version_info[0]
         stdout = version_info[1]
         expect(my_shell_out).to receive(:stdout).and_return(stdout)
@@ -126,7 +126,7 @@ describe MysqlTuningCookbook::CookbookHelpers do
   end # context #mysql_ver
 
   context '#cnf_from_samples' do
-    it 'should not throw any error with default examples' do
+    it 'does not throw any error with default examples' do
       expect { cnf_from_samples }.not_to raise_error
     end
 
@@ -139,17 +139,17 @@ describe MysqlTuningCookbook::CookbookHelpers do
         )
       end
 
-      it 'should choose the lower sample if below' do
+      it 'chooses the lower sample if below' do
         subject.memory(500 * MB)
         expect(cnf_from_samples['mysqld']['key1']).to eql(100)
       end
 
-      it 'should choose the lower sample if in between' do
+      it 'chooses the lower sample if in between' do
         subject.memory(2 * GB)
         expect(cnf_from_samples['mysqld']['key1']).to eql(100)
       end
 
-      it 'should choose the higher sample if above' do
+      it 'chooses the higher sample if above' do
         subject.memory(8 * GB)
         expect(cnf_from_samples['mysqld']['key1']).to eql(200)
       end
@@ -168,34 +168,34 @@ describe MysqlTuningCookbook::CookbookHelpers do
         )
       end
 
-      it 'should use proximal interpolation for lower values' do
+      it 'uses proximal interpolation for lower values' do
         subject.memory(500 * MB)
         expect(cnf_from_samples['mysqld']['key1']).to eql(100)
       end
 
-      it 'should warn when proximal interpolation is used' do
+      it 'warns when proximal interpolation is used' do
         subject.memory(500 * MB)
         expect(::Chef::Log).to receive(:warn).with(/Memory for MySQL too low/)
         cnf_from_samples['mysqld']['key1']
       end
 
-      it 'should interpolate intermediate values' do
+      it 'interpolates intermediate values' do
         subject.memory(2 * GB)
         expect(cnf_from_samples['mysqld']['key1']).to eql(133)
       end
 
-      it 'should interpolate higher' do
+      it 'interpolates higher' do
         subject.memory(8 * GB)
         expect(cnf_from_samples['mysqld']['key1']).to eql(333)
       end
 
-      it 'should interpolate with system_percentage' do
+      it 'interpolates with system_percentage' do
         subject.memory(8 * GB)
         subject.system_percentage(25)
         expect(cnf_from_samples['mysqld']['key1']).to eql(133)
       end
 
-      it 'should not interpolate non-integer values' do
+      it 'does not interpolate non-integer values' do
         subject.memory(2 * GB)
         subject.cnf_samples(
           1 * GB => { 'mysqld' => { 'key1' => 'value1' } },
@@ -204,7 +204,7 @@ describe MysqlTuningCookbook::CookbookHelpers do
         expect(cnf_from_samples['mysqld']['key1']).to eql('value1')
       end
 
-      it 'should not interpolate non-interpolated keys' do
+      it 'does not interpolate non-interpolated keys' do
         subject.memory(2 * GB)
         subject.cnf_samples(
           1 * GB => { 'mysqld' => { 'key1' => 100 } },
@@ -214,7 +214,7 @@ describe MysqlTuningCookbook::CookbookHelpers do
         expect(cnf_from_samples['mysqld']['key1']).to eql(100)
       end
 
-      it 'should interpolate mysql integer values' do
+      it 'interpolates mysql integer values' do
         subject.memory(2 * GB)
         subject.cnf_samples(
           1 * GB => { 'mysqld' => { 'key1' => '100M' } },
@@ -223,7 +223,7 @@ describe MysqlTuningCookbook::CookbookHelpers do
         expect(cnf_from_samples['mysqld']['key1']).to eql(139_810_133)
       end
 
-      it 'should interpolate without rounding to block size' do
+      it 'interpolates without rounding to block size' do
         subject.memory(2 * GB)
         subject.cnf_samples(
           1 * GB => { 'mysqld' => { 'key1' => '100M' } },
@@ -233,7 +233,7 @@ describe MysqlTuningCookbook::CookbookHelpers do
           .not_to be_zero
       end
 
-      it 'should interpolate rounding to block size' do
+      it 'interpolates rounding to block size' do
         subject.memory(1 * GB)
         subject.cnf_samples(
           1 * GB => { 'mysqld' => { 'innodb_log_buffer_size' => '100M' } },
@@ -243,7 +243,7 @@ describe MysqlTuningCookbook::CookbookHelpers do
           .to be_zero
       end
 
-      it 'should set keys set for next two higher memory values' do
+      it 'sets keys set for next two higher memory values' do
         subject.memory(1.1 * GB)
         subject.cnf_samples(
           1 * GB => { 'mysqld' => { 'key1' => 100 } },
@@ -254,7 +254,7 @@ describe MysqlTuningCookbook::CookbookHelpers do
         expect(cnf_from_samples['mysqld'].key?('key3')).to be true
       end
 
-      it 'should ignore keys set for far higher memory values' do
+      it 'ignores keys set for far higher memory values' do
         subject.memory(1.1 * GB)
         subject.cnf_samples(
           1 * GB => { 'mysqld' => { 'key1' => 100 } },
@@ -265,7 +265,7 @@ describe MysqlTuningCookbook::CookbookHelpers do
         expect(cnf_from_samples['mysqld'].key?('key4')).to be false
       end
 
-      it 'should warn when there not enough values' do
+      it 'warns when there not enough values' do
         # cubic requires 3 points
         subject.interpolation_type('cubic')
         subject.memory(1.1 * GB)

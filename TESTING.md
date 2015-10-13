@@ -8,6 +8,7 @@ Testing
 * `foodcritic`
 * `rubocop`
 * `berkshelf`
+* `should_not`
 * `chefspec`
 * `test-kitchen`
 * `kitchen-vagrant`

@@ -18,6 +18,7 @@ end
 
 group :unit do
   gem 'chef', chef_version unless chef_version.nil?
+  gem 'should_not', '~> 1.1'
   gem 'chefspec', '~> 4.1'
   gem 'interpolator', '~> 0.15'
 end
