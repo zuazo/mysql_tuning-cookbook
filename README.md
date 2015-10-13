@@ -188,8 +188,10 @@ There are some charts for variables generated from configuration samples [here](
 You can use different interpolation algorithms for some variables by setting them in the `node['mysql_tuning']['interpolation_by_variable']` attribute or the `mysql_tuning#interpolation_by_variable` resource parameter. This attribute has the following structure: `interpolation_by_variable[variable_name]`. For example:
 
 ```ruby
-node.default['mysql_tuning']['interpolation_by_variable']['key_buffer_size'] = 'catmull'
-node.default['mysql_tuning']['interpolation_by_variable']['thread_stack'] = 'proximal'
+node.default['mysql_tuning']\
+  ['interpolation_by_variable']['key_buffer_size'] = 'catmull'
+node.default['mysql_tuning']\
+  ['interpolation_by_variable']['thread_stack'] = 'proximal'
 include_recipe 'mysql_tuning::default'
 ```
 
@@ -461,7 +463,8 @@ include_recipe 'encrypted_attributes'
 # Include the Encrypted Attributes cookbook helpers
 Chef::Recipe.send(:include, Chef::EncryptedAttributesHelpers)
 
-# We can use an attribute to enable or disable encryption (recommended for tests)
+# We can use an attribute to enable or disable encryption
+# (recommended for tests)
 # self.encrypted_attributes_enabled = node['myapp']['encrypt_attributes']
 
 # Encrypted Attributes will be generated randomly and saved in in the
@@ -509,7 +512,8 @@ include_recipe 'encrypted_attributes'
 # Include the Encrypted Attributes cookbook helpers
 Chef::Recipe.send(:include, Chef::EncryptedAttributesHelpers)
 
-# We can use an attribute to enable or disable encryption (recommended for tests)
+# We can use an attribute to enable or disable encryption
+# (recommended for tests)
 # self.encrypted_attributes_enabled = node['myapp']['encrypt_attributes']
 
 # Encrypted Attributes will be generated randomly and saved in in the
