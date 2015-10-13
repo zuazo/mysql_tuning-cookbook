@@ -1,11 +1,11 @@
-Description
-===========
+MySQL Tuning Cookbook
+=====================
 [![Cookbook Version](https://img.shields.io/cookbook/v/mysql_tuning.svg?style=flat)](https://supermarket.chef.io/cookbooks/mysql_tuning)
 [![Dependency Status](http://img.shields.io/gemnasium/zuazo/mysql_tuning-cookbook.svg?style=flat)](https://gemnasium.com/zuazo/mysql_tuning-cookbook)
 [![Code Climate](http://img.shields.io/codeclimate/github/zuazo/mysql_tuning-cookbook.svg?style=flat)](https://codeclimate.com/github/zuazo/mysql_tuning-cookbook)
 [![Build Status](http://img.shields.io/travis/zuazo/mysql_tuning-cookbook.svg?style=flat)](https://travis-ci.org/zuazo/mysql_tuning-cookbook)
 
-This cookbook creates a generic MySQL server configuration, presumably more optimized for your current machine than the default configuration.
+This [Chef](https://www.chef.io/) cookbook creates a generic MySQL server configuration, presumably more optimized for your current machine than the default configuration.
 
 Of course, depending on your application your requirements may change and MySQL is a really complex application. So, in some cases, this cookbook will not help you much. But hopefully may serve as a point of departure.
 
