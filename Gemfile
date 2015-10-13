@@ -45,3 +45,7 @@ end
 group :charts do
   gem 'gnuplot', '~> 2.6'
 end
+
+group :travis do
+  gem 'coveralls', '~> 0.7', require: false
+end
