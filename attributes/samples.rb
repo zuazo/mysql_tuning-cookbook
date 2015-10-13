@@ -147,7 +147,7 @@ default['mysql_tuning']['configuration_samples'][4 * GB] = {
   myisamchk: {
     key_buffer_size: '512M',
     sort_buffer_size: '512M',
-    sort_buffer_size: '8M',
+    read_buffer: '8M',
     write_buffer: '8M'
   },
   mysqld_safe: {
