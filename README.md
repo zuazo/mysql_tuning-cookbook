@@ -1,6 +1,6 @@
 Description
 ===========
-[![Cookbook Version](https://img.shields.io/cookbook/v/mysql_tuning.svg?style=flat)](https://supermarket.getchef.com/cookbooks/mysql_tuning)
+[![Cookbook Version](https://img.shields.io/cookbook/v/mysql_tuning.svg?style=flat)](https://supermarket.chef.io/cookbooks/mysql_tuning)
 [![Dependency Status](http://img.shields.io/gemnasium/onddo/mysql_tuning-cookbook.svg?style=flat)](https://gemnasium.com/onddo/mysql_tuning-cookbook)
 [![Code Climate](http://img.shields.io/codeclimate/github/onddo/mysql_tuning-cookbook.svg?style=flat)](https://codeclimate.com/github/onddo/mysql_tuning-cookbook)
 [![Build Status](http://img.shields.io/travis/onddo/mysql_tuning-cookbook.svg?style=flat)](https://travis-ci.org/onddo/mysql_tuning-cookbook)
@@ -30,9 +30,9 @@ Please, [let us know](https://github.com/onddo/mysql_tuning-cookbook/issues/new?
 
 ## Required Cookbooks
 
-* [mysql (>= 5.0)](https://supermarket.getchef.com/cookbooks/mysql)
-* [ohai](https://supermarket.getchef.com/cookbooks/ohai)
-* [mysql-chef_gem](https://supermarket.getchef.com/cookbooks/mysql-chef_gem)
+* [mysql (>= 5.0)](https://supermarket.chef.io/cookbooks/mysql)
+* [ohai](https://supermarket.chef.io/cookbooks/ohai)
+* [mysql-chef_gem](https://supermarket.chef.io/cookbooks/mysql-chef_gem)
 
 ## Required Applications
 
@@ -44,7 +44,7 @@ Documentation
 
 ## Using with MySQL Cookbook
 
-This cookbook has been created to be used mainly with the [Chef's official MySQL cookbook](https://supermarket.getchef.com/cookbooks/mysql). The MySQL cookbook must be included before calling this cookbook recipes or using the resources:
+This cookbook has been created to be used mainly with the [Chef's official MySQL cookbook](https://supermarket.chef.io/cookbooks/mysql). The MySQL cookbook must be included before calling this cookbook recipes or using the resources:
 
 ### With MySQL Cookbook `~> 5.0`
 
@@ -447,7 +447,7 @@ end
 
 We need to use the `mysql_service` and `mysql_tuning` resources if we want to save the MySQL passwords encrypted.
 
-In this example we are using the [openssl](https://supermarket.getchef.com/cookbooks/openssl) and the [encrypted_attributes](https://supermarket.getchef.com/cookbooks/encrypted_attributes) cookbooks to generate and encrypt the MySQL credentials:
+In this example we are using the [openssl](https://supermarket.chef.io/cookbooks/openssl) and the [encrypted_attributes](https://supermarket.chef.io/cookbooks/encrypted_attributes) cookbooks to generate and encrypt the MySQL credentials:
 
 ### With MySQL Cookbook `~> 5.0`
 
@@ -540,7 +540,7 @@ end
 
 ## Reading Encrypted MySQL Passwords from Chef-Vault
 
-Another secure solution is to read the passwords from a previously generated [Chef-Vault](https://github.com/Nordstrom/chef-vault) bag item. The following example uses the [chef-vault](https://supermarket.getchef.com/cookbooks/chef-vault) cookbook:
+Another secure solution is to read the passwords from a previously generated [Chef-Vault](https://github.com/Nordstrom/chef-vault) bag item. The following example uses the [chef-vault](https://supermarket.chef.io/cookbooks/chef-vault) cookbook:
 
 ### With MySQL Cookbook `~> 5.0`
 
