@@ -44,10 +44,10 @@ end
 default['mysql_tuning']['mysqld_bin'] =
   case node['platform_family']
   when 'fedora', 'rhel'
-    if platform?('centos') && node['platform_version'].to_i >= 7
-      'mysqld'
-    else
+    if platform?('centos') && node['platform_version'].to_i < 7
       '/usr/libexec/mysqld'
+    else
+      'mysqld'
     end
   when 'freebsd'
     '/usr/local/libexec/mysqld'
