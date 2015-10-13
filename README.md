@@ -36,7 +36,7 @@ Please, [let us know](https://github.com/zuazo/mysql_tuning-cookbook/issues/new?
 
 ## Required Applications
 
-* Ruby `1.9.3` or higher.
+* Ruby `2.0.0` or higher.
 * MySQL `5.0` or higher.
 
 Documentation
