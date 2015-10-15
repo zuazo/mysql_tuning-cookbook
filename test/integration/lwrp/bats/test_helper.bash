@@ -1,5 +1,7 @@
 #!/usr/bin/env bats
 
+PATH='/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin'
+
 setup() {
   if [ -f '/usr/libexec/mysqld' ]
   then
@@ -10,6 +12,9 @@ setup() {
   elif [ -f '/usr/local/libexec/mysqld' ]
   then
     MYSQLD_BIN='/usr/local/libexec/mysqld'
+  elif [ -f '/usr/sbin/mysqld' ]
+  then
+    MYSQLD_BIN='/usr/sbin/mysqld'
   else
     MYSQLD_BIN='mysqld'
   fi
