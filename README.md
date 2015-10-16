@@ -33,7 +33,7 @@ Please, [let us know](https://github.com/zuazo/mysql_tuning-cookbook/issues/new?
 * [mysql (~> 6.0)](https://supermarket.chef.io/cookbooks/mysql)
  * If you need to use the `mysql` cookbook version `5`, try using the cookbook version `0.3.0`:
 
-```
+```ruby
 # metadata.rb
 
 # Use the mysql cookbook version 5
