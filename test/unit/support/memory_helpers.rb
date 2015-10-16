@@ -1,6 +1,7 @@
 # encoding: UTF-8
 #
 # Author:: Xabier de Zuazo (<xabier@zuazo.org>)
+# Copyright:: Copyright (c) 2015 Xabier de Zuazo
 # Copyright:: Copyright (c) 2014 Onddo Labs, SL.
 # License:: Apache License, Version 2.0
 #
@@ -17,12 +18,22 @@
 # limitations under the License.
 #
 
-require 'spec_helper'
+KB = 1024
+MB = 1024 * KB
+GB = 1024 * MB
 
-describe 'mysql_tuning::default' do
-  let(:chef_run) { ChefSpec::SoloRunner.new.converge(described_recipe) }
+# Some test helpers related with system memory and swap files.
+# Translates bytes to values used by real systems.
+module MemoryHelpers
+  def system_memory(bytes)
+    "#{(bytes / 1024).round}kB"
+  end
 
-  it 'uses mysql_tuning resource' do
-    expect(chef_run).to create_mysql_tuning('default')
+  def system_swap(*args)
+    system_memory(*args)
+  end
+
+  def swap_file_size(bytes)
+    (bytes / MB).round
   end
 end

@@ -1,6 +1,7 @@
 # encoding: UTF-8
 #
 # Author:: Xabier de Zuazo (<xabier@zuazo.org>)
+# Copyright:: Copyright (c) 2015 Xabier de Zuazo
 # Copyright:: Copyright (c) 2014 Onddo Labs, SL.
 # License:: Apache License, Version 2.0
 #
@@ -19,7 +20,7 @@
 
 require 'chef/node'
 require 'cookbook_helpers'
-require 'support/memory_helpers'
+require_relative 'memory_helpers'
 
 # Class to emulate a mysql cookbook version.
 class FakeMysqlCookbook
@@ -37,7 +38,7 @@ class FakeRecipe < ::Chef::Node
     super
     name('node001')
     node = self
-    Dir.glob("#{::File.dirname(__FILE__)}/../../attributes/*.rb") do |f|
+    Dir.glob("#{::File.dirname(__FILE__)}/../../../attributes/*.rb") do |f|
       node.from_file(f)
     end
     memory(2 * GB)

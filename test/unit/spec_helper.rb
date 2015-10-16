@@ -1,6 +1,7 @@
 # encoding: UTF-8
 #
 # Author:: Xabier de Zuazo (<xabier@zuazo.org>)
+# Copyright:: Copyright (c) 2015 Xabier de Zuazo
 # Copyright:: Copyright (c) 2014 Onddo Labs, SL.
 # License:: Apache License, Version 2.0
 #
@@ -17,14 +18,14 @@
 # limitations under the License.
 #
 
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'libraries'))
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', '..', 'libraries'))
 
 require 'chefspec'
 require 'chefspec/berkshelf'
 require 'should_not/rspec'
 
-require 'support/memory_helpers'
-require 'support/coverage'
+require_relative 'support/memory_helpers'
+require_relative 'support/coverage'
 
 RSpec.configure do |config|
   # Prohibit using the should syntax

@@ -1,6 +1,7 @@
 # encoding: UTF-8
 #
 # Author:: Xabier de Zuazo (<xabier@zuazo.org>)
+# Copyright:: Copyright (c) 2015 Xabier de Zuazo
 # Copyright:: Copyright (c) 2014 Onddo Labs, SL.
 # License:: Apache License, Version 2.0
 #
@@ -17,8 +18,8 @@
 # limitations under the License.
 #
 
-require 'spec_helper'
-require 'support/fake_recipe'
+require_relative '../spec_helper'
+require_relative '../support/fake_recipe'
 require 'cookbook_helpers'
 require 'mysql_version'
 require 'mysql_helpers'
