@@ -384,7 +384,7 @@ Another alternative is to include it in your Run List:
     }
   },
   "run_list": [
-    "[...]": "[...]",
+    "[...]",
     "recipe[mysql::server]",
     "recipe[mysql_tuning]"
   ]
