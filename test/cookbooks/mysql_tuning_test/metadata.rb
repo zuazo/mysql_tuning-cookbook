@@ -2,6 +2,7 @@
 #
 # Cookbook Name:: mysql_tuning_test
 # Author:: Xabier de Zuazo (<xabier@zuazo.org>)
+# Copyright:: Copyright (c) 2015 Xabier de Zuazo
 # Copyright:: Copyright (c) 2014 Onddo Labs, SL.
 # License:: Apache License, Version 2.0
 #
@@ -26,5 +27,5 @@ description 'This cookbook is used with test-kitchen to test the parent, '\
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '0.1.0'
 
-depends 'mysql'
+depends 'mysql', '~> 6.0'
 depends 'mysql_tuning'

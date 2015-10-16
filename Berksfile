@@ -26,7 +26,7 @@ metadata
 cookbook 'apt'
 cookbook 'freebsd'
 
-cookbook 'mysql', ENV['MYSQL_COOKBOOK'] unless ENV['MYSQL_COOKBOOK'].nil?
+cookbook 'mysql'
 
 # Minitest Chef Handler
 # More info at https://github.com/calavera/minitest-chef-handler

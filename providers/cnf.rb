@@ -3,6 +3,7 @@
 # Cookbook Name:: mysql_tuning
 # Provider:: cnf
 # Author:: Xabier de Zuazo (<xabier@zuazo.org>)
+# Copyright:: Copyright (c) 2015 Xabier de Zuazo
 # Copyright:: Copyright (c) 2014 Onddo Labs, SL.
 # License:: Apache License, Version 2.0
 #
@@ -119,7 +120,7 @@ end
 
 def install_mysql_gem
   return unless Gem::Specification.find_all_by_name('mysql').empty?
-  mysql_chef_gem 'default' do
+  mysql2_chef_gem 'default' do
     action :nothing
   end.run_action(:install)
 end

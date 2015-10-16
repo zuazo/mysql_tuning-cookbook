@@ -3,6 +3,7 @@
 # Cookbook Name:: mysql_tuning
 # Library:: mysql_cookbook_helpers
 # Author:: Xabier de Zuazo (<xabier@zuazo.org>)
+# Copyright:: Copyright (c) 2015 Xabier de Zuazo
 # Copyright:: Copyright (c) 2014 Onddo Labs, SL.
 # License:: Apache License, Version 2.0
 #
@@ -22,46 +23,25 @@
 require 'mixlib/shellout'
 
 class MysqlTuningCookbook
-  # Some MySQL Cookbook Helpers to get MySQL internal package names
+  # Some MySQL Cookbook Helpers to get MySQL internal package names.
   module MysqlCookbookHelpers
-    def package_from_helper_library?
-      defined?(Opscode::Mysql::Helpers) &&
-        Opscode::Mysql::Helpers.respond_to?(:default_version_for) &&
-        Opscode::Mysql::Helpers.respond_to?(:package_name_for)
-    end
-
-    def package_version_from_helper_library
-      default_version_for(
-        node['platform'], node['platform_family'],
-        node['platform_version']
-      )
-    end
-
-    def package_from_helper_library
-      return nil unless package_from_helper_library?
-      self.class.include(::Opscode::Mysql::Helpers)
-      version = package_version_from_helper_library
-      package_name_for(
-        node['platform'], node['platform_family'],
-        node['platform_version'], version
-      )
-    end
-
     def package_from_mysql_service?
-      defined?(Chef::MysqlService) &&
-        Chef::MysqlService.respond_to?(:parsed_package_name)
+      defined?(::Chef::Provider::MysqlClient) &&
+        ::Chef::Provider::MysqlClient.method_defined?(:client_package)
     end
 
     def package_from_mysql_service
       return nil unless package_from_mysql_service?
-      mysql_service 'get mysql package name (monkey-patch)' do
-        action :nothing
-      end.parsed_package_name
+      r = ::Chef::Resource::MysqlClient.new(
+        'get mysql package name (monkey-patch)', run_context
+      )
+      r.action(:nothing)
+      p = ::Chef::Provider::MysqlClient.new(r, run_context)
+      [p.client_package].flatten.first
     end
 
     def parsed_package_name
-      package_from_mysql_service ||
-        package_from_helper_library
+      @parsed_package_name ||= package_from_mysql_service
     end
   end
 end

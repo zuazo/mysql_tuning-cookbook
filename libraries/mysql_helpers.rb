@@ -3,6 +3,7 @@
 # Cookbook Name:: mysql_tuning
 # Library:: mysql_helpers
 # Author:: Xabier de Zuazo (<xabier@zuazo.org>)
+# Copyright:: Copyright (c) 2015 Xabier de Zuazo
 # Copyright:: Copyright (c) 2014 Onddo Labs, SL.
 # License:: Apache License, Version 2.0
 #
@@ -70,11 +71,14 @@ class MysqlTuningCookbook
     # private
 
     def self.connect(user, password, port)
-      require 'mysql'
+      require 'mysql2'
       # TODO: use the socket?
-      db = ::Mysql.new('localhost', user, password, nil, port)
-      db.set_server_option(::Mysql::OPTION_MULTI_STATEMENTS_ON)
-      db
+      Mysql2::Client.new(
+        host: '127.0.0.1',
+        username: user,
+        password: password,
+        port: port
+      )
     end
     private_class_method :connect
 
@@ -86,24 +90,24 @@ class MysqlTuningCookbook
     private_class_method :disconnect
 
     def self.variable_exists?(db, name)
-      value = db.query("SHOW GLOBAL VARIABLES LIKE '#{db.escape_string(name)}'")
-      value.num_rows > 0
+      value = db.query("SHOW GLOBAL VARIABLES LIKE '#{db.escape(name)}'")
+      value.count > 0
     end
     private_class_method :variable_exists?
 
     def self.get_variable(db, name)
-      value = db.query("SHOW GLOBAL VARIABLES LIKE '#{db.escape_string(name)}'")
-      value.num_rows > 0 ? value.fetch_row[1] : nil
+      value = db.query("SHOW GLOBAL VARIABLES LIKE '#{db.escape(name)}'")
+      value.count > 0 ? value.first.values[1] : nil
     end
     private_class_method :get_variable
 
     def self.set_variable_query(db, name, value)
       value = mysql2num(value) if numeric?(value)
-      db.prepare("SET GLOBAL #{name} = ?").execute(value)
+      db.query("SET GLOBAL #{name} = #{value}")
       Chef::Log.info("Changed MySQL #{name.inspect} variable "\
         "to #{value.inspect} dynamically")
       true
-    rescue Mysql::Error => e
+    rescue Mysql2::Error => e
       Chef::Log.info("MySQL #{name.inspect} variable cannot be changed "\
         "to #{value.inspect} dynamically: #{e.message}")
       false

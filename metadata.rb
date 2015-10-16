@@ -44,9 +44,9 @@ supports 'freebsd'
 supports 'redhat'
 supports 'ubuntu'
 
-depends 'mysql', '>= 5.0.0'
+depends 'mysql', '~> 6.0'
 depends 'ohai', '~> 2.0'
-depends 'mysql_chef_gem', '~> 2.0'
+depends 'mysql2_chef_gem', '~> 1.0'
 
 recipe 'mysql_tuning::default', 'Creates MySQL configuration files.'
 recipe 'mysql_tuning::ohai_plugin', 'Enables MySQL ohai plugin.'
