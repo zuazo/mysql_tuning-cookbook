@@ -4,7 +4,6 @@ MySQL Tuning Cookbook
 [![Dependency Status](http://img.shields.io/gemnasium/zuazo/mysql_tuning-cookbook.svg?style=flat)](https://gemnasium.com/zuazo/mysql_tuning-cookbook)
 [![Code Climate](http://img.shields.io/codeclimate/github/zuazo/mysql_tuning-cookbook.svg?style=flat)](https://codeclimate.com/github/zuazo/mysql_tuning-cookbook)
 [![Build Status](http://img.shields.io/travis/zuazo/mysql_tuning-cookbook.svg?style=flat)](https://travis-ci.org/zuazo/mysql_tuning-cookbook)
-[![Coverage Status](http://img.shields.io/coveralls/zuazo/mysql_tuning-cookbook.svg?style=flat)](https://coveralls.io/r/zuazo/mysql_tuning-cookbook?branch=master)
 
 This [Chef](https://www.chef.io/) cookbook creates a generic MySQL server configuration, presumably more optimized for your current machine than the default configuration.
 
