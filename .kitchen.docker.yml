@@ -1,0 +1,24 @@
+---
+driver:
+  name: docker
+  use_sudo: false
+  privileged: true
+
+# If you add new platforms below, include them in the .travis.yml file matrix
+platforms:
+- name: centos-6
+- name: debian-6
+  run_list: recipe[apt]
+- name: debian-7
+  run_list: recipe[apt]
+- name: debian-8
+  run_list: recipe[apt]
+- name: oraclelinux-6
+  driver_config:
+    platform: rhel
+
+# Non-official images
+- name: scientific-6.6
+  driver_config:
+    image: ringo/scientific:6.6
+    platform: rhel

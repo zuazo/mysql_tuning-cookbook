@@ -29,3 +29,4 @@ version '0.1.0'
 
 depends 'mysql', '~> 6.0'
 depends 'mysql_tuning'
+depends 'netstat', '~> 0.1.0' # Required to run integration tests with Docker

@@ -44,7 +44,8 @@ end
 default['mysql_tuning']['mysqld_bin'] =
   case node['platform_family']
   when 'fedora', 'rhel'
-    if platform?('centos') && node['platform_version'].to_i < 7
+    if %w(centos oracle scientific).include?(node['platform']) &&
+       node['platform_version'].to_i < 7
       '/usr/libexec/mysqld'
     else
       'mysqld'

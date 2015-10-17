@@ -52,3 +52,6 @@ mysql_tuning 'default' do
   mysql_user 'root'
   mysql_password root_password
 end
+
+# Required for integration tests:
+include_recipe 'netstat'

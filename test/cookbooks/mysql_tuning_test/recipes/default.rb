@@ -21,3 +21,6 @@
 
 include_recipe 'mysql_tuning_test::mysql_service'
 include_recipe 'mysql_tuning'
+
+# Required for integration tests:
+include_recipe 'netstat'
