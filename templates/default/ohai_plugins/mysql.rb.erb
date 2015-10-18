@@ -24,7 +24,7 @@ mysql['installed_version'] = nil unless mysql['installed_version']
 
 status, stdout, _stderr = run_command(
   no_status_check: true,
-  command: "<%= @mysql_bin %> --version"
+  command: '<%= @mysql_bin %> --version'
 )
 if status == 0
   case stdout.split("\n")[0]
