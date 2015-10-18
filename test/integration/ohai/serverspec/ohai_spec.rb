@@ -2,7 +2,6 @@
 #
 # Author:: Xabier de Zuazo (<xabier@zuazo.org>)
 # Copyright:: Copyright (c) 2015 Xabier de Zuazo
-# Copyright:: Copyright (c) 2014 Onddo Labs, SL.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,11 +18,21 @@
 #
 
 require 'spec_helper'
+require 'json'
 
-describe process('mysqld') do
-  it { should be_running }
-end
+VERSION_REGEXP = /^[0-9]+\.[0-9]+\.[0-9]+$/
 
-describe port(3306) do
-  it { should be_listening }
+describe command('ohai -d /etc/chef/ohai_plugins') do
+  # Parses ohai command output into node:
+  let(:node) { JSON.parse(subject.stdout) }
+
+  its(:exit_status) { should eq 0 }
+  its(:stderr) { should_not match(/ERROR:/) }
+  # WARN: Plugin Definition Error: </etc/chef/ohai_plugins/mysql.rb>:
+  # collect_data already defined on platform default
+  # its(:stderr) { should_not match(/WARN:/) }
+
+  it 'reads MySQL version' do
+    expect(node['mysql']['installed_version']).to match VERSION_REGEXP
+  end
 end

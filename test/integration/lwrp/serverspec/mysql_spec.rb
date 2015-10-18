@@ -1,6 +1,7 @@
 # encoding: UTF-8
 #
 # Author:: Xabier de Zuazo (<xabier@zuazo.org>)
+# Copyright:: Copyright (c) 2015 Xabier de Zuazo
 # Copyright:: Copyright (c) 2014 Onddo Labs, SL.
 # License:: Apache License, Version 2.0
 #
@@ -23,7 +24,6 @@ describe process('mysqld') do
   it { should be_running }
 end
 
-# mysql
 describe port(3306) do
   it { should be_listening }
 end

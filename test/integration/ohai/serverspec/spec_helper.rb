@@ -2,7 +2,6 @@
 #
 # Author:: Xabier de Zuazo (<xabier@zuazo.org>)
 # Copyright:: Copyright (c) 2015 Xabier de Zuazo
-# Copyright:: Copyright (c) 2014 Onddo Labs, SL.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,12 +17,7 @@
 # limitations under the License.
 #
 
-require 'spec_helper'
+require 'serverspec'
 
-describe process('mysqld') do
-  it { should be_running }
-end
-
-describe port(3306) do
-  it { should be_listening }
-end
+# Set backend type
+set :backend, :exec
