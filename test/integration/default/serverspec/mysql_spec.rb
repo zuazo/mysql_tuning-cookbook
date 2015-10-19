@@ -20,10 +20,12 @@
 
 require 'spec_helper'
 
-describe process('mysqld') do
-  it { should be_running }
-end
+describe 'MySQL service' do
+  describe process('mysqld') do
+    it { should be_running }
+  end
 
-describe port(3306) do
-  it { should be_listening }
+  describe port(3306) do
+    it { should be_listening }
+  end
 end

@@ -40,32 +40,36 @@ conf_dir = conf_dirs.reverse.reduce(conf_dirs.first) do |memo, path|
   File.directory?(path) ? path : memo
 end
 
-describe(
-  command("su -l nobody -s /bin/sh -c '#{mysql_bin} --verbose --help'")
-) do
-  its(:exit_status) { should eq 0 }
-  its(:stdout) { should contain 'Usage:' }
+describe 'Checking MySQL configuration' do
+  describe(
+    command("su -l nobody -s /bin/sh -c '#{mysql_bin} --verbose --help'")
+  ) do
+    its(:exit_status) { should eq 0 }
+    its(:stdout) { should contain 'Usage:' }
+  end
 end
 
-describe file(conf_dir) do
-  it { should exist }
-  it { should be_directory }
-  it { should be_owned_by 'mysql' }
-  it { should be_grouped_into 'mysql' }
-end
+describe 'MySQL configuration files' do
+  describe file(conf_dir) do
+    it { should exist }
+    it { should be_directory }
+    it { should be_owned_by 'mysql' }
+    it { should be_grouped_into 'mysql' }
+  end
 
-describe file(::File.join(conf_dir, 'tuning.cnf')) do
-  it { should exist }
-  it { should be_file }
-  it { should be_owned_by 'mysql' }
-  it { should be_grouped_into 'mysql' }
-  its(:content) { should contain 'key_buffer_size' }
-end
+  describe file(::File.join(conf_dir, 'tuning.cnf')) do
+    it { should exist }
+    it { should be_file }
+    it { should be_owned_by 'mysql' }
+    it { should be_grouped_into 'mysql' }
+    its(:content) { should contain 'key_buffer_size' }
+  end
 
-describe file(::File.join(conf_dir, 'logging.cnf')) do
-  it { should exist }
-  it { should be_file }
-  it { should be_owned_by 'mysql' }
-  it { should be_grouped_into 'mysql' }
-  its(:content) { should match(/slow_query_log_file|log_slow_queries/) }
+  describe file(::File.join(conf_dir, 'logging.cnf')) do
+    it { should exist }
+    it { should be_file }
+    it { should be_owned_by 'mysql' }
+    it { should be_grouped_into 'mysql' }
+    its(:content) { should match(/slow_query_log_file|log_slow_queries/) }
+  end
 end

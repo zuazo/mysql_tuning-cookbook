@@ -22,17 +22,19 @@ require 'json'
 
 VERSION_REGEXP = /^[0-9]+\.[0-9]+\.[0-9]+$/
 
-describe command('ohai -d /etc/chef/ohai_plugins') do
-  # Parses ohai command output into node:
-  let(:node) { JSON.parse(subject.stdout) }
+describe 'Ohai plugin' do
+  describe command('ohai -d /etc/chef/ohai_plugins') do
+    # Parses ohai command output into node:
+    let(:node) { JSON.parse(subject.stdout) }
 
-  its(:exit_status) { should eq 0 }
-  its(:stderr) { should_not match(/ERROR:/) }
-  # WARN: Plugin Definition Error: </etc/chef/ohai_plugins/mysql.rb>:
-  # collect_data already defined on platform default
-  # its(:stderr) { should_not match(/WARN:/) }
+    its(:exit_status) { should eq 0 }
+    its(:stderr) { should_not match(/ERROR:/) }
+    # WARN: Plugin Definition Error: </etc/chef/ohai_plugins/mysql.rb>:
+    # collect_data already defined on platform default
+    # its(:stderr) { should_not match(/WARN:/) }
 
-  it 'reads MySQL version' do
-    expect(node['mysql']['installed_version']).to match VERSION_REGEXP
+    it 'reads MySQL version' do
+      expect(node['mysql']['installed_version']).to match VERSION_REGEXP
+    end
   end
 end
