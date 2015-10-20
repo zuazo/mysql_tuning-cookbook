@@ -3,6 +3,72 @@ CHANGELOG for mysql_tuning
 
 This file is used to list changes made in each version of the `mysql_tuning` cookbook.
 
+## v0.4.0 (2015-10-20)
+
+### Upgrading from a `0.3.x` Cookbook Release
+
+If you need to use the `mysql` cookbook version `5`, try using the cookbook version `0.3.0`:
+
+```ruby
+# metadata.rb
+
+# Use the mysql cookbook version 5
+depends 'mysql', '~> 5.0'
+depends 'mysql_tuning', '~> 0.3.0' # old unmaintained cookbook version
+```
+
+### Breaking Changes on v0.4.0
+
+* Drop Ruby `1.9` support: **Ruby `2` required**.
+* Require `mysql` cookbook version `6`.
+ * Drop `mysql` cookbook version `5` support.
+
+### Fixes on v0.4.0
+
+* Fix `include_dir` attribute value with the mysql cookbook version 6.
+* Fix MySQL binary path on Fedora.
+* Fix myisamchk read buffer configuration for 4G.
+* Fix some features deprecated on Chef 13.
+
+### New Features on v0.4.0
+
+* Add Oracle Linux and Scientific Linux support.
+
+### Improvements on v0.4.0
+
+* Improve platform support using `platform_family` instead of `platform`.
+* Replace `mysql_chef_gem` dependency with `mysql2_chef_gem` ([issue #1](https://github.com/zuazo/mysql_tuning-cookbook/issues/1), thanks [Dieter Blomme](https://github.com/daften) for reporting).
+  * Update the libraries to use the `mysql2` gem.
+* Update foodcritic to version `5`.
+* Update RuboCop to version `0.34`.
+* RuboCop: Fix offenses on ohai plugin templates.
+
+### Documentation Changes on v0.4.0
+
+* metadata: Add `source_url` and `issues_url` links.
+* Update chef links to use *chef.io* domain.
+* Update contact information and links after migration.
+* README:
+  * Improve title and description.
+  * Some improvements.
+  * Fix RuboCop offenses in examples.
+  * Fix json examples.
+
+### Changes on Tests on v0.4.0
+
+* Run tests against Chef 11 and Chef 12.
+* Move ChefSpec tests from *spec/* to *test/unit/*.
+* Integration tests: Add */usr/sbin/mysqld* path.
+* Update .kitchen.yml file platforms.
+* Update Berkshelf to version `4`.
+* Travis CI: Run tests on Ruby `2.2`.
+* Integrate tests with `should_not` gem.
+* Integrate tests with coveralls.
+* Update Gemfile and Rakefile files.
+* Add .kitchen.docker.yml file to run integration tests on Docker.
+* Replace bats integration tests with Serverspec tests.
+* Run test-kitchen with Travis CI native Docker support.
+
 ## v0.3.0 (2014-12-18)
 
 * Fix Chef `12` support.
