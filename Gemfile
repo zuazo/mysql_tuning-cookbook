@@ -21,7 +21,7 @@ group :test do
 end
 
 group :style do
-  gem 'foodcritic', '~> 5.0.0'
+  gem 'foodcritic', '~> 6.3.0'
   gem 'rubocop', '~> 0.34.0'
 end
 
