@@ -20,6 +20,8 @@
 # limitations under the License.
 #
 
+use_inline_resources if defined?(use_inline_resources)
+
 def complete_service_name(name)
   name.include?('[') ? name : "mysql_service[#{name}]"
 end

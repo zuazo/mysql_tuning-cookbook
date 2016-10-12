@@ -19,6 +19,8 @@
 # limitations under the License.
 #
 
+use_inline_resources if defined?(use_inline_resources)
+
 def interpolation
   new_resource.interpolation(
     if new_resource.interpolation.nil?
