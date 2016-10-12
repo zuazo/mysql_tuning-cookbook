@@ -66,7 +66,12 @@ namespace :style do
 
   require 'foodcritic'
   desc 'Run Chef style checks using foodcritic'
-  FoodCritic::Rake::LintTask.new(:chef)
+  FoodCritic::Rake::LintTask.new(:chef) do |t|
+    t.options = {
+      fail_tags: ['any'],
+      progress: true
+    }
+  end
 end
 
 desc 'Run all style checks'
@@ -83,6 +88,19 @@ end
 
 desc 'Run Test Kitchen integration tests'
 namespace :integration do
+  # Generates the `Kitchen::Config` class configuration values.
+  #
+  # @param loader_config [Hash] loader configuration options.
+  # @return [Hash] configuration values for the `Kitchen::Config` class.
+  def kitchen_config(loader_config = {})
+    {}.tap do |config|
+      unless loader_config.empty?
+        @loader = Kitchen::Loader::YAML.new(loader_config)
+        config[:loader] = @loader
+      end
+    end
+  end
+
   # Gets a collection of instances.
   #
   # @param regexp [String] regular expression to match against instance names.
@@ -104,7 +122,7 @@ namespace :integration do
     action = 'test' if action.nil?
     require 'kitchen'
     Kitchen.logger = Kitchen.default_file_logger
-    config = { loader: Kitchen::Loader::YAML.new(loader_config) }
+    config = kitchen_config(loader_config)
     kitchen_instances(regexp, config).each { |i| i.send(action) }
   end
 
