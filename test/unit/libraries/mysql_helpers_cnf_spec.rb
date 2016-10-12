@@ -37,21 +37,25 @@ describe MysqlTuningCookbook::MysqlHelpers::Cnf do
     end
 
     it 'does not fix conigurations with new versions' do
-      expect(described_class.fix(
-        cnf,
-        node['mysql_tuning']['variables_block_size'],
-        node['mysql_tuning']['old_names'],
-        '5.5'
-      )).to eql(cnf)
+      expect(
+        described_class.fix(
+          cnf,
+          node['mysql_tuning']['variables_block_size'],
+          node['mysql_tuning']['old_names'],
+          '5.5'
+        )
+      ).to eql(cnf)
     end
 
     it 'fixes conigurations with old versions' do
-      expect(described_class.fix(
-        cnf,
-        node['mysql_tuning']['variables_block_size'],
-        node['mysql_tuning']['old_names'],
-        '5.0'
-      )).to eql('mysqld' => { 'log_slow_queries' => 'foo' })
+      expect(
+        described_class.fix(
+          cnf,
+          node['mysql_tuning']['variables_block_size'],
+          node['mysql_tuning']['old_names'],
+          '5.0'
+        )
+      ).to eql('mysqld' => { 'log_slow_queries' => 'foo' })
     end
   end
 end

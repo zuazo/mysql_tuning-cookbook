@@ -35,13 +35,15 @@ def default_service_name
 end
 
 def service_name
-  new_resource.service_name(complete_service_name(
-    if new_resource.service_name.nil?
-      default_service_name
-    else
-      new_resource.service_name
-    end
-  ))
+  new_resource.service_name(
+    complete_service_name(
+      if new_resource.service_name.nil?
+        default_service_name
+      else
+        new_resource.service_name
+      end
+    )
+  )
 end
 
 def include_dir

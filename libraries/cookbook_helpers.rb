@@ -142,7 +142,7 @@ class MysqlTuningCookbook
       install_required_gems(interpolator)
       required_points = interpolator.required_data_points
       if data_points.count < required_points
-        fail "Not enough data points, #{data_points.count} < #{required_points}"
+        raise "Not enough data points #{data_points.count} < #{required_points}"
       end
       result = interpolator.interpolate(point)
       Chef::Log.debug("Interpolation(#{type}): point = #{point}, "\
@@ -214,7 +214,7 @@ class MysqlTuningCookbook
       keys_by_group.each_with_object({}) do |(group, keys), r|
         r[group] = keys.select do |key|
           !non_interpolated_key?(key, non_interp_keys) &&
-          samples_key_numeric?(cnf_samples, group, key)
+            samples_key_numeric?(cnf_samples, group, key)
         end # r[group] = keys.select
       end # keys_by_group.each_with_object
     end # #keys_to_interpolate

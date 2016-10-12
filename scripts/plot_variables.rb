@@ -40,12 +40,12 @@ require cookbook_library('cookbook_helpers')
 
 # Parses arguments
 class PlotVariablesOptionParser
-  DEFAULT_ALGORITHMS = %w(proximal linear cubic catmull)
+  DEFAULT_ALGORITHMS = %w(proximal linear cubic catmull).freeze
   # OpenOffice Colors:
   DEFAULT_COLORS = %w(
     #005796 #FF5317 #FFDA2E #69AB29 #8E002F #93D2FF
     #415108 #BAD700 #5D2D80 #FFA417 #CE0013 #0094D8
-  )
+  ).freeze
   OPTIONS = [
     {
       short: '-p',
@@ -60,7 +60,7 @@ class PlotVariablesOptionParser
         'proximal, linear, cubic, bicubic, catmull',
       proc: proc { |v| @options[:algorithms] = v.split(/,\s*/) }
     }
-  ]
+  ].freeze
 
   def initialize(args)
     @options = { algorithms: DEFAULT_ALGORITHMS, colors: DEFAULT_COLORS }

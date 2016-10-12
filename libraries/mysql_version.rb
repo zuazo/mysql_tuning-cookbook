@@ -29,8 +29,6 @@ class MysqlTuningCookbook
       parse_mysql_version(cmd.split("\n")[0])
     end
 
-    private
-
     def self.run_command(cmd)
       result = Mixlib::ShellOut.new(cmd).run_command
       result.error!
@@ -44,7 +42,7 @@ class MysqlTuningCookbook
       when / +Ver +([0-9][0-9.]*)[^0-9.]/
         Regexp.last_match[1]
       else
-        fail "Unknown MySQL version: #{stdout}"
+        raise "Unknown MySQL version: #{stdout}"
       end
     end
   end

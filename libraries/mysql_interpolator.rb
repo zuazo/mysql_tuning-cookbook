@@ -60,7 +60,7 @@ class MysqlTuningCookbook
       when ::Interpolator::Table::LAGRANGE3 then 4
       when 'proximal' then 1
       else
-        fail "Unknown required data points for #{@type.inspect} interpolation"
+        raise "Unknown required data points for #{@type.inspect} interpolation"
       end
     end
 

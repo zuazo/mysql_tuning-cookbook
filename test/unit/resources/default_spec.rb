@@ -49,9 +49,7 @@ describe 'mysql_tuning resource' do
   end
 
   def chef_run(data = {})
-    runner = ChefSpec::SoloRunner.new(
-        step_into: %w(mysql_tuning)
-    ) do |node|
+    runner = ChefSpec::SoloRunner.new(step_into: %w(mysql_tuning)) do |node|
       node_setup(node, data)
     end
     runner.converge('mysql_tuning_test::lwrp')

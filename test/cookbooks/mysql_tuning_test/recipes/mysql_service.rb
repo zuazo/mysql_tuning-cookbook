@@ -21,7 +21,7 @@
 
 mysql_service 'default' do
   # mysql cookbook 5
-  if self.respond_to?(:initial_root_password)
+  if respond_to?(:initial_root_password)
     action [:create, :start]
   # mysql cookbook 6
   else

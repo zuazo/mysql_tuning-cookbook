@@ -31,7 +31,7 @@ mysql_service 'default' do
   port node['mysql']['port']
   data_dir node['mysql']['data_dir']
   # mysql cookbook 5
-  if self.respond_to?(:initial_root_password)
+  if respond_to?(:initial_root_password)
     initial_root_password root_password
     action [:create, :start]
   # mysql cookbook 6
