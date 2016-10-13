@@ -30,8 +30,6 @@ describe 'Ohai plugin' do
 
     its(:exit_status) { should eq 0 }
     its(:stderr) { should_not match(/ERROR:/) }
-    # WARN: Plugin Definition Error: </etc/chef/ohai_plugins/mysql.rb>:
-    # collect_data already defined on platform default
     its(:stderr) { should_not match(/WARN:/) }
     its(:stderr) { should be_empty }
 
