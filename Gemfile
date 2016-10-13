@@ -47,12 +47,12 @@ group :integration_vagrant do
 end
 
 group :integration_cloud do
-  gem 'kitchen-ec2', '~> 1.2.0'
+  gem 'kitchen-ec2', '~> 1.2'
   gem 'kitchen-digitalocean', '~> 0.9.5'
 end
 
 group :guard do
-  gem 'guard', '~> 2.14.0'
+  gem 'guard', '~> 2.14'
   gem 'guard-foodcritic', '~> 2.1'
   gem 'guard-rubocop', '~> 1.1'
   gem 'guard-rspec', '~> 4.3'
