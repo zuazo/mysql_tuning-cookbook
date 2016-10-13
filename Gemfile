@@ -17,7 +17,7 @@ end
 
 group :test do
   gem 'rake'
-  gem 'berkshelf', '~> 4.0'
+  gem 'berkshelf', '~> 5.1'
 end
 
 group :style do
@@ -27,7 +27,7 @@ end
 
 group :unit do
   gem 'chef', chef_version unless chef_version.nil?
-  gem 'chefspec', '~> 4.0'
+  gem 'chefspec', '~> 5.2'
   gem 'simplecov', '~> 0.12.0'
   gem 'should_not', '~> 1.1'
   gem 'interpolator', '~> 0.15.0'
