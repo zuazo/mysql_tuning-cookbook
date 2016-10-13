@@ -6,7 +6,7 @@ MySQL Tuning Cookbook
 
 [![Dependency Status](http://img.shields.io/gemnasium/zuazo/mysql_tuning-cookbook.svg?style=flat)](https://gemnasium.com/zuazo/mysql_tuning-cookbook)
 [![Code Climate](http://img.shields.io/codeclimate/github/zuazo/mysql_tuning-cookbook.svg?style=flat)](https://codeclimate.com/github/zuazo/mysql_tuning-cookbook)
-[![Build Status](http://img.shields.io/travis/zuazo/mysql_tuning-cookbook.svg?style=flat)](https://travis-ci.org/zuazo/mysql_tuning-cookbook)
+[![Build Status](http://img.shields.io/travis/zuazo/mysql_tuning-cookbook/0.5.0.svg?style=flat)](https://travis-ci.org/zuazo/mysql_tuning-cookbook)
 
 This [Chef](https://www.chef.io/) cookbook creates a generic MySQL server configuration, presumably more optimized for your current machine than the default configuration.
 
@@ -36,18 +36,26 @@ Please, [let us know](https://github.com/zuazo/mysql_tuning-cookbook/issues/new?
 ## Required Cookbooks
 
 * [mysql (~> 6.0)](https://supermarket.chef.io/cookbooks/mysql)
- * If you need to use the `mysql` cookbook version `5`, try using the cookbook version `0.3.0`:
+* [ohai (~> 3.0)](https://supermarket.chef.io/cookbooks/ohai)
+* [mysql2_chef_gem](https://supermarket.chef.io/cookbooks/mysql2_chef_gem)
+
+To use it with older `mysql` or `ohai` cookbook versions look at the following table:
+
+| `ohai` \ `mysql` | `5`   | `6`   |
+|:-----------------|:------|:------|
+| ***any***        | `0.2` |       |
+| **`2`**          | `0.3` | `0.4` |
+| **`3`**          |       | `0.5` |
+
+For example, if you need to use the `mysql` cookbook version `5` and `ohai` cookbook version `2`, try using the cookbook version `0.3`:
 
 ```ruby
 # metadata.rb
 
-# Use the mysql cookbook version 5
 depends 'mysql', '~> 5.0'
+depends 'ohai', '~> 2.0'
 depends 'mysql_tuning', '~> 0.3.0' # old unmaintained cookbook version
 ```
-
-* [mysql2_chef_gem](https://supermarket.chef.io/cookbooks/mysql2_chef_gem)
-* [ohai](https://supermarket.chef.io/cookbooks/ohai)
 
 ## Required Applications
 

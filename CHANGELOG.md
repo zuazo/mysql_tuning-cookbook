@@ -1,7 +1,34 @@
 CHANGELOG for mysql_tuning
-=========================
+==========================
 
 This file is used to list changes made in each version of the `mysql_tuning` cookbook.
+
+## v0.5.0 (2016-10-14)
+
+### Breaking Changes on v0.5.0
+
+* Drop Chef `11` support.
+* Require Ruby `2.2` or higher.
+* Update `ohai` cookbook to version `3` (closes [#3](https://github.com/zuazo/mysql_tuning-cookbook/issues/3), [#4](https://github.com/zuazo/mysql_tuning-cookbook/issues/4), thanks [David Brown](https://github.com/dmlb2000) for opening the issues).
+
+### Improvements on v0.5.0
+
+* Fix Ohai plugin warnings and improve its tests.
+* Add `use_inline_resources` to providers (fixes FC059).
+* Update RuboCop to `0.39`: New offenses fixed.
+
+### Documentation Changes on v0.5.0
+
+* Update TESTING file.
+* README: Add GitHub and License badges.
+
+### Changes on Tests on v0.5.0
+
+* Travis CI: Update ChefDK to `0.18.30`, gems and add Ruby `2.3`.
+* Update foodcritic to version `6`.
+* Update the Rakefile.
+* Update the Vagrantfile.
+* Disable integration tests on Debian.
 
 ## v0.4.0 (2015-10-20)
 
