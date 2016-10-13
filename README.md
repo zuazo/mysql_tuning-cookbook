@@ -48,6 +48,7 @@ depends 'mysql_tuning', '~> 0.3.0' # old unmaintained cookbook version
 
 ## Required Applications
 
+* Chef `12` or higher.
 * Ruby `2.0.0` or higher.
 * MySQL `5.0` or higher.
 

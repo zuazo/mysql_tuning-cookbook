@@ -11,7 +11,6 @@ services: docker
 env:
   matrix:
 # CHEF_VERSION is only for unit tests, no for test-kitchen:
-  - TESTS="style unit" CHEF_VERSION="~> 11.0"
   - TESTS="style unit" CHEF_VERSION="~> 12.0"
 # Split up the test-kitchen run to avoid exceeding 50 minutes:
   - TESTS="integration[default-oraclelinux-6,verify]"
@@ -71,6 +70,7 @@ install:
 before_script:
 # https://github.com/zuazo/kitchen-in-travis-native/issues/1#issuecomment-142455888
 - sudo iptables -L DOCKER || ( echo "DOCKER iptables chain missing" ; sudo iptables -N DOCKER )
+- ruby --version
 - chef --version
 - cookstyle --version
 - foodcritic --version
