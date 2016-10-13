@@ -21,9 +21,10 @@ require 'spec_helper'
 require 'json'
 
 VERSION_REGEXP = /^[0-9]+\.[0-9]+\.[0-9]+$/
+PLUGINS_DIR = '/etc/chef/ohai_plugins'.freeze
 
 describe 'Ohai plugin' do
-  describe command('ohai -d /etc/chef/ohai_plugins') do
+  describe command("ohai -d #{PLUGINS_DIR}") do
     # Parses ohai command output into node:
     let(:node) { JSON.parse(subject.stdout) }
 
@@ -31,7 +32,8 @@ describe 'Ohai plugin' do
     its(:stderr) { should_not match(/ERROR:/) }
     # WARN: Plugin Definition Error: </etc/chef/ohai_plugins/mysql.rb>:
     # collect_data already defined on platform default
-    # its(:stderr) { should_not match(/WARN:/) }
+    its(:stderr) { should_not match(/WARN:/) }
+    its(:stderr) { should be_empty }
 
     it 'reads MySQL version' do
       expect(node['mysql']['installed_version']).to match VERSION_REGEXP

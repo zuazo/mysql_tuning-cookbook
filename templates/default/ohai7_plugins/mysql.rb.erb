@@ -37,10 +37,7 @@ Ohai.plugin(:Mysql) do
 
   collect_data do
     init_mysql
-    status, stdout, _stderr = run_command(
-      no_status_check: true,
-      command: '<%= @mysql_bin %> --version'
-    )
-    collect_version(stdout) if status == 0
+    so = shell_out('<%= @mysql_bin %> --version')
+    collect_version(so.stdout) if so.exitstatus == 0
   end
 end
