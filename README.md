@@ -1,6 +1,9 @@
 MySQL Tuning Cookbook
 =====================
 [![Cookbook Version](https://img.shields.io/cookbook/v/mysql_tuning.svg?style=flat)](https://supermarket.chef.io/cookbooks/mysql_tuning)
+[![GitHub](http://img.shields.io/badge/github-zuazo/mysql__tuning--cookbook-blue.svg?style=flat)](https://github.com/zuazo/mysql_tuning-cookbook)
+[![License](https://img.shields.io/github/license/zuazo/mysql_tuning-cookbook.svg?style=flat)](#license-and-author)
+
 [![Dependency Status](http://img.shields.io/gemnasium/zuazo/mysql_tuning-cookbook.svg?style=flat)](https://gemnasium.com/zuazo/mysql_tuning-cookbook)
 [![Code Climate](http://img.shields.io/codeclimate/github/zuazo/mysql_tuning-cookbook.svg?style=flat)](https://codeclimate.com/github/zuazo/mysql_tuning-cookbook)
 [![Build Status](http://img.shields.io/travis/zuazo/mysql_tuning-cookbook.svg?style=flat)](https://travis-ci.org/zuazo/mysql_tuning-cookbook)
