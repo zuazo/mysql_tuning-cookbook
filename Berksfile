@@ -26,8 +26,6 @@ metadata
 cookbook 'apt'
 cookbook 'freebsd'
 
-cookbook 'mysql'
-
 # Minitest Chef Handler
 # More info at https://github.com/calavera/minitest-chef-handler
 if ::File.directory?(::File.join('files', 'default', 'tests', 'minitest')) ||

@@ -35,17 +35,17 @@ Please, [let us know](https://github.com/zuazo/mysql_tuning-cookbook/issues/new?
 
 ## Required Cookbooks
 
-* [mysql (~> 6.0)](https://supermarket.chef.io/cookbooks/mysql)
+* [mysql (~> 7.0)](https://supermarket.chef.io/cookbooks/mysql)
 * [ohai (~> 3.0)](https://supermarket.chef.io/cookbooks/ohai)
 * [mysql2_chef_gem](https://supermarket.chef.io/cookbooks/mysql2_chef_gem)
 
 To use it with older `mysql` or `ohai` cookbook versions look at the following table:
 
-| `ohai` \ `mysql` | `5`   | `6`   |
-|:-----------------|:------|:------|
-| ***any***        | `0.2` |       |
-| **`2`**          | `0.3` | `0.4` |
-| **`3`**          |       | `0.5` |
+| `ohai` \ `mysql` | `5`   | `6`   | `7`   |
+|:-----------------|:------|:------|:------|
+| ***any***        | `0.2` |       |       |
+| **`2`**          | `0.3` | `0.4` |       |
+| **`3`**          |       | `0.5` | `0.6` |
 
 For example, if you need to use the `mysql` cookbook version `5` and `ohai` cookbook version `2`, try using the cookbook version `0.3`:
 

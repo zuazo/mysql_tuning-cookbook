@@ -46,7 +46,7 @@ supports 'redhat'
 supports 'scientific'
 supports 'ubuntu'
 
-depends 'mysql', '~> 6.0'
+depends 'mysql', '~> 7.0'
 depends 'ohai', '~> 3.0'
 depends 'mysql2_chef_gem', '~> 1.0'
 
