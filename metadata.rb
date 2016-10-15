@@ -47,7 +47,7 @@ supports 'scientific'
 supports 'ubuntu'
 
 depends 'mysql', '~> 7.0'
-depends 'ohai', '~> 3.0'
+depends 'ohai', '~> 4.0'
 depends 'mysql2_chef_gem', '~> 1.0'
 
 recipe 'mysql_tuning::default', 'Creates MySQL configuration files.'

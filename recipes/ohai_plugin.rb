@@ -27,9 +27,9 @@ end
 
 source_dir = ohai7? ? 'ohai7_plugins' : 'ohai_plugins'
 package_name = parsed_package_name
-plugin_path = "#{node['ohai']['plugin_path']}/mysql.rb"
 
-ohai 'reload_mysql' do
+# dummy resource to be able to notify reload action to the ohai plugin
+ohai 'mysql' do
   plugin 'mysql'
   action :nothing
 end
@@ -37,19 +37,13 @@ end
 ruby_block 'ohai plugin reload subscriber' do
   block {}
   subscribes :create, "package[#{package_name}]", :immediately
-  notifies :create, "template[#{plugin_path}]", :immediately
-  notifies :reload, 'ohai[reload_mysql]', :immediately
+  notifies :create, 'ohai_plugin[mysql]', :immediately
   action :nothing
 end
 
-template plugin_path do
-  source "#{source_dir}/mysql.rb.erb"
-  owner 'root'
-  mode '0755'
-  variables(
-    mysql_bin: node['mysql_tuning']['mysqld_bin']
-  )
-  notifies :reload, 'ohai[reload_mysql]', :immediately
+ohai_plugin 'mysql' do
+  name 'mysql'
+  source_file "#{source_dir}/mysql.rb.erb"
+  resource :template
+  variables mysql_bin: node['mysql_tuning']['mysqld_bin']
 end
-
-include_recipe 'ohai::default'

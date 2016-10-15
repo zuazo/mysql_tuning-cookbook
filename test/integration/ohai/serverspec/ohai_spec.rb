@@ -21,7 +21,7 @@ require 'spec_helper'
 require 'json'
 
 VERSION_REGEXP = /^[0-9]+\.[0-9]+\.[0-9]+$/
-PLUGINS_DIR = '/etc/chef/ohai_plugins'.freeze
+PLUGINS_DIR = '/tmp/kitchen/ohai/plugins'.freeze
 
 describe 'Ohai plugin' do
   describe command("ohai -d #{PLUGINS_DIR}") do

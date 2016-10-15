@@ -23,15 +23,30 @@ require_relative '../spec_helper'
 describe 'mysql_tuning::ohai_plugin' do
   let(:chef_run) { ChefSpec::SoloRunner.new.converge(described_recipe) }
 
-  it 'installs mysql plugin' do
-    expect(chef_run).to create_template('/etc/chef/ohai_plugins/mysql.rb')
-      .with_owner('root')
-      .with_mode('0755')
+  it 'creates ohai dummy resource' do
+    resource = chef_run.ohai('mysql')
+    expect(resource).to do_nothing
   end
 
-  it 'mysql plugin installation notifies ohai reload' do
-    resource = chef_run.template('/etc/chef/ohai_plugins/mysql.rb')
-    expect(resource).to notify('ohai[reload_mysql]').to(:reload).immediately
+  it 'creates ohai plugin reload subscriber resource' do
+    resource = chef_run.ruby_block('ohai plugin reload subscriber')
+    expect(resource).to do_nothing
+  end
+
+  it 'creates ohai mysql plugin' do
+    expect(chef_run).to create_ohai_plugin('mysql')
+      .with_resource(:template)
+  end
+
+  context 'ohai plugin reload subscriber resource' do
+    let(:resource) { chef_run.ruby_block('ohai plugin reload subscriber') }
+    let(:mysql_package) { 'mysql_package' }
+
+    xit 'subscribes to package installation'
+
+    it 'notifies mysql ohai plugin to create' do
+      expect(resource).to notify('ohai_plugin[mysql]').to(:create).immediately
+    end
   end
 
   context 'with Ohai 6' do
@@ -40,8 +55,8 @@ describe 'mysql_tuning::ohai_plugin' do
     end
 
     it 'uses the template from plugins/' do
-      expect(chef_run).to create_template('/etc/chef/ohai_plugins/mysql.rb')
-        .with_source('ohai_plugins/mysql.rb.erb')
+      expect(chef_run).to create_ohai_plugin('mysql')
+        .with_source_file('ohai_plugins/mysql.rb.erb')
     end
   end # context with Ohai 6
 
@@ -51,12 +66,8 @@ describe 'mysql_tuning::ohai_plugin' do
     end
 
     it 'uses the template from plugins7/' do
-      expect(chef_run).to create_template('/etc/chef/ohai_plugins/mysql.rb')
-        .with_source('ohai7_plugins/mysql.rb.erb')
+      expect(chef_run).to create_ohai_plugin('mysql')
+        .with_source_file('ohai7_plugins/mysql.rb.erb')
     end
-  end # context with Ohai 6
-
-  it 'includes ohai::default recipe' do
-    expect(chef_run).to include_recipe('ohai::default')
-  end
+  end # context with Ohai 7
 end
