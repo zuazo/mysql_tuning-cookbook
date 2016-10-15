@@ -3,6 +3,10 @@ CHANGELOG for mysql_tuning
 
 T his file is used to list changes made in each version of the `mysql_tuning` cookbook.
 
+## v0.7.0 (2016-10-15)
+
+* Update `ohai` cookbook to version `4`.
+
 ## v0.6.0 (2016-10-15)
 
 * Update `mysql` cookbook to version `7`.
