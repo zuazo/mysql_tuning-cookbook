@@ -1,7 +1,11 @@
 CHANGELOG for mysql_tuning
 ==========================
 
-This file is used to list changes made in each version of the `mysql_tuning` cookbook.
+T his file is used to list changes made in each version of the `mysql_tuning` cookbook.
+
+## v0.6.0 (2016-10-15)
+
+* Update `mysql` cookbook to version `7`.
 
 ## v0.5.0 (2016-10-14)
 
