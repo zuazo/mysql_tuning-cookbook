@@ -52,7 +52,8 @@ default['mysql_tuning']['mysqld_bin'] =
     end
   when 'freebsd'
     '/usr/local/libexec/mysqld'
-  # when 'debian', 'ubuntu' then
+  when 'debian', 'ubuntu'
+    '/usr/sbin/mysqld'
   else
     'mysqld'
   end
