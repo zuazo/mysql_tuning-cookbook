@@ -21,31 +21,12 @@
 #
 
 root_password = 'r00t_p4ssw0rd'
-debian_password = 'd3b14n_p4ssw0rd'
-repl_password = 'r3pl_p4ssw0rd'
 
-node.default['mysql'] = Mash.new if node['mysql'].nil?
 node.default['mysql_tuning']['dynamic_configuration'] = true
 
 mysql_service 'default' do
-  port node['mysql']['port']
-  data_dir node['mysql']['data_dir']
-  # mysql cookbook 5
-  if respond_to?(:initial_root_password)
-    initial_root_password root_password
-    action [:create, :start]
-  # mysql cookbook 6
-  else
-    version node['mysql']['version']
-    server_root_password root_password
-    server_debian_password debian_password
-    server_repl_password repl_password
-    allow_remote_root node['mysql']['allow_remote_root']
-    remove_anonymous_users node['mysql']['remove_anonymous_users']
-    remove_test_database node['mysql']['remove_test_database']
-    root_network_acl node['mysql']['root_network_acl']
-    action :create
-  end
+  initial_root_password root_password
+  action [:create, :start]
 end
 
 mysql_tuning 'default' do

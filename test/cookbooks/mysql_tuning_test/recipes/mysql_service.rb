@@ -20,11 +20,5 @@
 #
 
 mysql_service 'default' do
-  # mysql cookbook 5
-  if respond_to?(:initial_root_password)
-    action [:create, :start]
-  # mysql cookbook 6
-  else
-    action :create
-  end
+  action [:create, :start]
 end
