@@ -30,7 +30,7 @@ describe 'mysql_tuning resource' do
   let(:root_password) { 'r00t_p4ssw0rd' }
   before do
     allow(Mixlib::ShellOut).to receive(:new)
-      .with('mysqld --version').and_return(my_shell_out)
+      .with('/usr/sbin/mysqld --version').and_return(my_shell_out)
     allow(my_shell_out).to receive(:run_command).and_return(my_shell_out)
     allow(my_shell_out).to receive(:error!)
     allow(my_shell_out).to receive(:stdout).and_return(my_version_stdout)

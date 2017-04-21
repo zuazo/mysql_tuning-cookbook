@@ -28,7 +28,7 @@ describe 'mysql_tuning_cnf resource' do
     'readline 5.1'
   end
   before do
-    allow(Mixlib::ShellOut).to receive(:new).with('mysqld --version')
+    allow(Mixlib::ShellOut).to receive(:new).with('/usr/sbin/mysqld --version')
       .and_return(my_shell_out)
     allow(my_shell_out).to receive(:run_command).and_return(my_shell_out)
     allow(my_shell_out).to receive(:error!)
