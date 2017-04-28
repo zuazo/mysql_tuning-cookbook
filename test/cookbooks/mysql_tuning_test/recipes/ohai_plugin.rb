@@ -19,11 +19,5 @@
 # limitations under the License.
 #
 
-# Silence extraneous stderr from ohai
-# "INFO: The plugin path /etc/chef/ohai/plugins does not exist. Skipping..."
-directory '/etc/chef/ohai/plugins' do
-  recursive true
-end
-
 include_recipe 'mysql_tuning_test::mysql_service'
 include_recipe 'mysql_tuning::ohai_plugin'
