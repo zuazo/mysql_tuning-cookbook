@@ -25,10 +25,10 @@ set :backend, :exec
 # Load Ohai gem from Chef omnibus install
 # Borrowed from https://github.com/rackerlabs/ohai-plugins/blob/b10aa8f563ebb8dfe999528937596a54c237a85f/test/integration/ohaiplugins/serverspec/spec_helper.rb
 # Use Chef's gems to speed things up
-chef_gem_path = Dir.glob("/opt/chef/embedded/lib/ruby/gems/*")
+chef_gem_path = Dir.glob('/opt/chef/embedded/lib/ruby/gems/*')
 chef_gem_path.each do |path|
   gemdirs = Dir.glob("#{path}/gems/*")
-  gemdirs = gemdirs.map {|x| x + '/lib'}
+  gemdirs = gemdirs.map { |x| x + '/lib' }
   $LOAD_PATH.push(*gemdirs)
 end
 

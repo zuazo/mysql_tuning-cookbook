@@ -57,7 +57,8 @@ describe 'mysql_tuning_cnf resource' do
     path = "/etc/mysql-default/conf.d/#{cnf}"
 
     context cnf do
-      # FIXME: ChefSpec doesn't appear to be stepping into mysql_tuning_cnf so templates aren't in tested resource collection
+      # FIXME: ChefSpec doesn't appear to be stepping into mysql_tuning_cnf so
+      # templates aren't in tested resource collection
       xit 'creates the file with template' do
         expect(chef_run).to create_template(path)
       end
