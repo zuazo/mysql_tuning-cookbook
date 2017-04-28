@@ -83,13 +83,13 @@ describe 'mysql_tuning resource' do
     end # context with bytes of memory
   end # each do |memory, range_r|
 
-  %w(tuning.cnf logging.cnf new.cnf).each do |cnf|
+  %w(default).each do |cnf|
     it "creates #{cnf} file with mysql_tuning_cnf" do
-      expect(chef_run).to create_mysql_tuning_cnf(cnf)
+      expect(chef_run).to create_mysql_tuning(cnf)
     end
 
-    it "passes the credentials to mysql_tuning_cnf[#{cnf}]" do
-      expect(chef_run).to create_mysql_tuning_cnf(cnf)
+    it "passes the credentials to mysql_tuning[#{cnf}]" do
+      expect(chef_run).to create_mysql_tuning(cnf)
         .with_mysql_user('root')
         .with_mysql_password(root_password)
     end
