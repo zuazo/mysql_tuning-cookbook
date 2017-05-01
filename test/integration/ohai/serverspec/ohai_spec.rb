@@ -18,16 +18,22 @@
 #
 
 require 'spec_helper'
+require 'json'
 
 VERSION_REGEXP = /^[0-9]+\.[0-9]+\.[0-9]+$/
 PLUGINS_DIR = '/tmp/kitchen/ohai/plugins'.freeze
 
-o = Ohai::System.new(plugin_path: PLUGINS_DIR)
-o.all_plugins
-OHAI = o.data
-
 describe 'Ohai plugin' do
-  it 'reads MySQL version' do
-    expect(OHAI['mysql']['installed_version']).to match VERSION_REGEXP
+  describe command("ohai -d #{PLUGINS_DIR}") do
+    # Parses ohai command output into node:
+    let(:node) { JSON.parse(subject.stdout) }
+
+    its(:exit_status) { should eq 0 }
+    its(:stderr) { should_not match(/ERROR:/) }
+    its(:stderr) { should_not match(/WARN:/) }
+
+    it 'reads MySQL version' do
+      expect(node['mysql']['installed_version']).to match VERSION_REGEXP
+    end
   end
 end
