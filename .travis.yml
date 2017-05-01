@@ -6,7 +6,7 @@ services: docker
 
 env:
   global:
-  - CHEF_VERSION: ~> 12.0
+  - CHEF_VERSION="~> 12.0"
   matrix:
   - TESTS="style unit"
   - TESTS="integration[default-centos-6,verify]"
