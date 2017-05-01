@@ -7,25 +7,19 @@ driver:
 # If you add new platforms below, include them in the .travis.yml file matrix
 platforms:
 - name: centos-6
-# service[default :create mysql] (/tmp/kitchen/cache/cookbooks/mysql/libraries/
-# provider_mysql_service_upstart.rb line 96) had an error:
-# Errno::ENOENT: No such file or directory - /sbin/status
-# - name: debian-7
-#   run_list: recipe[apt]
-# - name: debian-8
-#   run_list: recipe[apt]
+- name: debian-7
+  run_list: recipe[apt]
+- name: debian-8
+  run_list: recipe[apt]
 - name: oraclelinux-6
   driver_config:
     platform: rhel
-# mysql_tuning_cnf[logging.cnf] (/tmp/kitchen/cache/cookbooks/mysql_tuning/
-# providers/default.rb line 86) had an error: Mysql2::Error: Can't connect to
-# MySQL server on '127.0.0.1' (111)
-# - name: ubuntu-12.04
-#   run_list: recipe[apt]
-# - name: ubuntu-14.04
-#   run_list: recipe[apt]
-# - name: ubuntu-15.10
-#   run_list: recipe[apt]
+- name: ubuntu-12.04
+  run_list: recipe[apt]
+- name: ubuntu-14.04
+  run_list: recipe[apt]
+- name: ubuntu-15.10
+  run_list: recipe[apt]
 
 # Non-official images
 - name: scientific-6.6

@@ -6,19 +6,35 @@ services: docker
 
 env:
   global:
-  - CHEF_VERSION="~> 12.0"
+  - CHEF_VERSION: ~> 12.0
   matrix:
   - TESTS="style unit"
-# Split up the test-kitchen run to avoid exceeding 50 minutes:
+  - TESTS="integration[default-centos-6,verify]"
+  - TESTS="integration[default-debian-7,verify]"
+  - TESTS="integration[default-debian-8,verify]"
   - TESTS="integration[default-oraclelinux-6,verify]"
+  - TESTS="integration[default-ubuntu-1204,verify]"
+  - TESTS="integration[default-ubuntu-1404,verify]"
+  - TESTS="integration[default-ubuntu-1510,verify]"
+  - TESTS="integration[default-scientific-66,verify]"
   - TESTS="integration[lwrp-centos-6,verify]"
+  - TESTS="integration[lwrp-debian-7,verify]"
+  - TESTS="integration[lwrp-debian-8,verify]"
+  - TESTS="integration[lwrp-ubuntu-1204,verify]"
+  - TESTS="integration[lwrp-ubuntu-1404,verify]"
+  - TESTS="integration[lwrp-ubuntu-1510,verify]"
   - TESTS="integration[lwrp-scientific-66,verify]"
   - TESTS="integration[ohai-centos-6,verify]"
+  - TESTS="integration[ohai-debian-7,verify]"
+  - TESTS="integration[ohai-debian-8,verify]"
   - TESTS="integration[ohai-oraclelinux-6,verify]"
+  - TESTS="integration[ohai-ubuntu-1204,verify]"
+  - TESTS="integration[ohai-ubuntu-1404,verify]"
+  - TESTS="integration[ohai-ubuntu-1510,verify]"
   - TESTS="integration[ohai-scientific-66,verify]"
 
 before_install:
-- chef --version &> /dev/null || curl -L https://www.getchef.com/chef/install.sh | sudo bash -s -- -P chefdk -v 0.18.30
+- chef --version &> /dev/null || curl -L https://www.getchef.com/chef/install.sh | sudo bash -s -- -P chefdk -v 1.2.22
 - eval "$(/opt/chefdk/bin/chef shell-init bash)"
 
 install:

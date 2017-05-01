@@ -32,8 +32,6 @@ suites:
 - name: lwrp
   run_list: recipe[mysql_tuning_test::lwrp]
   excludes:
-# mysql_tuning_cnf[logging.cnf] (mysql_tuning/providers/cnf.rb line 123) had an
-# error: ArgumentError: wrong number of arguments (2 for 0)
   - oraclelinux-6
 - name: ohai
   run_list: recipe[mysql_tuning_test::ohai_plugin]
