@@ -3,6 +3,15 @@ CHANGELOG for mysql_tuning
 
 T his file is used to list changes made in each version of the `mysql_tuning` cookbook.
 
+## v0.8.0 (2017-05-03)
+
+Special thanks to [Gavin Reynolds](https://github.com/gsreynolds) for his work on this release.
+
+* Update `mysql` cookbook to version `8` (issues [#5](https://github.com/zuazo/mysql_tuning-cookbook/issues/5) and [#6](https://github.com/zuazo/mysql_tuning-cookbook/pull/6)).
+* Update `ohai` cookbook to version `5` ([issue #6](https://github.com/zuazo/mysql_tuning-cookbook/pull/6)).
+* Fix ohai plugin on Debian & Ubuntu, `mysqld_bin` is */usr/sbin/mysqld* ([issue #6](https://github.com/zuazo/mysql_tuning-cookbook/pull/6)).
+* metadata: Add `chef_version`.
+
 ## v0.7.0 (2016-10-15)
 
 * Update `ohai` cookbook to version `4`.

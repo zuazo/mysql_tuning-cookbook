@@ -27,7 +27,7 @@ description <<-EOS
 Tries to create MySQL configuraiton better suited for your system.
 EOS
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version '0.8.0' # WiP
+version '0.8.0'
 
 if respond_to?(:source_url)
   source_url "https://github.com/zuazo/#{name}-cookbook"

@@ -6,7 +6,7 @@ MySQL Tuning Cookbook
 [![Cookbook Version](https://img.shields.io/cookbook/v/mysql_tuning.svg?style=flat)](https://supermarket.chef.io/cookbooks/mysql_tuning)
 [![Dependency Status](http://img.shields.io/gemnasium/zuazo/mysql_tuning-cookbook.svg?style=flat)](https://gemnasium.com/zuazo/mysql_tuning-cookbook)
 [![Code Climate](http://img.shields.io/codeclimate/github/zuazo/mysql_tuning-cookbook.svg?style=flat)](https://codeclimate.com/github/zuazo/mysql_tuning-cookbook)
-[![Build Status](http://img.shields.io/travis/zuazo/mysql_tuning-cookbook.svg?style=flat)](https://travis-ci.org/zuazo/mysql_tuning-cookbook)
+[![Build Status](http://img.shields.io/travis/zuazo/mysql_tuning-cookbook/0.8.0.svg?style=flat)](https://travis-ci.org/zuazo/mysql_tuning-cookbook)
 
 This [Chef](https://www.chef.io/) cookbook creates a generic MySQL server configuration, presumably more optimized for your current machine than the default configuration.
 
@@ -35,18 +35,19 @@ Please, [let us know](https://github.com/zuazo/mysql_tuning-cookbook/issues/new?
 
 ## Required Cookbooks
 
-* [mysql (~> 7.0)](https://supermarket.chef.io/cookbooks/mysql)
-* [ohai (~> 4.0)](https://supermarket.chef.io/cookbooks/ohai)
+* [mysql (~> 8.0)](https://supermarket.chef.io/cookbooks/mysql)
+* [ohai (~> 5.0)](https://supermarket.chef.io/cookbooks/ohai)
 * [mysql2_chef_gem](https://supermarket.chef.io/cookbooks/mysql2_chef_gem)
 
 To use it with older `mysql` or `ohai` cookbook versions look at the following table:
 
-| `ohai` \ `mysql` | `5`   | `6`   | `7`   |
-|:-----------------|:------|:------|:------|
-| ***any***        | `0.2` |       |       |
-| **`2`**          | `0.3` | `0.4` |       |
-| **`3`**          |       | `0.5` | `0.6` |
-| **`4`**          |       |       | `0.7` |
+| `ohai` \ `mysql` | `5`   | `6`   | `7`   | `8`   |
+|:-----------------|:------|:------|:------|:------|
+| ***any***        | `0.2` |       |       |       |
+| **`2`**          | `0.3` | `0.4` |       |       |
+| **`3`**          |       | `0.5` | `0.6` |       |
+| **`4`**          |       |       | `0.7` |       |
+| **`5`**          |       |       |       | `0.8` |
 
 For example, if you need to use the `mysql` cookbook version `5` and `ohai` cookbook version `2`, try using the cookbook version `0.3`:
 
@@ -593,6 +594,7 @@ License and Author
 |                      |                                          |
 |:---------------------|:-----------------------------------------|
 | **Author:**          | [Xabier de Zuazo](https://github.com/zuazo) (<xabier@zuazo.org>)
+| **Contributor:**     | [Gavin Reynolds](https://github.com/gsreynolds)
 | **Copyright:**       | Copyright (c) 2015, Xabier de Zuazo
 | **Copyright:**       | Copyright (c) 2014-2015, Onddo Labs, SL.
 | **License:**         | Apache License, Version 2.0
