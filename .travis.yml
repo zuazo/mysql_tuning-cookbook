@@ -22,7 +22,6 @@ env:
   - TESTS="integration[ohai-debian-7,verify]"
   - TESTS="integration[ohai-debian-8,verify]"
   - TESTS="integration[ohai-oraclelinux-6,verify]"
-  - TESTS="integration[ohai-ubuntu-1204,verify]"
   - TESTS="integration[ohai-ubuntu-1404,verify]"
   - TESTS="integration[ohai-scientific-66,verify]"
 
